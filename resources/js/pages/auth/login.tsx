@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, router } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -12,15 +12,24 @@ import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import PasskeyVerify from '@/components/passkey-verify';
 
+type DemoAccount = { role: string; label: string; email: string };
+
 type Props = {
     status?: string;
     canResetPassword: boolean;
+    demoAccounts?: DemoAccount[];
 };
 
-export default function Login({ status, canResetPassword }: Props) {
+const DEMO_PASSWORD = 'a123b456';
+
+export default function Login({ status, canResetPassword, demoAccounts = [] }: Props) {
+    function masukCepat(email: string) {
+        router.post(store.url(), { email, password: DEMO_PASSWORD, remember: 'on' });
+    }
+
     return (
         <>
-            <Head title="Log in" />
+            <Head title="Masuk" />
 
             <PasskeyVerify />
 
@@ -33,7 +42,7 @@ export default function Login({ status, canResetPassword }: Props) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -42,21 +51,21 @@ export default function Login({ status, canResetPassword }: Props) {
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder="email@contoh.com"
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">Kata Sandi</Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
-                                            Forgot your password?
+                                            Lupa kata sandi?
                                         </TextLink>
                                     )}
                                 </div>
@@ -66,7 +75,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="Kata sandi"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -77,7 +86,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">Ingat saya</Label>
                             </div>
 
                             <Button
@@ -88,14 +97,14 @@ export default function Login({ status, canResetPassword }: Props) {
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Masuk
                             </Button>
                         </div>
 
-                        <div className="text-muted-foreground text-center text-sm">
-                            Don't have an account?{' '}
+                        <div className="text-[#4A6274] text-center text-sm">
+                            Belum punya akun?{' '}
                             <TextLink href={register()} tabIndex={5}>
-                                Sign up
+                                Daftar akun eksternal
                             </TextLink>
                         </div>
                     </>
@@ -103,8 +112,30 @@ export default function Login({ status, canResetPassword }: Props) {
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mb-4 text-center text-sm font-medium text-[#2A9D6F]">
                     {status}
+                </div>
+            )}
+
+            {demoAccounts.length > 0 && (
+                <div className="mt-2 rounded-lg border border-dashed bg-[#F1FAEE] p-4">
+                    <p className="text-center text-xs font-medium text-[#4A6274]">
+                        Akun uji (hanya environment lokal)
+                    </p>
+                    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {demoAccounts.map((account) => (
+                            <Button
+                                key={account.role}
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                onClick={() => masukCepat(account.email)}
+                                data-test={`quick-login-${account.role}`}
+                            >
+                                {account.label}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             )}
         </>
@@ -112,6 +143,6 @@ export default function Login({ status, canResetPassword }: Props) {
 }
 
 Login.layout = {
-    title: 'Log in to your account',
-    description: 'Enter your email and password below to log in',
+    title: 'Masuk ke SIMLAFIS',
+    description: 'Masukkan email dan kata sandi untuk mengakses sistem',
 };

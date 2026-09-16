@@ -13,10 +13,22 @@ class ProfileUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * External users may also edit their institution and phone number. The
+     * tariff category (kategori) is intentionally absent: it drives pricing
+     * (BR-2) and may only be changed by an Admin. Role is never accepted here
+     * so a user cannot escalate their own access (BR-1, BR-6).
+     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return $this->profileRules($this->user()->id);
+        $rules = $this->profileRules($this->user()->id);
+
+        if ($this->user()->role === 'ekst') {
+            $rules['instansi'] = ['required', 'string', 'max:255'];
+            $rules['no_hp'] = $this->noHpRules();
+        }
+
+        return $rules;
     }
 }

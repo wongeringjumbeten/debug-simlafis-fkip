@@ -1,0 +1,276 @@
+import { Head } from '@inertiajs/react';
+import { Plus, RotateCcw, Search, ShoppingCart } from 'lucide-react';
+import { useMemo, useState } from 'react';
+
+import { StatusBadge } from '@/components/status-badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { mockAset } from '@/mock/katalog';
+import { dashboard } from '@/routes';
+import { cn } from '@/lib/utils';
+import type { Aset, CartItem, KategoriAset, Role, SubKategoriEksternal } from '@/types';
+import { AddToCartDialog } from './add-to-cart-dialog';
+import { AsetCard } from './aset-card';
+import { CartDialog } from './cart-dialog';
+import { DetailDialog } from './detail-dialog';
+import { ItemFormDialog } from './item-form-dialog';
+import { canBorrow, canManageKategori, kategoriLabels, tabsByRole } from './helpers';
+
+type Props = {
+    /** Role user terautentikasi (REQ-1). */
+    role: Role;
+    /** Sub-kategori tarif untuk role eksternal (BR-2). */
+    subKategori?: SubKategoriEksternal | null;
+};
+
+export default function Katalog({ role, subKategori }: Props) {
+    const tabs = tabsByRole[role];
+    const kategoriEksternal = subKategori ?? undefined;
+
+    const [kategori, setKategori] = useState<KategoriAset>(tabs[0]);
+    const [asets, setAsets] = useState<Aset[]>(mockAset);
+    const [pencarian, setPencarian] = useState('');
+    const [tanggalMulai, setTanggalMulai] = useState('');
+    const [tanggalSelesai, setTanggalSelesai] = useState('');
+    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cartTerbuka, setCartTerbuka] = useState(false);
+    const [detail, setDetail] = useState<Aset | null>(null);
+    const [tambahKeCart, setTambahKeCart] = useState<Aset | null>(null);
+    const [formAset, setFormAset] = useState<{ mode: 'buat' | 'ubah'; aset?: Aset } | null>(null);
+    const [pengajuanTerkirim, setPengajuanTerkirim] = useState(false);
+
+    const hasil = useMemo(() => {
+        const kata = pencarian.trim().toLowerCase();
+        return asets.filter(
+            (a) =>
+                a.kategori === kategori &&
+                (kata === '' || a.nama.toLowerCase().includes(kata) || a.kode.toLowerCase().includes(kata)),
+        );
+    }, [asets, kategori, pencarian]);
+
+    const filterTanggalAktif = tanggalMulai !== '' && tanggalSelesai !== '';
+
+    function resetFilter() {
+        setPencarian('');
+        setTanggalMulai('');
+        setTanggalSelesai('');
+    }
+
+    function tambahItemKeCart(item: CartItem) {
+        setCart((sebelumnya) => [...sebelumnya, item]);
+        setTambahKeCart(null);
+        setPengajuanTerkirim(false);
+    }
+
+    function hapusDariCart(index: number) {
+        setCart((sebelumnya) => sebelumnya.filter((_, i) => i !== index));
+    }
+
+    function simpanAset(aset: Aset) {
+        setAsets((sebelumnya) => {
+            const ada = sebelumnya.some((a) => a.id === aset.id);
+            return ada ? sebelumnya.map((a) => (a.id === aset.id ? aset : a)) : [...sebelumnya, aset];
+        });
+        setFormAset(null);
+    }
+
+    function ajukanPeminjaman() {
+        // Stub integrasi: pengajuan dikirim ke backend saat modul transaksi siap (REQ-13, REQ-14).
+        setCart([]);
+        setCartTerbuka(false);
+        setPengajuanTerkirim(true);
+    }
+
+    return (
+        <>
+            <Head title="Katalog Laboratorium" />
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4">
+                <header className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                        <h1 className="text-[28px] leading-tight font-semibold">Katalog Laboratorium</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {canBorrow(role)
+                                ? 'Cari alat dan ruangan, lalu masukkan ke keranjang untuk membuat pengajuan peminjaman.'
+                                : 'Data alat, ruangan, bahan, dan mebeler pada empat unit laboratorium.'}
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {canManageKategori(role, kategori) && (
+                            <Button onClick={() => setFormAset({ mode: 'buat' })}>
+                                <Plus /> Tambah {kategoriLabels[kategori]}
+                            </Button>
+                        )}
+                        {canBorrow(role) && (
+                            <Button variant="secondary" onClick={() => setCartTerbuka(true)}>
+                                <ShoppingCart /> Keranjang
+                                {cart.length > 0 && (
+                                    <span className="ml-1 min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-center text-xs text-primary-foreground">
+                                        {cart.length}
+                                    </span>
+                                )}
+                            </Button>
+                        )}
+                    </div>
+                </header>
+
+                {pengajuanTerkirim && (
+                    <div className="flex items-center justify-between gap-4 rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-sm text-[#1E7050]">
+                        <span>
+                            Pengajuan peminjaman terkirim (simulasi). Status akan tampil di Riwayat Peminjaman setelah
+                            integrasi backend.
+                        </span>
+                        <button onClick={() => setPengajuanTerkirim(false)} className="shrink-0 font-medium hover:underline">
+                            Tutup
+                        </button>
+                    </div>
+                )}
+
+                <div className="rounded-xl border bg-card p-4">
+                    <div className="flex flex-wrap gap-2" role="tablist" aria-label="Kategori katalog">
+                        {tabs.map((t) => (
+                            <button
+                                key={t}
+                                role="tab"
+                                aria-selected={kategori === t}
+                                onClick={() => setKategori(t)}
+                                className={cn(
+                                    'rounded-md px-4 py-2 text-sm font-medium transition-colors',
+                                    kategori === t
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                                )}
+                            >
+                                {kategoriLabels[t]}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-end gap-3">
+                        <div className="relative min-w-56 flex-1">
+                            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                value={pencarian}
+                                onChange={(e) => setPencarian(e.target.value)}
+                                placeholder="Cari nama atau kode inventaris…"
+                                aria-label="Cari katalog"
+                                className="pl-9"
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label htmlFor="filter-mulai" className="text-xs font-medium text-muted-foreground">
+                                Tanggal Mulai
+                            </label>
+                            <Input
+                                id="filter-mulai"
+                                type="date"
+                                value={tanggalMulai}
+                                onChange={(e) => setTanggalMulai(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label htmlFor="filter-selesai" className="text-xs font-medium text-muted-foreground">
+                                Tanggal Selesai
+                            </label>
+                            <Input
+                                id="filter-selesai"
+                                type="date"
+                                value={tanggalSelesai}
+                                onChange={(e) => setTanggalSelesai(e.target.value)}
+                            />
+                        </div>
+                        <Button variant="ghost" onClick={resetFilter}>
+                            <RotateCcw /> Reset
+                        </Button>
+                    </div>
+
+                    <p className="mt-3 text-xs text-muted-foreground">
+                        {filterTanggalAktif
+                            ? `Ketersediaan diperhitungkan untuk rentang ${tanggalMulai} s.d. ${tanggalSelesai}. `
+                            : 'Pilih rentang tanggal untuk melihat ketersediaan stok pada tanggal tersebut. '}
+                        Kalkulasi stok dinamis mengikuti transaksi aktif — aktif setelah integrasi backend (REQ-10).
+                    </p>
+                </div>
+
+                {hasil.length > 0 ? (
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                        {hasil.map((aset) => (
+                            <AsetCard
+                                key={aset.id}
+                                aset={aset}
+                                role={role}
+                                subKategori={kategoriEksternal}
+                                onDetail={setDetail}
+                                onTambahKeCart={setTambahKeCart}
+                                onUbah={(a) => setFormAset({ mode: 'ubah', aset: a })}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="rounded-xl border border-dashed px-6 py-16 text-center">
+                        <p className="text-sm text-muted-foreground">
+                            Tidak ada {kategoriLabels[kategori].toLowerCase()} yang cocok dengan pencarian.
+                        </p>
+                    </div>
+                )}
+
+                {canBorrow(role) && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <StatusBadge label="Stok dinamis" tone="neutral" />
+                        <span>
+                            Jumlah stok tampil berdasarkan data master; pengurangan otomatis per tanggal menyusul
+                            (REQ-10).
+                        </span>
+                    </div>
+                )}
+            </div>
+
+            <DetailDialog
+                aset={detail}
+                role={role}
+                subKategori={kategoriEksternal}
+                onOpenChange={(open) => !open && setDetail(null)}
+                onTambahKeCart={(aset) => {
+                    setDetail(null);
+                    setTambahKeCart(aset);
+                }}
+            />
+
+            <AddToCartDialog
+                aset={tambahKeCart}
+                role={role}
+                onOpenChange={(open) => !open && setTambahKeCart(null)}
+                onSimpan={tambahItemKeCart}
+            />
+
+            <CartDialog
+                open={cartTerbuka}
+                items={cart}
+                role={role}
+                subKategori={kategoriEksternal}
+                onOpenChange={setCartTerbuka}
+                onHapus={hapusDariCart}
+                onAjukan={ajukanPeminjaman}
+            />
+
+            <ItemFormDialog
+                state={formAset}
+                kategori={kategori}
+                onOpenChange={(open) => !open && setFormAset(null)}
+                onSimpan={simpanAset}
+            />
+        </>
+    );
+}
+
+Katalog.layout = {
+    breadcrumbs: [
+        {
+            title: 'Dashboard',
+            href: dashboard(),
+        },
+        {
+            title: 'Katalog',
+            href: '/katalog',
+        },
+    ],
+};

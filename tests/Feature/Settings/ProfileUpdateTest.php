@@ -83,3 +83,80 @@ test('correct password must be provided to delete account', function () {
 
     expect($user->fresh())->not->toBeNull();
 });
+
+test('external user can update institution and phone number', function () {
+    $user = User::factory()->create([
+        'role' => 'ekst',
+        'instansi' => 'Instansi Lama',
+        'kategori' => 'internal_unej',
+    ]);
+
+    $this->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'instansi' => 'Instansi Baru',
+            'no_hp' => '081234567890',
+        ])
+        ->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->instansi)->toBe('Instansi Baru');
+    expect($user->no_hp)->toBe('081234567890');
+});
+
+test('external user cannot change tariff category or role via profile update', function () {
+    $user = User::factory()->create([
+        'role' => 'ekst',
+        'instansi' => 'Instansi Awal',
+        'kategori' => 'internal_unej',
+    ]);
+
+    $this->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'instansi' => 'Instansi Awal',
+            'kategori' => 'luar_unej', // ignored: not validated for profile
+            'role' => 'admin', // ignored: never accepted here
+        ])
+        ->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->kategori)->toBe('internal_unej');
+    expect($user->role)->toBe('ekst');
+});
+
+test('external profile update rejects an invalid phone number', function () {
+    $user = User::factory()->create(['role' => 'ekst', 'instansi' => 'Instansi']);
+
+    $this->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'instansi' => 'Instansi',
+            'no_hp' => 'abc',
+        ])
+        ->assertSessionHasErrors('no_hp');
+});
+
+test('internal user profile update ignores external-only fields', function () {
+    $user = User::factory()->create(['role' => 'mhs']);
+
+    $this->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => 'Nama Baru',
+            'email' => $user->email,
+            'instansi' => 'Coba Diisi',
+            'no_hp' => '081234567890',
+        ])
+        ->assertSessionHasNoErrors();
+
+    $user->refresh();
+
+    expect($user->name)->toBe('Nama Baru');
+    expect($user->instansi)->toBeNull();
+    expect($user->no_hp)->toBeNull();
+});

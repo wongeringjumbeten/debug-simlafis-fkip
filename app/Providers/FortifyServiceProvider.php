@@ -51,6 +51,14 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
+            'demoAccounts' => app()->environment('local') ? [
+                ['role' => 'admin', 'label' => 'Admin', 'email' => 'admin@simlafis.test'],
+                ['role' => 'kalab', 'label' => 'KaLab', 'email' => 'kalab@simlafis.test'],
+                ['role' => 'plp', 'label' => 'PLP', 'email' => 'plp@simlafis.test'],
+                ['role' => 'dosen', 'label' => 'Dosen', 'email' => 'dosen@simlafis.test'],
+                ['role' => 'mhs', 'label' => 'Mahasiswa', 'email' => 'mhs@simlafis.test'],
+                ['role' => 'ekst', 'label' => 'Eksternal', 'email' => 'ekst@simlafis.test'],
+            ] : [],
         ]));
 
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [

@@ -48,4 +48,36 @@ trait ProfileValidationRules
                 : Rule::unique(User::class)->ignore($userId),
         ];
     }
+
+    /**
+     * Get the validation rules for external registration fields.
+     * instansi and kategori are coupled: either both are provided or both
+     * are null — an external user must specify both their institution and
+     * tariff category (BR-2).
+     *
+     * @return array<string, array<int, ValidationRule|array<mixed>|string>>
+     */
+    protected function externalRegistrationRules(): array
+    {
+        return [
+            'instansi' => ['nullable', 'string', 'max:255', 'required_with:kategori'],
+            'kategori' => ['nullable', 'in:internal_unej,luar_unej', 'required_with:instansi'],
+            'no_hp' => $this->noHpRules(),
+        ];
+    }
+
+    /**
+     * Validation rules for an Indonesian mobile/WhatsApp number.
+     *
+     * @return array<int, ValidationRule|array<mixed>|string>
+     */
+    protected function noHpRules(): array
+    {
+        return [
+            'nullable',
+            'string',
+            'max:20',
+            'regex:/^(\+62|62|0)8[1-9][0-9]{6,10}$/',
+        ];
+    }
 }

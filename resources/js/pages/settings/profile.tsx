@@ -15,6 +15,11 @@ type PageProps = {
     auth: Auth;
 };
 
+const kategoriLabels: Record<string, string> = {
+    internal_unej: 'Internal UNEJ',
+    luar_unej: 'Luar UNEJ',
+};
+
 export default function Profile({
     mustVerifyEmail,
     status,
@@ -23,18 +28,19 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage<PageProps>().props;
+    const isEksternal = auth.user?.role === 'ekst';
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title="Pengaturan Profil" />
 
-            <h1 className="sr-only">Profile settings</h1>
+            <h1 className="sr-only">Pengaturan Profil</h1>
 
             <div className="space-y-6">
                 <Heading
                     variant="small"
-                    title="Profile"
-                    description="Update your name and email address"
+                    title="Profil"
+                    description="Perbarui nama dan alamat email Anda"
                 />
 
                 <Form
@@ -47,7 +53,7 @@ export default function Profile({
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="name">Nama</Label>
 
                                 <Input
                                     id="name"
@@ -56,7 +62,7 @@ export default function Profile({
                                     name="name"
                                     required
                                     autoComplete="name"
-                                    placeholder="Full name"
+                                    placeholder="Nama lengkap"
                                 />
 
                                 <InputError
@@ -66,7 +72,7 @@ export default function Profile({
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">Alamat Email</Label>
 
                                 <Input
                                     id="email"
@@ -76,7 +82,7 @@ export default function Profile({
                                     name="email"
                                     required
                                     autoComplete="username"
-                                    placeholder="Email address"
+                                    placeholder="email@contoh.com"
                                 />
 
                                 <InputError
@@ -89,33 +95,87 @@ export default function Profile({
                                 auth.user.email_verified_at === null && (
                                     <div>
                                         <p className="text-muted-foreground -mt-4 text-sm">
-                                            Your email address is unverified.{' '}
+                                            Alamat email Anda belum diverifikasi.{' '}
                                             <Link
                                                 href={send()}
                                                 as="button"
                                                 className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                                             >
-                                                Click here to re-send the
-                                                verification email.
+                                                Klik di sini untuk mengirim ulang email verifikasi.
                                             </Link>
                                         </p>
 
                                         {status ===
                                             'verification-link-sent' && (
                                             <div className="mt-2 text-sm font-medium text-green-600">
-                                                A new verification link has been
-                                                sent to your email address.
+                                                Tautan verifikasi baru telah dikirim ke alamat email Anda.
                                             </div>
                                         )}
                                     </div>
                                 )}
+
+                            {isEksternal && (
+                                <div className="space-y-6 border-t pt-6">
+                                    <div>
+                                        <h3 className="text-base font-medium">
+                                            Informasi Institusi
+                                        </h3>
+                                        <p className="text-muted-foreground text-sm">
+                                            Data ini menentukan layanan dan tarif sewa Anda.
+                                        </p>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="instansi">Instansi</Label>
+                                        <Input
+                                            id="instansi"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.instansi ?? ''}
+                                            name="instansi"
+                                            required
+                                            autoComplete="organization"
+                                            placeholder="Contoh: Universitas Jember, PT. XYZ"
+                                        />
+                                        <InputError message={errors.instansi} />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="kategori">Kategori Pengguna</Label>
+                                        <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm">
+                                            {auth.user.kategori
+                                                ? kategoriLabels[auth.user.kategori]
+                                                : 'Belum ditetapkan'}
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Menentukan tarif sewa (BR-2). Perubahan hanya dapat dilakukan Admin.
+                                        </p>
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="no_hp">Nomor HP / WhatsApp</Label>
+                                        <Input
+                                            id="no_hp"
+                                            type="tel"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.no_hp ?? ''}
+                                            name="no_hp"
+                                            autoComplete="tel"
+                                            placeholder="08xxxxxxxxxx atau +628xxxxxxxxx"
+                                        />
+                                        <InputError message={errors.no_hp} />
+                                        <p className="text-xs text-muted-foreground">
+                                            Format: 08xxxxxxxxxx atau +628xxxxxxxxx.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="flex items-center gap-4">
                                 <Button
                                     disabled={processing}
                                     data-test="update-profile-button"
                                 >
-                                    Save
+                                    Simpan
                                 </Button>
                             </div>
                         </>
@@ -131,7 +191,7 @@ export default function Profile({
 Profile.layout = {
     breadcrumbs: [
         {
-            title: 'Profile settings',
+            title: 'Pengaturan Profil',
             href: edit(),
         },
     ],

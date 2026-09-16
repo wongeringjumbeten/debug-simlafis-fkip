@@ -1,5 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
-import AppLogoIcon from '@/components/app-logo-icon';
+import { Link } from '@inertiajs/react';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
@@ -8,31 +7,63 @@ export default function AuthSplitLayout({
     title,
     description,
 }: AuthLayoutProps) {
-    const { name } = usePage().props;
-
     return (
-        <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
-            <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
-                <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative grid min-h-dvh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+            <div className="relative hidden h-full flex-col justify-between bg-[#1D3557] p-10 lg:flex">
+                <div
+                    className="absolute inset-0 bg-cover bg-center opacity-20"
+                    style={{
+                        backgroundImage:
+                            "url('/images/lab-fisika.png')",
+                    }}
+                />
                 <Link
                     href={home()}
-                    className="relative z-20 flex items-center text-lg font-medium"
+                    className="relative z-10 flex items-center gap-3"
                 >
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
-                    {name}
+                    <img
+                        src="/images/logo-fkip.png"
+                        alt="Logo FKIP UNEJ"
+                        className="h-10 w-auto"
+                    />
+                    <div>
+                        <p className="text-sm font-semibold text-white">
+                            SIMLAFIS
+                        </p>
+                        <p className="text-xs text-[#A8DADC]">
+                            Laboratorium Fisika FKIP UNEJ
+                        </p>
+                    </div>
                 </Link>
+                <div className="relative z-10">
+                    <p className="text-lg font-semibold text-white">
+                        Sistem Informasi Manajemen
+                        <br />
+                        Laboratorium Fisika
+                    </p>
+                    <p className="mt-2 text-sm text-[#A8DADC]">
+                        Kelola peminjaman alat, ruangan, dan
+                        inventaris laboratorium secara terpadu.
+                    </p>
+                </div>
             </div>
-            <div className="w-full lg:p-8">
-                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="w-full bg-[#F1FAEE] px-6 py-8 lg:p-8">
+                <div className="mx-auto flex w-full max-w-sm flex-col justify-center space-y-6">
                     <Link
                         href={home()}
-                        className="relative z-20 flex items-center justify-center lg:hidden"
+                        className="relative z-20 flex items-center justify-center gap-2 lg:hidden"
                     >
-                        <AppLogoIcon className="h-10 fill-current text-black sm:h-12" />
+                        <img
+                            src="/images/logo-fkip.png"
+                            alt="Logo FKIP UNEJ"
+                            className="h-12 w-auto"
+                        />
                     </Link>
-                    <div className="flex flex-col items-start gap-2 text-left sm:items-center sm:text-center">
-                        <h1 className="text-xl font-medium">{title}</h1>
-                        <p className="text-muted-foreground text-sm text-balance">
+                    <div className="flex flex-col items-start gap-1 text-left sm:items-center sm:text-center">
+                        <h1 className="text-xl font-semibold text-[#1D3557]">
+                            {title}
+                        </h1>
+                        <p className="text-sm text-[#4A6274]">
                             {description}
                         </p>
                     </div>

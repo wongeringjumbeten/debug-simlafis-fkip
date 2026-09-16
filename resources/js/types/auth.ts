@@ -3,6 +3,12 @@ export type User = {
     name: string;
     email: string;
     avatar?: string;
+    instansi?: string | null;
+    kategori?: 'internal_unej' | 'luar_unej' | null;
+    no_hp?: string | null;
+    role: 'admin' | 'kalab' | 'plp' | 'dosen' | 'mhs' | 'ekst';
+    active: boolean;
+    suspension_reason?: number | null;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
