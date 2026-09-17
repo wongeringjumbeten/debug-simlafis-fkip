@@ -5,6 +5,7 @@ namespace App\Http\Requests\Settings;
 use App\Concerns\ProfileValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -27,6 +28,11 @@ class ProfileUpdateRequest extends FormRequest
         if ($this->user()->role === 'ekst') {
             $rules['instansi'] = ['required', 'string', 'max:255'];
             $rules['no_hp'] = $this->noHpRules();
+        }
+
+        // Foto profil hanya didukung pada schema PostgreSQL Sprint 1.
+        if (DB::getDriverName() === 'pgsql') {
+            $rules['foto_profil'] = ['nullable', 'image', 'mimes:jpg,png', 'max:2048'];
         }
 
         return $rules;

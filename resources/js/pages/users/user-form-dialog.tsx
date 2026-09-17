@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/select';
 import UserController from '@/actions/App/Http/Controllers/Users/UserController';
 import type { KategoriEksternal, UserRow, UserRole } from '@/types';
-import { kategoriLabels, roleLabels } from '@/types/users';
+import { identitasLabels, kategoriLabels, roleLabels } from '@/types/users';
 
 interface UserFormDialogProps {
     open: boolean;
@@ -39,6 +39,7 @@ export function UserFormDialog({ open, user, roleOptions, passwordRules, onOpenC
     const isEdit = Boolean(user);
     const [role, setRole] = useState<UserRole>(user?.role ?? 'mhs');
     const isEkst = role === 'ekst';
+    const perluIdentitas = role === 'dosen' || role === 'mhs' || isEkst;
 
     useEffect(() => {
         if (open) {
@@ -94,6 +95,14 @@ export function UserFormDialog({ open, user, roleOptions, passwordRules, onOpenC
                                 <InputError message={errors.role} />
                             </div>
 
+                            {perluIdentitas && (
+                                <div className="grid gap-2">
+                                    <Label htmlFor="no_identitas">{identitasLabels[role]}</Label>
+                                    <Input id="no_identitas" name="no_identitas" defaultValue={user?.nomor_identitas ?? ''} placeholder={role === 'mhs' ? 'Contoh: 241910301065' : role === 'dosen' ? 'Contoh: 197503152005011002' : 'Contoh: 3308062309060004'} />
+                                    <InputError message={errors.no_identitas} />
+                                </div>
+                            )}
+
                             {isEkst && (
                                 <div className="grid gap-4 rounded-lg border p-4">
                                     <div className="grid gap-2">
@@ -126,6 +135,20 @@ export function UserFormDialog({ open, user, roleOptions, passwordRules, onOpenC
                                 <Input id="no_hp" type="tel" name="no_hp" defaultValue={user?.no_hp ?? ''} placeholder="08xxxxxxxxxx atau +628xxxxxxxxx" />
                                 <InputError message={errors.no_hp} />
                             </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="foto_profil">Foto Profil</Label>
+                                    <Input id="foto_profil" type="file" name="foto_profil" accept=".jpg,.jpeg,.png" />
+                                    <InputError message={errors.foto_profil} />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="foto_identitas">Foto Identitas</Label>
+                                    <Input id="foto_identitas" type="file" name="foto_identitas" accept=".jpg,.jpeg,.png" />
+                                    <InputError message={errors.foto_identitas} />
+                                </div>
+                            </div>
+                            <p className="text-xs text-muted-foreground">JPG/PNG maksimal 2 MB. Kosongkan bila tidak diubah.</p>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="password">Kata Sandi</Label>

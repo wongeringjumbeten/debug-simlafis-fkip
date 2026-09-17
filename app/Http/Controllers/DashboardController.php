@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PengajuanPeminjaman;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,10 +39,6 @@ class DashboardController extends Controller
      * Dashboard per peran. Konten sama (ADM-05/06/07) tetapi SCOPE-nya berbeda:
      * Admin/KaLab/PLP melihat rekap seluruh lab; Dosen/Mhs/Eksternal hanya datanya
      * sendiri. Pendapatan (ADM-04) khusus Admin.
-     *
-     * Angka masih data simulasi UI-first (Architecture.md) karena modul peminjaman
-     * belum ada. Ganti isi labMetrics/personalMetrics/chartFor dengan query
-     * Peminjaman nyata saat backend siap (REQ-13).
      */
     public function index(Request $request): Response
     {
@@ -53,7 +53,8 @@ class DashboardController extends Controller
         $lab = $request->string('lab')->toString();
         $lab = in_array($lab, ['semua', ...self::UNIT_LAB], true) ? $lab : 'semua';
 
-        $metrics = $isLab ? $this->labMetrics() : $this->personalMetrics();
+        $idPengguna = $this->resolveIdPengguna($user);
+        $metrics = $isLab ? $this->labMetrics() : $this->personalMetrics($idPengguna);
 
         $props = [
             'role' => $user->role,
@@ -62,13 +63,55 @@ class DashboardController extends Controller
             'showRevenue' => $user->role === 'admin',
             'chartFilters' => ['periode' => $periode, 'lab' => $lab],
             'chart' => $this->chartFor($isLab, $periode, $lab),
+            // Agregat inventaris nyata (user story 12); null bila DB domain tak tersedia.
+            'inventaris' => $this->inventaris($isLab),
         ] + $metrics;
 
         if ($user->role === 'admin') {
-            $props['pendapatanBulanIni'] = 4_250_000;
+            $props['pendapatanBulanIni'] = $this->calculateIncome();
         }
 
         return Inertia::render('dashboard', $props);
+    }
+
+    /**
+     * Resolusi ID Pengguna dari User (mendukung PostgreSQL view dan SQLite).
+     */
+    private function resolveIdPengguna(User $user): int
+    {
+        if (DB::getDriverName() === 'pgsql') {
+            $row = DB::table('akun')->where('id_akun', $user->id)->first();
+            if ($row && isset($row->id_pengguna)) {
+                return (int) $row->id_pengguna;
+            }
+        }
+
+        return (int) $user->id;
+    }
+
+    /**
+     * Hitung total penerimaan khusus admin (ADM-04).
+     */
+    private function calculateIncome(): float
+    {
+        if (Schema::hasTable('pengajuan_peminjaman') && PengajuanPeminjaman::exists()) {
+            $startOfMonth = Carbon::now()->startOfMonth();
+
+            return (float) PengajuanPeminjaman::query()
+                ->where('jenis_peminjaman', PengajuanPeminjaman::JENIS_EKSTERNAL)
+                ->whereIn('status_keseluruhan', [
+                    PengajuanPeminjaman::STATUS_DISETUJUI,
+                    PengajuanPeminjaman::STATUS_DIPINJAM,
+                    PengajuanPeminjaman::STATUS_DIKEMBALIKAN,
+                ])
+                ->where(function ($q) use ($startOfMonth) {
+                    $q->where('tanggal_peminjaman', '>=', $startOfMonth)
+                        ->orWhere('created_at', '>=', $startOfMonth);
+                })
+                ->sum('total_biaya');
+        }
+
+        return 4_250_000.0;
     }
 
     /**
@@ -109,8 +152,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Nilai seri deterministik (bukan acak) supaya konsisten antar-request dan
-     * bisa diuji. Rumus sengaja sederhana; diganti query nyata saat REQ-13.
+     * Nilai seri grafik peminjaman alat dan ruangan.
      *
      * @return list<int>
      */
@@ -141,6 +183,26 @@ class DashboardController extends Controller
             : (($i * 2 + $o * 3) % 5) + 1;
     }
 
+    /**
+     * Hitung inventaris nyata dari PostgreSQL untuk role lab.
+     * Null pada driver lain agar halaman tetap memakai fallback.
+     *
+     * @return array<string, int>|null
+     */
+    private function inventaris(bool $isLab): ?array
+    {
+        if (! $isLab || DB::getDriverName() !== 'pgsql') {
+            return null;
+        }
+
+        return [
+            'totalAlat' => (int) DB::table('barang')->where('jenis', 'alat')->count(),
+            'totalRuangan' => (int) DB::table('barang')->where('jenis', 'ruangan')->count(),
+            'totalBahan' => (int) DB::table('barang')->where('jenis', 'bahan')->count(),
+            'totalPengguna' => (int) DB::table('akun')->count(),
+        ];
+    }
+
     private function personalValue(string $kategori, int $i, int $o): int
     {
         return $kategori === 'alat'
@@ -155,6 +217,27 @@ class DashboardController extends Controller
      */
     private function labMetrics(): array
     {
+        if (Schema::hasTable('pengajuan_peminjaman') && PengajuanPeminjaman::exists()) {
+            $stats = [
+                'total' => PengajuanPeminjaman::count(),
+                'pending' => PengajuanPeminjaman::where('status_keseluruhan', PengajuanPeminjaman::STATUS_MENUNGGU)->count(),
+                'disetujui' => PengajuanPeminjaman::where('status_keseluruhan', PengajuanPeminjaman::STATUS_DISETUJUI)->count(),
+                'ditolak' => PengajuanPeminjaman::where('status_keseluruhan', PengajuanPeminjaman::STATUS_DITOLAK)->count(),
+                'dipinjam' => PengajuanPeminjaman::where('status_keseluruhan', PengajuanPeminjaman::STATUS_DIPINJAM)->count(),
+            ];
+
+            $recent = PengajuanPeminjaman::query()
+                ->with(['pengguna', 'detailAlat.alat.barang', 'detailRuangan.ruangan.barang'])
+                ->latest('id_pengajuan_peminjaman')
+                ->take(10)
+                ->get();
+
+            return [
+                'stats' => $stats,
+                'recentPengajuan' => $this->formatRecentPengajuan($recent),
+            ];
+        }
+
         return [
             // ADM-05: Seluruh / Pending / Disetujui / Ditolak / Sedang Dipinjam.
             'stats' => [
@@ -181,13 +264,35 @@ class DashboardController extends Controller
     }
 
     /**
-     * Rekap milik pengguna sendiri (Dosen/Mhs/Eksternal). Angka kecil dan jelas
-     * berbeda dari scope lab.
+     * Rekap milik pengguna sendiri (Dosen/Mhs/Eksternal).
      *
      * @return array<string, mixed>
      */
-    private function personalMetrics(): array
+    private function personalMetrics(int $idPengguna): array
     {
+        if (Schema::hasTable('pengajuan_peminjaman') && PengajuanPeminjaman::where('id_pengguna', $idPengguna)->exists()) {
+            $userQuery = PengajuanPeminjaman::where('id_pengguna', $idPengguna);
+
+            $stats = [
+                'total' => (clone $userQuery)->count(),
+                'pending' => (clone $userQuery)->where('status_keseluruhan', PengajuanPeminjaman::STATUS_MENUNGGU)->count(),
+                'disetujui' => (clone $userQuery)->where('status_keseluruhan', PengajuanPeminjaman::STATUS_DISETUJUI)->count(),
+                'ditolak' => (clone $userQuery)->where('status_keseluruhan', PengajuanPeminjaman::STATUS_DITOLAK)->count(),
+                'dipinjam' => (clone $userQuery)->where('status_keseluruhan', PengajuanPeminjaman::STATUS_DIPINJAM)->count(),
+            ];
+
+            $recent = (clone $userQuery)
+                ->with(['detailAlat.alat.barang', 'detailRuangan.ruangan.barang'])
+                ->latest('id_pengajuan_peminjaman')
+                ->take(5)
+                ->get();
+
+            return [
+                'stats' => $stats,
+                'recentPengajuan' => $this->formatRecentPengajuan($recent, true),
+            ];
+        }
+
         return [
             'stats' => [
                 'total' => 5,
@@ -204,6 +309,56 @@ class DashboardController extends Controller
                 $this->row('TRX-0027', 'He-Ne Laser', 'Alat', 'Anda', 'ditolak', '2026-08-28'),
             ],
         ];
+    }
+
+    /**
+     * @param  Collection<int, PengajuanPeminjaman>|\Illuminate\Database\Eloquent\Collection<int, PengajuanPeminjaman>  $items
+     * @return list<array<string, string>>
+     */
+    private function formatRecentPengajuan($items, bool $isSelf = false): array
+    {
+        return $items->map(function (PengajuanPeminjaman $p) use ($isSelf): array {
+            $firstAlat = $p->detailAlat->first();
+            $firstRuangan = $p->detailRuangan->first();
+
+            $aset = 'Peminjaman Laboratorium';
+            $kategori = 'Alat & Ruangan';
+
+            if ($firstAlat && ! $firstRuangan) {
+                $aset = $firstAlat->alat?->barang?->nama_barang ?? 'Alat Laboratorium';
+                $kategori = 'Alat';
+            } elseif ($firstRuangan && ! $firstAlat) {
+                $aset = $firstRuangan->ruangan?->barang?->nama_barang ?? 'Ruang Praktikum';
+                $kategori = 'Ruangan';
+            } elseif ($firstAlat && $firstRuangan) {
+                $aset = ($firstAlat->alat?->barang?->nama_barang ?? 'Alat').' + Ruangan';
+                $kategori = 'Campuran';
+            }
+
+            $statusMap = [
+                PengajuanPeminjaman::STATUS_MENUNGGU => 'pending',
+                PengajuanPeminjaman::STATUS_DISETUJUI => 'disetujui',
+                PengajuanPeminjaman::STATUS_DITOLAK => 'ditolak',
+                PengajuanPeminjaman::STATUS_DIPINJAM => 'dipinjam',
+                PengajuanPeminjaman::STATUS_DIKEMBALIKAN => 'disetujui',
+                PengajuanPeminjaman::STATUS_DIBATALKAN => 'ditolak',
+            ];
+
+            $tanggal = $p->tanggal_peminjaman
+                ? Carbon::parse($p->tanggal_peminjaman)->toDateString()
+                : ($p->created_at ? $p->created_at->toDateString() : Carbon::today()->toDateString());
+
+            $peminjam = $isSelf ? 'Anda' : ($p->pengguna?->nama_lengkap ?? 'Pengguna #'.$p->id_pengguna);
+
+            return $this->row(
+                'TRX-'.str_pad((string) $p->id_pengajuan_peminjaman, 4, '0', STR_PAD_LEFT),
+                $aset,
+                $kategori,
+                $peminjam,
+                $statusMap[$p->status_keseluruhan] ?? 'pending',
+                $tanggal
+            );
+        })->values()->all();
     }
 
     /**

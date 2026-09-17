@@ -38,13 +38,12 @@ Menyetujui/Menolak Item Peminjaman Alat (Termasuk mengecek transaksi status pemb
 Menyetujui/Menolak Item Peminjaman Ruangan (Termasuk mengecek transaksi status pembayaran & menginput alasan jika ditolak) 
 Fitur Riwayat Peminjaman
 Mengubah Status Pengajuan Peminjaman Alat/Ruangan 
-Mencatat  ID  Alat yang Dipinjam
 Melihat Status Pengajuan Peminjaman Alat dan Ruangan
 Melihat Riwayat Peminjaman
 Mengunduh Laporan Inventarisasi
 Fitur Validasi Pengembalian 
 Melihat Daftar Alat Dipinjam
-Mengubah Data Peminjaman Alat (Mengubah kondisi fisik saat kembali: Baik/Rusak & memicu blokir akun otomatis jika telat) 
+Mengubah Data Peminjaman Alat (Mengubah kondisi fisik saat pengembalian: Baik/Rusak) 
 Fitur Pengecekan Bebas Laboratorium
 Melihat Daftar Mahasiswa yang memiliki Tunggakan Lab
 Fitur Dokumentasi
@@ -55,12 +54,8 @@ Tab Dokumentasi Kegiatan
 Melihat Dokumentasi Kegiatan
 Tab Laporan Keuangan atau Laporan Pendapatan Transaksi
 Mengunduh Laporan Keuangan atau Laporan Pendapatan Transaksi
-Fitur Prosedur (Dokumentasi SOP)
-Melihat Prosedur Tata Kelola Sistem
-Melihat FAQ
 Log out
 Kepala Laboratorium (Kalab)
-Fitur Register
 Fitur Login Kepala Laboratorium (Kalab)
 Login Kepala Laboratorium (Kalab)
 Lupa Password
@@ -89,21 +84,16 @@ Menyetujui/Menolak Item Peminjaman Alat (Termasuk mengecek transaksi status pemb
 Menyetujui/Menolak Item Peminjaman Ruangan (Termasuk mengecek transaksi status pembayaran & menginput alasan jika ditolak) 
 Fitur Riwayat Peminjaman
 Melihat Riwayat Peminjaman Alat dan Ruangan yang telah diproses 
-Mengunduh Laporan Inventarisasi
 Fitur Dokumentasi
-Tab Laporan Laporan Maintenance dan Kalibrasi
+Tab Laporan Maintenance dan Kalibrasi
 Melihat Laporan Maintenance dan Kalibrasi
 Mengunduh Laporan Maintenance dan Kalibrasi
 Tab Dokumentasi Kegiatan
 Melihat Dokumentasi Kegiatan
 Tab Laporan Keuangan atau Laporan Pendapatan Transaksi
 Mengunduh Laporan Keuangan atau Laporan Pendapatan Transaksi
-Fitur Prosedur (Dokumentasi SOP)
-Melihat Prosedur Otorisasi & Pengawasan Lab 
-Melihat FAQ
 Log out
 Pranata Laboratorium Pendidikan  (PLP)
-Fitur Register
 Fitur Login Pranata Laboratorium Pendidikan  (PLP)
 Login Pranata Laboratorium Pendidikan  (PLP)
 Lupa Password
@@ -136,12 +126,11 @@ Melihat Data Mebeler
 Mengubah Data Mebeler
 Fitur Riwayat Peminjaman
 Mengubah Status Pengajuan Peminjaman Alat/Ruangan (tapi hanya alat/ruangan yang sudah disetujui PLP) 
-Mencatat  ID  Alat yang Dipinjam
 Melihat Status Pengajuan Peminjaman Alat dan Ruangan
 Melihat Riwayat Peminjaman
 Fitur Validasi Pengembalian 
 Melihat Daftar Alat Dipinjam
-Mengubah Data Peminjaman Alat (Mengubah kondisi fisik saat kembali: Baik/Rusak & memicu suspend akun jika telat) 
+Mengubah Data Peminjaman Alat (Mengubah kondisi fisik saat pengembalian: Baik/Rusak)
 Fitur Pengecekan Bebas Laboratorium
 Melihat Daftar Mahasiswa yang memiliki Tunggakan Lab
 Fitur Dokumentasi
@@ -152,9 +141,6 @@ Tab Laporan Maintenance dan Kalibrasi
 Mengunggah Laporan Maintenance dan Kalibrasi
 Melihat Laporan Maintenance dan Kalibrasi
 Mengunduh Laporan Maintenance dan Kalibrasi
-Fitur Prosedur (Dokumentasi SOP)
-Melihat Prosedur Operasional Fisik & Maintenance 
-Melihat FAQ
 Log out
 Dosen
 Fitur Register 
@@ -259,7 +245,9 @@ Melihat Status Pengajuan Peminjaman (Melihat status Approved/Reject per item)
 Membatalkan Pengajuan Peminjaman (Hanya bisa dilakukan jika status masih belum “Dipinjam”)
 Melihat Riwayat Peminjaman
 Fitur Prosedur (Dokumen SOP)
-Melihat Prosedur Peminjaman
+Melihat Prosedur Peminjaman 
 Melihat Ringkasan Persyaratan
 Melihat FAQ
 Log out
+
+

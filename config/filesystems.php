@@ -60,6 +60,15 @@ return [
             'report' => false,
         ],
 
+        // Dokumen identitas (KTP/KTM/kartu pegawai) disimpan di disk private.
+        // Akses hanya melalui route /identitas/{path} yang selalu melewati authorization.
+        'identities' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/identities'),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*

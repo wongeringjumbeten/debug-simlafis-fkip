@@ -43,6 +43,13 @@ export interface DashboardRow {
     tanggal: string;
 }
 
+export interface DashboardInventaris {
+    totalAlat: number;
+    totalRuangan: number;
+    totalBahan: number;
+    totalPengguna: number;
+}
+
 export interface DashboardProps {
     role: Role;
     scope: DashboardScope;
@@ -53,4 +60,5 @@ export interface DashboardProps {
     chart: DashboardChart;
     chartFilters: ChartFilters;
     recentPengajuan: DashboardRow[];
+    inventaris: DashboardInventaris | null;
 }

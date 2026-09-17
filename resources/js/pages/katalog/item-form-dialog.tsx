@@ -25,7 +25,7 @@ interface ItemFormDialogProps {
     state: { mode: 'buat' | 'ubah'; aset?: Aset } | null;
     kategori: KategoriAset;
     onOpenChange: (open: boolean) => void;
-    onSimpan: (aset: Aset) => void;
+    onSimpan: (aset: Aset, foto?: File | null) => void;
 }
 
 const unitLabs: UnitLab[] = ['dasar', 'elektronika', 'lanjut', 'elf'];
@@ -44,7 +44,9 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
     const [kapasitas, setKapasitas] = useState('');
     const [tarifInternal, setTarifInternal] = useState('');
     const [tarifLuar, setTarifLuar] = useState('');
+    const [foto, setFoto] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (state) {
@@ -59,7 +61,9 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
             setKapasitas(aset?.kapasitas !== undefined ? String(aset.kapasitas) : '');
             setTarifInternal(aset?.tarifInternalUnej !== undefined ? String(aset.tarifInternalUnej) : '');
             setTarifLuar(aset?.tarifLuarUnej !== undefined ? String(aset.tarifLuarUnej) : '');
+            setFoto(null);
             setError(null);
+            setSaving(false);
         }
     }, [state, aset]);
 
@@ -88,6 +92,7 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
             setError('Tarif tidak boleh negatif.');
             return;
         }
+        setSaving(true);
         onSimpan({
             id: aset?.id ?? Date.now(),
             kode: kode.trim(),
@@ -102,7 +107,7 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
             kapasitas: kategori === 'ruangan' && kapasitas !== '' ? Number(kapasitas) : undefined,
             tarifInternalUnej: punyaTarif && tarifInternal !== '' ? Number(tarifInternal) : undefined,
             tarifLuarUnej: punyaTarif && tarifLuar !== '' ? Number(tarifLuar) : undefined,
-        });
+        }, foto);
     }
 
     return (
@@ -113,7 +118,7 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
                         {state.mode === 'buat' ? 'Tambah' : 'Ubah'} {kategoriLabels[kategori]}
                     </DialogTitle>
                     <DialogDescription>
-                        Data disimpan lokal sebagai simulasi — tersambung ke database setelah integrasi backend (REQ-7).
+                        Data tersimpan langsung ke basis data inventaris laboratorium SIMLAFIS.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -143,6 +148,16 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
                     <div className="space-y-1.5">
                         <Label htmlFor="nama">Nama</Label>
                         <Input id="nama" value={nama} onChange={(e) => setNama(e.target.value)} />
+                    </div>
+
+                    <div className="space-y-1.5">
+                        <Label htmlFor="foto">Foto Aset (Opsional, JPG/PNG max 2MB)</Label>
+                        <Input
+                            id="foto"
+                            type="file"
+                            accept="image/png,image/jpeg,image/jpg"
+                            onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -217,10 +232,12 @@ export function ItemFormDialog({ state, kategori, onOpenChange, onSimpan }: Item
                 </div>
 
                 <DialogFooter>
-                    <Button variant="secondary" onClick={() => onOpenChange(false)}>
+                    <Button variant="secondary" onClick={() => onOpenChange(false)} disabled={saving}>
                         Batal
                     </Button>
-                    <Button onClick={simpan}>Simpan</Button>
+                    <Button onClick={simpan} disabled={saving}>
+                        {saving ? 'Menyimpan...' : 'Simpan'}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

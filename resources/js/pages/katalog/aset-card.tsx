@@ -30,6 +30,16 @@ export function AsetCard({ aset, role, subKategori, onDetail, onTambahKeCart, on
 
     return (
         <Card className="gap-3 py-4">
+            {aset.foto && (
+                <div className="px-4">
+                    <img
+                        src={aset.foto}
+                        alt={aset.nama}
+                        loading="lazy"
+                        className="h-40 w-full rounded-lg border object-cover"
+                    />
+                </div>
+            )}
             <div className="flex flex-col gap-3 px-4">
                 <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-[13px] text-muted-foreground">{aset.kode}</span>

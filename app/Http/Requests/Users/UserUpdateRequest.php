@@ -6,6 +6,7 @@ use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -30,7 +31,7 @@ class UserUpdateRequest extends FormRequest
         $role = $this->input('role', $target->role);
         $isEkst = $role === User::ROLE_EKSTERNAL;
 
-        return [
+        $rules = [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($target->id),
             'role' => ['required', 'string', Rule::in(User::ROLES)],
@@ -40,6 +41,37 @@ class UserUpdateRequest extends FormRequest
             'kategori' => $isEkst ? ['required', Rule::in(User::KATEGORI_EKSTERNAL)] : ['nullable', Rule::in(User::KATEGORI_EKSTERNAL)],
             'no_hp' => $this->noHpRules(),
         ];
+
+        if (DB::getDriverName() === 'pgsql') {
+            $idPengguna = (int) DB::table('akun')->where('id_akun', $target->id)->value('id_pengguna');
+            $rules['no_identitas'] = $this->identitasRules($role, $idPengguna);
+            $rules['foto_profil'] = ['nullable', 'image', 'mimes:jpg,png', 'max:2048'];
+            $rules['foto_identitas'] = ['nullable', 'image', 'mimes:jpg,png', 'max:2048'];
+        }
+
+        return $rules;
+    }
+
+    /**
+     * No Identitas wajib untuk dosen/mhs/ekst pada schema PostgreSQL.
+     *
+     * @return array<int, ValidationRule|array<mixed>|string>
+     */
+    private function identitasRules(?string $role, ?int $ignorePenggunaId): array
+    {
+        if (! in_array($role, ['dosen', 'mhs', 'ekst'], true)) {
+            return ['nullable', 'string', 'max:50'];
+        }
+
+        $table = $role === 'dosen' ? 'dosen' : ($role === 'mhs' ? 'mahasiswa' : 'eksternal');
+        $column = $role === 'dosen' ? 'nip_nidn' : ($role === 'mhs' ? 'nim' : 'nik');
+
+        $unique = Rule::unique($table, $column);
+        if ($ignorePenggunaId !== null) {
+            $unique->where(fn ($q) => $q->where('id_pengguna', '!=', $ignorePenggunaId));
+        }
+
+        return ['required', 'string', 'max:50', $unique];
     }
 
     /**

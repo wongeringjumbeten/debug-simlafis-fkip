@@ -52,6 +52,7 @@ export default function Dashboard({
     chart,
     chartFilters,
     recentPengajuan,
+    inventaris,
 }: DashboardProps) {
     const { auth } = usePage().props;
 
@@ -97,6 +98,16 @@ export default function Dashboard({
                             </div>
                             <p className="text-right text-xs text-muted-foreground">Akumulasi alat & ruangan (ADM-04)</p>
                         </div>
+                    </div>
+                )}
+
+                {/* Inventaris nyata (user story 12) — hanya scope lab */}
+                {isLab && inventaris && (
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <StatCard title="Jenis Alat" value={inventaris.totalAlat} icon={Package} hint="Master alat terdaftar" />
+                        <StatCard title="Ruangan" value={inventaris.totalRuangan} icon={FileText} hint="Ruang laboratorium" />
+                        <StatCard title="Bahan" value={inventaris.totalBahan} icon={Clock} hint="Jenis bahan tercatat" />
+                        <StatCard title="Pengguna" value={inventaris.totalPengguna} icon={CheckCircle2} hint="Akun terdaftar" />
                     </div>
                 )}
 

@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -41,6 +44,16 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
+
+        Fortify::authenticateUsing(function (Request $request): ?User {
+            $user = User::query()->where('email', $request->string('email')->toString())->first();
+
+            if ($user === null || ! Hash::check($request->string('password')->toString(), $user->password)) {
+                return null;
+            }
+
+            return $user->isBlocked() ? null : $user;
+        });
     }
 
     /**
@@ -51,14 +64,6 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
-            'demoAccounts' => app()->environment('local') ? [
-                ['role' => 'admin', 'label' => 'Admin', 'email' => 'admin@simlafis.test'],
-                ['role' => 'kalab', 'label' => 'KaLab', 'email' => 'kalab@simlafis.test'],
-                ['role' => 'plp', 'label' => 'PLP', 'email' => 'plp@simlafis.test'],
-                ['role' => 'dosen', 'label' => 'Dosen', 'email' => 'dosen@simlafis.test'],
-                ['role' => 'mhs', 'label' => 'Mahasiswa', 'email' => 'mhs@simlafis.test'],
-                ['role' => 'ekst', 'label' => 'Eksternal', 'email' => 'ekst@simlafis.test'],
-            ] : [],
         ]));
 
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [
@@ -77,6 +82,15 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::registerView(fn () => Inertia::render('auth/register', [
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
+            'referensi' => DB::getDriverName() === 'pgsql' ? [
+                'fakultas' => DB::table('fakultas')->orderBy('nama_fakultas')->get(['id_fakultas as id', 'nama_fakultas as nama']),
+                'instansi' => DB::table('instansi')->orderBy('nama_instansi')->get(['id_instansi as id', 'nama_instansi as nama']),
+                'provinsi' => DB::table('provinces')->orderBy('name')->get(['id', 'name']),
+            ] : [
+                'fakultas' => [],
+                'instansi' => [],
+                'provinsi' => [],
+            ],
         ]));
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));

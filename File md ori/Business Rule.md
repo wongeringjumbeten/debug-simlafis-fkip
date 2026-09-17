@@ -17,4 +17,4 @@ Dalam menerapkan mekanisme Persetujuan Parsial (Item-Level Approval), pengguna (
 Eksclusivitas Peran (Role) 
 Setiap akun pengguna hanya diperbolehkan terhubung dengan satu peran (Single Role) untuk menghindari tumpang tindih tanggung jawab sesuai standar operasional laboratorium. 
 Ketersediaan Informasi Publik 
-Halaman katalog tarif sewa (Alat dan Ruangan) dapat diakses secara terbuka oleh publik tanpa memerlukan autentikasi (login). Namun, akses ke fitur manajemen internal, kalender pengajuan, dan riwayat transaksi mutlak memerlukan login.
+Halaman katalog tarif sewa (Alat dan Ruangan) dapat diakses secara terbuka oleh publik tanpa memerlukan autentikasi (login). Namun, akses ke fitur manajemen internal, kalender pengajuan, dan riwayat transaksi mutlak memerlukan login. 

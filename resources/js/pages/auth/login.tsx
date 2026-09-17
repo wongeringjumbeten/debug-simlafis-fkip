@@ -1,4 +1,4 @@
-import { Form, Head, router } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -10,28 +10,16 @@ import { Spinner } from '@/components/ui/spinner';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-import PasskeyVerify from '@/components/passkey-verify';
-
-type DemoAccount = { role: string; label: string; email: string };
 
 type Props = {
     status?: string;
     canResetPassword: boolean;
-    demoAccounts?: DemoAccount[];
 };
 
-const DEMO_PASSWORD = 'a123b456';
-
-export default function Login({ status, canResetPassword, demoAccounts = [] }: Props) {
-    function masukCepat(email: string) {
-        router.post(store.url(), { email, password: DEMO_PASSWORD, remember: 'on' });
-    }
-
+export default function Login({ status, canResetPassword }: Props) {
     return (
         <>
             <Head title="Masuk" />
-
-            <PasskeyVerify />
 
             <Form
                 {...store.form()}
@@ -114,28 +102,6 @@ export default function Login({ status, canResetPassword, demoAccounts = [] }: P
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-[#2A9D6F]">
                     {status}
-                </div>
-            )}
-
-            {demoAccounts.length > 0 && (
-                <div className="mt-2 rounded-lg border border-dashed bg-[#F1FAEE] p-4">
-                    <p className="text-center text-xs font-medium text-[#4A6274]">
-                        Akun uji (hanya environment lokal)
-                    </p>
-                    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {demoAccounts.map((account) => (
-                            <Button
-                                key={account.role}
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                onClick={() => masukCepat(account.email)}
-                                data-test={`quick-login-${account.role}`}
-                            >
-                                {account.label}
-                            </Button>
-                        ))}
-                    </div>
                 </div>
             )}
         </>

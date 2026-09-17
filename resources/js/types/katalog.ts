@@ -25,6 +25,8 @@ export interface Aset {
     /** Tarif sewa per hari (Rupiah) — hanya alat & ruangan (BR-2) */
     tarifInternalUnej?: number;
     tarifLuarUnej?: number;
+    /** Path foto publik relatif root, mis. /images/katalog/alat/xxx.png */
+    foto?: string | null;
 }
 
 export interface CartItem {

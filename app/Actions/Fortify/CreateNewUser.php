@@ -5,6 +5,8 @@ namespace App\Actions\Fortify;
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
 use App\Models\User;
+use App\Services\RegistrationService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -19,6 +21,11 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
+        // Sprint 1 PostgreSQL: registrasi 3 kategori menulis graf 3NF transaksional.
+        if (DB::getDriverName() === 'pgsql') {
+            return app(RegistrationService::class)->register($input);
+        }
+
         Validator::make($input, [
             ...$this->profileRules(),
             ...$this->externalRegistrationRules(),

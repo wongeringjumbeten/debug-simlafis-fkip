@@ -7,6 +7,8 @@ Analisis Kebutuhan Fungsional
 1.1. Analisis Memulai Sistem
 Prosedur Login (Admin, Kalab, PLP, Mahasiswa, Dosen, Eksternal)
 Pengguna membuka website Simlafis
+Sistem menampilkan homepage
+Pengguna klik “Login”
 Sistem menampilkan form login yang berisi:
 Email: Varchar (255 char)
 Password: Varchar (255 char)
@@ -22,8 +24,9 @@ Jika data akun yang diinputkan tidak sesuai, maka sistem akan menampilkan pesan 
 Setelah berhasil login, sistem membuat sesi (session) pengguna.
 
 Prosedur Lupa Password (Admin, Kalab, PLP, Mahasiswa, Dosen, Eksternal)
-Pengguna membuka halaman login pada sistem Simlafis
-Sistem menam
+Pengguna membuka website sistem SIMLAFIS
+Sistem menampilkan homepage
+Pengguna membuka halaman login pada sistem SIMLAFIS
 Sistem menampilkan halaman login
 Pengguna mengklik tautan “Lupa Password”
 Sistem menampilkan form pemulihan kata sandi yang berisi: 
@@ -43,28 +46,62 @@ Sistem melakukan validasi:
 Jika Password Baru dan Konfirmasi Password Baru tidak identik, sistem menampilkan pesan "Konfirmasi password tidak cocok".
 Jika identik, sistem memperbarui kata sandi di basis data, menghapus token sementara, menampilkan pesan "Password berhasil diperbarui, silakan login kembali", dan mengarahkan pengguna ke halaman login.
 
-Prosedur Register( Kalab, PLP, Mahasiswa, Dosen, Eksternal)
-Pengguna membuka halaman awal SIMLAFIS dan mengklik tombol "Daftar Akun". 
+Prosedur Register( Mahasiswa, Dosen, Eksternal)
+Pengguna membuka website Simlafis
+Sistem menampilkan homepage
+Pengguna klik “Daftar Akun”
 Sistem menampilkan form registrasi yang berisi: 
 Nama Lengkap: Varchar (255 char)
-Instansi / Organisasi: Varchar (255 char)
-Kategori Mahasiswa: Enum (‘Mahasiswa’, ‘Internal-UNEJ’, 'Luar-UNEJ')
+Kategori Pengguna: Enum (‘Mahasiswa UNEJ’, ‘Dosen UNEJ’, ‘Pengguna Umum (Non-UNEJ)')
 Nomor Telepon/WA: Varchar (20 char)
-No Identitas: Varchar (100 char)
 Email: Varchar (255 char)
-Password: Varchar (255 char)
-Konfirmasi Password: Varchar (255 char)
-Foto Profil: Varchar (255 char)
-Foto Identitas (KTM atau KTP):  Varchar (255 char)
-Pengguna mengisi seluruh data pada form registrasi dan mengklik tombol "Daftar Sekarang".
+Pengguna mengisi seluruh data pada form registrasi dan mengklik tombol "Lanjut".
 Sistem melakukan validasi masukan:
 Jika ada field yang belum diisi, sistem menampilkan pesan "Semua kolom wajib diisi".
 Jika format email tidak valid, sistem menampilkan pesan "Format email tidak sesuai".
 Jika email sudah pernah terdaftar, sistem menampilkan pesan "Email sudah terdaftar, silakan gunakan email lain".
+Jika seluruh data valid, sistem menampilkan form register sesuai kategori pengguna.
+Jika kategori pengguna Dosen unej, sistem menampilkan form register dosen yang berisi:
+NIP:Integer (Unique)
+Fakultas: VarChar(255)
+Prodi: VarChar(255)
+Password: Varchar (255 char)
+Konfirmasi Password: Varchar (255 char)
+Unggah Foto Profil (format jpg/png): Varchar (255 char)
+Unggah Foto Kartu Pegawai (format jpg/png):  Varchar (255 char)
+Jika kategori pengguna Mahasiswa unej, sistem menampilkan form register mahasiswa yang berisi:
+NIM: Integer (Unique)
+Fakultas:VarChar(255)
+Prodi: VarChar(255)
+Password: Varchar (255 char)
+Konfirmasi Password: Varchar (255 char)
+Unggah Foto Profil (format jpg/png): Varchar (255 char)
+Unggah Foto Kartu Tanda Mahasiswa (format jpg/png):  Varchar (255 char)
+Jika kategori pengguna Umum (non-unej), sistem menampilkan form register umum yang berisi:
+NIK: Integer (Unique)
+Instansi: Varchar (255 char)
+Provinsi (tempat tinggal):VarChar(100 char)
+Kabupaten (tempat tinggal): VarChar(100 char)
+Kecamatan (tempat tinggal): VarChar(100 char)
+Kelurahan/Desa (tempat tinggal): VarChar(100 char)
+Alamat Lengkap (tempat tinggal): Varchar (255 char)
+Password: Varchar (255 char)
+Konfirmasi Password: Varchar (255 char)
+Unggah Foto Profil (format jpg/png): Varchar (255 char)
+Unggah Foto Kartu Tanda Penduduk (format jpg/png):  Varchar (255 char)
+Pengguna mengisi seluruh data pada form registrasi dan mengklik tombol "Daftar Sekarang".
+Sistem melakukan validasi masukan:
+Jika ada field yang belum diisi, sistem menampilkan pesan "Semua kolom wajib diisi".
+Jika ukuran unggahan foto melebihi batas 2MB atau format bukan JPG/PNG, sistem menampilkan pesan "Format foto harus JPG/PNG dan maksimal 2MB".
 Jika Password dan Konfirmasi Password tidak sama, sistem menampilkan pesan "Konfirmasi password tidak cocok".
-Jika seluruh data valid, sistem menyimpan data akun pengguna baru, menampilkan pesan "Registrasi akun berhasil, silakan login", dan mengarahkan pengguna ke halaman login. 
-Khusus yang mendaftar dengan role Kalab atau PLP dapat mendaftar dengan role terserah terlebih dahulu. kemudian wajib konfirmasi ke admin supaya admin dapat mengganti role kalab atau plp yang sesuai.
-
+Jika seluruh data valid, sistem menampilkan pop up "Yakin ingin melakukan registrasi?"
+Jika pengguna mengklik "Ya", maka sistem akan:
+Menyimpan data akun pengguna baru sesuai kategori pengguna
+Menampilkan pesan"Registrasi akun berhasil, silakan login"
+Mengarahkan pengguna ke halaman login
+Jika pengguna mengklik "Batal", maka sistem akan:
+ Menampilkan pesan “Batal Melakukan Registrasi”
+Tetap menampilkan form registrasi
 
 Prosedur Melihat Profil  (Admin, Kalab, PLP, Mahasiswa, Dosen, Eksternal)
 Pengguna masuk ke halaman dashboard sesuai role. 
@@ -89,6 +126,7 @@ Nomor Telepon: Varchar (20 char)
 Instansi / Program Studi: Varchar (255 char)
 Pengguna memperbarui data yang ingin diubah dan mengklik tombol "Simpan Perubahan".
 Sistem melakukan validasi:
+Jika ada form yang kosong, sistem menampilkan pesan "Semua kolom wajib diisi".
 Jika ukuran unggahan foto melebihi batas 2MB atau format bukan JPG/PNG, sistem menampilkan pesan "Format foto harus JPG/PNG dan maksimal 2MB".
 Jika semua data valid, maka sistem akan menampilkan pop-up dialog "Yakin ingin menyimpan perubahan?".
 Jika pengguna mengklik "Ya", maka sistem akan:

@@ -140,8 +140,8 @@ test('admin can suspend an account with a reason', function () {
 
     $this->actingAs(adminUser())
         ->patch(route('users.status', $user), [
-            'active' => false,
-            'suspension_reason' => 'Terlambat mengembalikan alat',
+            'status' => 'suspended',
+            'alasan' => 'Terlambat mengembalikan alat',
         ])
         ->assertSessionHasNoErrors();
 
@@ -154,15 +154,15 @@ test('suspending requires a reason', function () {
     $user = User::factory()->create(['role' => 'mhs']);
 
     $this->actingAs(adminUser())
-        ->patch(route('users.status', $user), ['active' => false])
-        ->assertSessionHasErrors('suspension_reason');
+        ->patch(route('users.status', $user), ['status' => 'suspended'])
+        ->assertSessionHasErrors('alasan');
 });
 
 test('reactivating clears the suspension reason', function () {
     $user = User::factory()->create(['role' => 'mhs', 'active' => false, 'suspension_reason' => 'lama']);
 
     $this->actingAs(adminUser())
-        ->patch(route('users.status', $user), ['active' => true])
+        ->patch(route('users.status', $user), ['status' => 'active'])
         ->assertSessionHasNoErrors();
 
     $user->refresh();
@@ -170,12 +170,42 @@ test('reactivating clears the suspension reason', function () {
         ->and($user->suspension_reason)->toBeNull();
 });
 
-test('admin cannot suspend their own account', function () {
+test('admin cannot change their own account status', function () {
     $admin = adminUser();
 
     $this->actingAs($admin)
-        ->patch(route('users.status', $admin), ['active' => false, 'suspension_reason' => 'x'])
+        ->patch(route('users.status', $admin), ['status' => 'suspended', 'alasan' => 'x'])
         ->assertSessionHasErrors('status');
 
     expect($admin->refresh()->active)->toBeTrue();
+});
+
+test('admin can block an account with a reason', function () {
+    $user = User::factory()->create(['role' => 'mhs']);
+
+    $this->actingAs(adminUser())
+        ->patch(route('users.status', $user), [
+            'status' => 'blocked',
+            'alasan' => 'Penyalahgunaan fasilitas lab',
+        ])
+        ->assertSessionHasNoErrors();
+
+    $user->refresh();
+    expect($user->suspension_reason)->toBe('Penyalahgunaan fasilitas lab');
+});
+
+test('blocking requires a reason', function () {
+    $user = User::factory()->create(['role' => 'mhs']);
+
+    $this->actingAs(adminUser())
+        ->patch(route('users.status', $user), ['status' => 'blocked'])
+        ->assertSessionHasErrors('alasan');
+});
+
+test('invalid status value is rejected', function () {
+    $user = User::factory()->create(['role' => 'mhs']);
+
+    $this->actingAs(adminUser())
+        ->patch(route('users.status', $user), ['status' => 'unknown'])
+        ->assertSessionHasErrors('status');
 });

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Auth\AccountUserProvider;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        Auth::provider('account-view', function ($app, array $config): AccountUserProvider {
+            return new AccountUserProvider($app['hash'], $config['model']);
+        });
     }
 
     /**

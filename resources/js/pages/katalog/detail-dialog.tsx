@@ -52,6 +52,13 @@ export function DetailDialog({ aset, role, subKategori, onOpenChange, onTambahKe
                 </DialogHeader>
 
                 <div className="space-y-3">
+                    {aset.foto && (
+                        <img
+                            src={aset.foto}
+                            alt={aset.nama}
+                            className="max-h-64 w-full rounded-lg border object-contain"
+                        />
+                    )}
                     <div className="flex flex-wrap gap-2">
                         <StatusBadge label={kondisiLabels[aset.kondisi]} tone={kondisiTone[aset.kondisi]} />
                         <StatusBadge

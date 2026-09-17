@@ -1,35 +1,42 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { Plus, RotateCcw, Search, ShoppingCart } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { mockAset } from '@/mock/katalog';
 import { dashboard } from '@/routes';
 import { cn } from '@/lib/utils';
-import type { Aset, CartItem, KategoriAset, Role, SubKategoriEksternal } from '@/types';
+import type { Aset, CartItem, KategoriAset, Role, SubKategoriEksternal, UnitLab } from '@/types';
 import { AddToCartDialog } from './add-to-cart-dialog';
 import { AsetCard } from './aset-card';
 import { CartDialog } from './cart-dialog';
 import { DetailDialog } from './detail-dialog';
 import { ItemFormDialog } from './item-form-dialog';
-import { canBorrow, canManageKategori, kategoriLabels, tabsByRole } from './helpers';
+import { canBorrow, canManageKategori, kategoriLabels, tabsByRole, unitLabLabels } from './helpers';
 
 type Props = {
     /** Role user terautentikasi (REQ-1). */
     role: Role;
     /** Sub-kategori tarif untuk role eksternal (BR-2). */
     subKategori?: SubKategoriEksternal | null;
+    /** Data aset dari database; null berarti pakai mock UI-first. */
+    asets?: Aset[] | null;
 };
 
-export default function Katalog({ role, subKategori }: Props) {
+const unitLabOptions: ('semua' | UnitLab)[] = ['semua', 'dasar', 'elektronika', 'lanjut', 'elf'];
+
+export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) {
     const tabs = tabsByRole[role];
     const kategoriEksternal = subKategori ?? undefined;
 
     const [kategori, setKategori] = useState<KategoriAset>(tabs[0]);
-    const [asets, setAsets] = useState<Aset[]>(mockAset);
+    const [asets, setAsets] = useState<Aset[]>(asetsAwal ?? mockAset);
     const [pencarian, setPencarian] = useState('');
+    const [unitLab, setUnitLab] = useState<'semua' | UnitLab>('semua');
     const [tanggalMulai, setTanggalMulai] = useState('');
     const [tanggalSelesai, setTanggalSelesai] = useState('');
     const [cart, setCart] = useState<CartItem[]>([]);
@@ -44,14 +51,16 @@ export default function Katalog({ role, subKategori }: Props) {
         return asets.filter(
             (a) =>
                 a.kategori === kategori &&
+                (unitLab === 'semua' || a.unitLab === unitLab) &&
                 (kata === '' || a.nama.toLowerCase().includes(kata) || a.kode.toLowerCase().includes(kata)),
         );
-    }, [asets, kategori, pencarian]);
+    }, [asets, kategori, pencarian, unitLab]);
 
     const filterTanggalAktif = tanggalMulai !== '' && tanggalSelesai !== '';
 
     function resetFilter() {
         setPencarian('');
+        setUnitLab('semua');
         setTanggalMulai('');
         setTanggalSelesai('');
     }
@@ -66,19 +75,71 @@ export default function Katalog({ role, subKategori }: Props) {
         setCart((sebelumnya) => sebelumnya.filter((_, i) => i !== index));
     }
 
-    function simpanAset(aset: Aset) {
-        setAsets((sebelumnya) => {
-            const ada = sebelumnya.some((a) => a.id === aset.id);
-            return ada ? sebelumnya.map((a) => (a.id === aset.id ? aset : a)) : [...sebelumnya, aset];
+    function simpanAset(aset: Aset, foto?: File | null) {
+        const mode = formAset?.mode ?? 'buat';
+        const formData = new FormData();
+        formData.append('nama', aset.nama);
+        if (aset.spesifikasi) formData.append('spesifikasi', aset.spesifikasi);
+        if (aset.stokTotal !== undefined) formData.append('stok_awal', String(aset.stokTotal));
+        if (aset.stokTersedia !== undefined) formData.append('stok_saat_ini', String(aset.stokTersedia));
+        if (aset.kondisi) formData.append('kondisi', aset.kondisi);
+        if (aset.kapasitas !== undefined) formData.append('kapasitas', String(aset.kapasitas));
+        if (aset.tarifInternalUnej !== undefined) formData.append('tarif_internal', String(aset.tarifInternalUnej));
+        if (aset.tarifLuarUnej !== undefined) formData.append('tarif_luar', String(aset.tarifLuarUnej));
+        if (foto) formData.append('foto', foto);
+
+        let url = `/katalog/${aset.kategori}`;
+        if (mode === 'ubah') {
+            url = `/katalog/${aset.kategori}/${aset.id}`;
+            formData.append('_method', 'PATCH');
+        }
+
+        router.post(url, formData, {
+            forceFormData: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                setAsets((sebelumnya) => {
+                    const ada = sebelumnya.some((a) => a.id === aset.id);
+                    return ada ? sebelumnya.map((a) => (a.id === aset.id ? aset : a)) : [...sebelumnya, aset];
+                });
+                setFormAset(null);
+            },
+            onError: (err) => {
+                console.error('Gagal menyimpan aset:', err);
+                setFormAset(null);
+            },
         });
-        setFormAset(null);
     }
 
-    function ajukanPeminjaman() {
-        // Stub integrasi: pengajuan dikirim ke backend saat modul transaksi siap (REQ-13, REQ-14).
-        setCart([]);
-        setCartTerbuka(false);
-        setPengajuanTerkirim(true);
+    function ajukanPeminjaman(data?: { metodePembayaran?: 'transfer' | 'cash'; buktiPembayaran?: File | null }) {
+        const itemsPayload = cart.map((item) => ({
+            id: item.aset.id,
+            id_alat: item.aset.kategori === 'alat' ? item.aset.id : undefined,
+            id_ruangan: item.aset.kategori === 'ruangan' ? item.aset.id : undefined,
+            kategori: item.aset.kategori,
+            tanggalMulai: item.tanggalMulai,
+            tanggalSelesai: item.tanggalSelesai,
+            jamMulai: item.jamMulai,
+            jamSelesai: item.jamSelesai,
+            jumlah: item.jumlah,
+        }));
+
+        router.post(
+            '/peminjaman',
+            {
+                items: itemsPayload as any,
+                metode_pembayaran: data?.metodePembayaran,
+                bukti_pembayaran: data?.buktiPembayaran,
+            },
+            {
+                forceFormData: true,
+                onSuccess: () => {
+                    setCart([]);
+                    setCartTerbuka(false);
+                    setPengajuanTerkirim(true);
+                },
+            },
+        );
     }
 
     return (
@@ -155,6 +216,23 @@ export default function Katalog({ role, subKategori }: Props) {
                                 aria-label="Cari katalog"
                                 className="pl-9"
                             />
+                        </div>
+                        <div className="space-y-1">
+                            <Label htmlFor="filter-unit" className="text-xs font-medium text-muted-foreground">
+                                Unit Lab
+                            </Label>
+                            <Select value={unitLab} onValueChange={(v) => setUnitLab(v as 'semua' | UnitLab)}>
+                                <SelectTrigger id="filter-unit" className="w-44">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {unitLabOptions.map((u) => (
+                                        <SelectItem key={u} value={u}>
+                                            {u === 'semua' ? 'Semua unit' : unitLabLabels[u]}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="space-y-1">
                             <label htmlFor="filter-mulai" className="text-xs font-medium text-muted-foreground">

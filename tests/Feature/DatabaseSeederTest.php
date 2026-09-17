@@ -20,12 +20,11 @@ test('seeder creates one verified account per role sharing the test password', f
         ->and($external->kategori)->toBe('internal_unej');
 });
 
-test('login page hides the demo role shortcuts outside the local environment', function () {
-    // Tests run in the "testing" environment, so the quick-login list must be empty.
+test('login page exposes no demo role shortcuts', function () {
     $this->get(route('login'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('auth/login')
-            ->where('demoAccounts', []),
+            ->missing('demoAccounts'),
         );
 });

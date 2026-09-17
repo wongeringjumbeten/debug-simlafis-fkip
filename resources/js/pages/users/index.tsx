@@ -34,10 +34,21 @@ import {
 import { dashboard } from '@/routes';
 import users from '@/routes/users';
 import type { UserListProps, UserRow, UserRole } from '@/types';
-import { kategoriLabels, roleLabels } from '@/types/users';
+import { type AccountStatus, identitasLabels, kategoriLabels, roleLabels } from '@/types/users';
 import { UserFormDialog } from './user-form-dialog';
 
 type Props = UserListProps & { passwordRules: string };
+
+function statusBadgeProps(status: AccountStatus) {
+    switch (status) {
+        case 'active':
+            return { label: 'Aktif', tone: 'success' } as const;
+        case 'suspended':
+            return { label: 'Ditangguhkan', tone: 'warning' } as const;
+        case 'blocked':
+            return { label: 'Diblokir', tone: 'destructive' } as const;
+    }
+}
 
 /** Decode label paginator Laravel (mis. "&laquo;" menjadi «). */
 const htmlEntities: Record<string, string> = {
@@ -55,6 +66,8 @@ export default function Users({ users: list, filters, roleOptions, passwordRules
     const [formOpen, setFormOpen] = useState(false);
     const [editTarget, setEditTarget] = useState<UserRow | undefined>(undefined);
     const [suspendTarget, setSuspendTarget] = useState<UserRow | null>(null);
+    const [blockTarget, setBlockTarget] = useState<UserRow | null>(null);
+    const [detailTarget, setDetailTarget] = useState<UserRow | null>(null);
 
     const { data, setData, get, processing } = useForm({
         q: filters.q,
@@ -160,10 +173,7 @@ export default function Users({ users: list, filters, roleOptions, passwordRules
                                                 {user.kategori ? kategoriLabels[user.kategori] : '—'}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <StatusBadge
-                                                    label={user.active ? 'Aktif' : 'Ditangguhkan'}
-                                                    tone={user.active ? 'success' : 'destructive'}
-                                                />
+                                                <StatusBadge {...statusBadgeProps(user.status)} />
                                             </td>
                                             <td className="px-4 py-3">
                                                 <DropdownMenu>
@@ -175,10 +185,26 @@ export default function Users({ users: list, filters, roleOptions, passwordRules
                                                     <DropdownMenuContent align="end">
                                                         <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                                                         <DropdownMenuSeparator />
+                                                        <DropdownMenuItem onClick={() => setDetailTarget(user)}>
+                                                            Detail
+                                                        </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => openEdit(user)}>
                                                             Ubah data
                                                         </DropdownMenuItem>
-                                                        {user.active ? (
+                                                        {user.status !== 'active' && (
+                                                            <DropdownMenuItem
+                                                                onClick={() =>
+                                                                    router.patch(
+                                                                        UserController.updateStatus.url(user.id),
+                                                                        { status: 'active' },
+                                                                        { preserveScroll: true, only: ['users'] },
+                                                                    )
+                                                                }
+                                                            >
+                                                                Aktifkan kembali
+                                                            </DropdownMenuItem>
+                                                        )}
+                                                        {user.status === 'active' && (
                                                             <DropdownMenuItem
                                                                 variant="destructive"
                                                                 disabled={user.id === currentUserId}
@@ -186,17 +212,14 @@ export default function Users({ users: list, filters, roleOptions, passwordRules
                                                             >
                                                                 Tangguhkan akses
                                                             </DropdownMenuItem>
-                                                        ) : (
+                                                        )}
+                                                        {user.status !== 'blocked' && (
                                                             <DropdownMenuItem
-                                                                onClick={() =>
-                                                                    router.patch(
-                                                                        UserController.updateStatus.url(user.id),
-                                                                        { active: true },
-                                                                        { preserveScroll: true, only: ['users'] },
-                                                                    )
-                                                                }
+                                                                variant="destructive"
+                                                                disabled={user.id === currentUserId}
+                                                                onClick={() => setBlockTarget(user)}
                                                             >
-                                                                Aktifkan kembali
+                                                                Blokir akun
                                                             </DropdownMenuItem>
                                                         )}
                                                     </DropdownMenuContent>
@@ -253,7 +276,74 @@ export default function Users({ users: list, filters, roleOptions, passwordRules
             )}
 
             <SuspendDialog user={suspendTarget} onClose={() => setSuspendTarget(null)} />
+
+            <BlockDialog user={blockTarget} onClose={() => setBlockTarget(null)} />
+
+            <DetailDialog user={detailTarget} onClose={() => setDetailTarget(null)} />
         </>
+    );
+}
+
+function BarisDetail({ label, value }: { label: string; value: React.ReactNode }) {
+    return (
+        <div className="grid grid-cols-3 gap-2 text-sm">
+            <dt className="text-muted-foreground">{label}</dt>
+            <dd className="col-span-2 font-medium break-words">{value ?? '—'}</dd>
+        </div>
+    );
+}
+
+function DetailDialog({ user, onClose }: { user: UserRow | null; onClose: () => void }) {
+    return (
+        <Dialog open={user !== null} onOpenChange={(o) => !o && onClose()}>
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>Detail Pengguna</DialogTitle>
+                    <DialogDescription>Informasi akun, identitas, dan dokumen terdaftar.</DialogDescription>
+                </DialogHeader>
+                {user && (
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            {user.foto_profil_url ? (
+                                <img src={user.foto_profil_url} alt={`Foto ${user.name}`} className="h-16 w-16 rounded-full object-cover" />
+                            ) : (
+                                <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-full text-lg font-medium">
+                                    {user.name.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <div>
+                                <p className="font-medium">{user.name}</p>
+                                <p className="text-muted-foreground text-sm">{user.email}</p>
+                                <StatusBadge {...statusBadgeProps(user.status)} />
+                            </div>
+                        </div>
+                        <dl className="space-y-3">
+                            <BarisDetail label="ID Pengguna" value={<span className="font-mono">{user.id}</span>} />
+                            <BarisDetail label="No. HP" value={user.no_hp} />
+                            <BarisDetail label="Role" value={roleLabels[user.role]} />
+                            {user.instansi && <BarisDetail label="Instansi" value={user.instansi} />}
+                            {user.kategori && <BarisDetail label="Kategori Tarif" value={kategoriLabels[user.kategori]} />}
+                            {user.nomor_identitas && <BarisDetail label={identitasLabels[user.role] ?? 'No. Identitas'} value={<span className="font-mono">{user.nomor_identitas}</span>} />}
+                            {user.suspension_reason && <BarisDetail label="Alasan Status" value={user.suspension_reason} />}
+                            <BarisDetail label="Terdaftar" value={user.terdaftar} />
+                            {user.foto_identitas_url && (
+                                <div>
+                                    <dt className="text-muted-foreground text-sm">Foto Identitas</dt>
+                                    <dd className="mt-1">
+                                        <img src={user.foto_identitas_url} alt="Foto identitas" className="max-h-48 rounded-lg border object-contain" />
+                                    </dd>
+                                </div>
+                            )}
+                        </dl>
+                        <DialogFooter>
+                            <Button variant="secondary" onClick={onClose}>
+                                Tutup
+                            </Button>
+                        </DialogFooter>
+                    </div>
+                )}
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -279,18 +369,18 @@ function SuspendDialog({ user, onClose }: { user: UserRow | null; onClose: () =>
                     >
                         {({ processing, errors }) => (
                             <>
-                                <input type="hidden" name="active" value="0" />
+                                <input type="hidden" name="status" value="suspended" />
                                 <div className="grid gap-2">
-                                    <Label htmlFor="suspension_reason">Alasan penangguhan</Label>
+                                    <Label htmlFor="alasan_suspend">Alasan penangguhan</Label>
                                     <textarea
-                                        id="suspension_reason"
-                                        name="suspension_reason"
+                                        id="alasan_suspend"
+                                        name="alasan"
                                         rows={3}
                                         required
                                         placeholder="Mis. terlambat mengembalikan alat lebih dari 7 hari"
                                         className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none"
                                     />
-                                    <InputError message={errors.suspension_reason} />
+                                    <InputError message={errors.alasan} />
                                 </div>
                                 <DialogFooter>
                                     <Button type="button" variant="secondary" onClick={onClose}>
@@ -299,6 +389,59 @@ function SuspendDialog({ user, onClose }: { user: UserRow | null; onClose: () =>
                                     <Button type="submit" variant="destructive" disabled={processing}>
                                         {processing && <Spinner />}
                                         Tangguhkan
+                                    </Button>
+                                </DialogFooter>
+                            </>
+                        )}
+                    </Form>
+                )}
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function BlockDialog({ user, onClose }: { user: UserRow | null; onClose: () => void }) {
+    const open = user !== null;
+    return (
+        <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Blokir Akun</DialogTitle>
+                    <DialogDescription>
+                        {user
+                            ? `Akun ${user.name} akan diblokir. Pengguna tidak dapat login dan semua sesi aktif akan dicabut.`
+                            : ''}
+                    </DialogDescription>
+                </DialogHeader>
+                {user && (
+                    <Form
+                        {...UserController.updateStatus.form(user.id)}
+                        className="space-y-4"
+                        options={{ preserveScroll: true }}
+                        onSuccess={onClose}
+                    >
+                        {({ processing, errors }) => (
+                            <>
+                                <input type="hidden" name="status" value="blocked" />
+                                <div className="grid gap-2">
+                                    <Label htmlFor="alasan_block">Alasan pemblokiran</Label>
+                                    <textarea
+                                        id="alasan_block"
+                                        name="alasan"
+                                        rows={3}
+                                        required
+                                        placeholder="Mis. pelanggaran berat atau penyalahgunaan fasilitas"
+                                        className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none"
+                                    />
+                                    <InputError message={errors.alasan} />
+                                </div>
+                                <DialogFooter>
+                                    <Button type="button" variant="secondary" onClick={onClose}>
+                                        Batal
+                                    </Button>
+                                    <Button type="submit" variant="destructive" disabled={processing}>
+                                        {processing && <Spinner />}
+                                        Blokir Akun
                                     </Button>
                                 </DialogFooter>
                             </>

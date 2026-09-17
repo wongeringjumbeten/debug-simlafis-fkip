@@ -1,5 +1,4 @@
 import { Form, Head, usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
@@ -9,10 +8,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/profile';
 import type { Auth } from '@/types';
-import { send } from '@/routes/verification';
 
 type PageProps = {
     auth: Auth;
+};
+
+type Identitas = {
+    jenis_identitas: string | null;
+    nomor_identitas: string | null;
+    fakultas: string | null;
+    prodi: string | null;
+    instansi?: string | null;
+    alamat?: string | null;
+    foto_profil_url: string | null;
+    foto_identitas_url: string | null;
 };
 
 const kategoriLabels: Record<string, string> = {
@@ -23,9 +32,13 @@ const kategoriLabels: Record<string, string> = {
 export default function Profile({
     mustVerifyEmail,
     status,
+    identitas,
+    canDeleteAccount = true,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    identitas?: Identitas | null;
+    canDeleteAccount?: boolean;
 }) {
     const { auth } = usePage<PageProps>().props;
     const isEksternal = auth.user?.role === 'ekst';
@@ -91,28 +104,69 @@ export default function Profile({
                                 />
                             </div>
 
-                            {mustVerifyEmail &&
-                                auth.user.email_verified_at === null && (
+                            {identitas && (
+                                <div className="space-y-6 border-t pt-6">
                                     <div>
-                                        <p className="text-muted-foreground -mt-4 text-sm">
-                                            Alamat email Anda belum diverifikasi.{' '}
-                                            <Link
-                                                href={send()}
-                                                as="button"
-                                                className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                                            >
-                                                Klik di sini untuk mengirim ulang email verifikasi.
-                                            </Link>
+                                        <h3 className="text-base font-medium">Identitas Terdaftar</h3>
+                                        <p className="text-muted-foreground text-sm">
+                                            Data identitas bersifat read-only. Perubahan melalui Admin.
                                         </p>
+                                    </div>
 
-                                        {status ===
-                                            'verification-link-sent' && (
-                                            <div className="mt-2 text-sm font-medium text-green-600">
-                                                Tautan verifikasi baru telah dikirim ke alamat email Anda.
+                                    {identitas.foto_profil_url && (
+                                        <div className="flex items-center gap-4">
+                                            <img
+                                                src={identitas.foto_profil_url}
+                                                alt="Foto profil"
+                                                className="h-16 w-16 rounded-full object-cover"
+                                            />
+                                            <div className="text-sm">
+                                                <p className="font-medium">{auth.user.name}</p>
+                                                <p className="text-muted-foreground">{auth.user.email}</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <dl className="grid gap-3 rounded-lg border p-4 text-sm sm:grid-cols-2">
+                                        {identitas.jenis_identitas && (
+                                            <div>
+                                                <dt className="text-muted-foreground text-xs">{identitas.jenis_identitas}</dt>
+                                                <dd className="font-mono">{identitas.nomor_identitas ?? '—'}</dd>
                                             </div>
                                         )}
+                                        {identitas.fakultas && (
+                                            <div>
+                                                <dt className="text-muted-foreground text-xs">Fakultas</dt>
+                                                <dd>{identitas.fakultas}</dd>
+                                            </div>
+                                        )}
+                                        {identitas.prodi && (
+                                            <div>
+                                                <dt className="text-muted-foreground text-xs">Program Studi</dt>
+                                                <dd>{identitas.prodi}</dd>
+                                            </div>
+                                        )}
+                                        {identitas.instansi && (
+                                            <div>
+                                                <dt className="text-muted-foreground text-xs">Instansi</dt>
+                                                <dd>{identitas.instansi}</dd>
+                                            </div>
+                                        )}
+                                        {identitas.alamat && (
+                                            <div className="sm:col-span-2">
+                                                <dt className="text-muted-foreground text-xs">Alamat</dt>
+                                                <dd>{identitas.alamat}</dd>
+                                            </div>
+                                        )}
+                                    </dl>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="foto_profil">Ganti Foto Profil (JPG/PNG, maks 2 MB)</Label>
+                                        <Input id="foto_profil" type="file" name="foto_profil" accept=".jpg,.jpeg,.png" className="mt-1 block w-full" />
+                                        <InputError message={errors.foto_profil} />
                                     </div>
-                                )}
+                                </div>
+                            )}
 
                             {isEksternal && (
                                 <div className="space-y-6 border-t pt-6">
@@ -183,7 +237,7 @@ export default function Profile({
                 </Form>
             </div>
 
-            <DeleteUser />
+            {canDeleteAccount && <DeleteUser />}
         </>
     );
 }

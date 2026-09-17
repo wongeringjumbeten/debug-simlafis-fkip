@@ -14,6 +14,11 @@ import { cn } from '@/lib/utils';
 import type { CartItem, Role, SubKategoriEksternal } from '@/types';
 import { formatRupiah, formatTanggal, hitungHari, tarifUntuk } from './helpers';
 
+interface CartSubmitData {
+    metodePembayaran?: 'transfer' | 'cash';
+    buktiPembayaran?: File | null;
+}
+
 interface CartDialogProps {
     open: boolean;
     items: CartItem[];
@@ -21,13 +26,15 @@ interface CartDialogProps {
     subKategori?: SubKategoriEksternal;
     onOpenChange: (open: boolean) => void;
     onHapus: (index: number) => void;
-    onAjukan: () => void;
+    onAjukan: (data: CartSubmitData) => void;
 }
 
 type CartTab = 'alat' | 'ruangan';
 
 export function CartDialog({ open, items, role, subKategori, onOpenChange, onHapus, onAjukan }: CartDialogProps) {
     const [tab, setTab] = useState<CartTab>('alat');
+    const [metodePembayaran, setMetodePembayaran] = useState<'transfer' | 'cash'>('transfer');
+    const [buktiPembayaran, setBuktiPembayaran] = useState<File | null>(null);
 
     const isEkst = role === 'ekst';
     const itemTab = items.filter((item) => item.aset.kategori === tab);
@@ -117,6 +124,45 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                     })}
                 </div>
 
+                {isEkst && items.length > 0 && (
+                    <div className="space-y-3 rounded-lg border bg-muted/40 p-3">
+                        <p className="text-sm font-semibold">Opsi Pembayaran Sewa (REQ-15)</p>
+                        <div className="flex gap-4 text-sm">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="radio"
+                                    name="metodePembayaran"
+                                    value="transfer"
+                                    checked={metodePembayaran === 'transfer'}
+                                    onChange={() => setMetodePembayaran('transfer')}
+                                />
+                                Transfer Bank
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="radio"
+                                    name="metodePembayaran"
+                                    value="cash"
+                                    checked={metodePembayaran === 'cash'}
+                                    onChange={() => setMetodePembayaran('cash')}
+                                />
+                                Tunai / Cash via PLP
+                            </label>
+                        </div>
+                        {metodePembayaran === 'transfer' && (
+                            <div className="space-y-1">
+                                <label className="text-xs text-muted-foreground">Unggah Bukti Transfer (JPG/PNG max 2MB):</label>
+                                <input
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/jpg"
+                                    onChange={(e) => setBuktiPembayaran(e.target.files?.[0] ?? null)}
+                                    className="block w-full text-xs text-muted-foreground file:mr-2 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-xs file:font-semibold file:text-primary-foreground hover:file:bg-primary/90"
+                                />
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 <DialogFooter className="items-center sm:justify-between">
                     {isEkst ? (
                         <p className="text-sm">
@@ -129,7 +175,10 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                         <Button variant="secondary" onClick={() => onOpenChange(false)}>
                             Tutup
                         </Button>
-                        <Button onClick={onAjukan} disabled={items.length === 0}>
+                        <Button
+                            onClick={() => onAjukan({ metodePembayaran: isEkst ? metodePembayaran : undefined, buktiPembayaran })}
+                            disabled={items.length === 0}
+                        >
                             Ajukan Peminjaman
                         </Button>
                     </div>

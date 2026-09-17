@@ -2,6 +2,8 @@ export type UserRole = 'admin' | 'kalab' | 'plp' | 'dosen' | 'mhs' | 'ekst';
 
 export type KategoriEksternal = 'internal_unej' | 'luar_unej';
 
+export type AccountStatus = 'active' | 'suspended' | 'blocked';
+
 /** Bentuk paginator Laravel yang diserialisasi Inertia. */
 export interface PaginationLink {
     url: string | null;
@@ -29,13 +31,25 @@ export interface UserRow {
     name: string;
     email: string;
     role: UserRole;
+    /** Dipetakan dari v_auth_users.status untuk backward compat. */
     active: boolean;
+    /** Status tiga kondisi Sprint 1: active | suspended | blocked. */
+    status: AccountStatus;
     instansi: string | null;
     kategori: KategoriEksternal | null;
     no_hp: string | null;
     suspension_reason: string | null;
     terdaftar: string | null;
+    nomor_identitas?: string | null;
+    foto_profil_url?: string | null;
+    foto_identitas_url?: string | null;
 }
+
+export const identitasLabels: Record<string, string> = {
+    dosen: 'NIP / NIDN',
+    mhs: 'NIM',
+    ekst: 'NIK',
+};
 
 export interface UserListProps {
     users: Pagination<UserRow>;
