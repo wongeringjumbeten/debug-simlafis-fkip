@@ -53,6 +53,18 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('unverified users can not authenticate and are told to verify their email', function () {
+    $user = User::factory()->unverified()->create();
+
+    $response = $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertGuest();
+    $response->assertSessionHasErrors('email');
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

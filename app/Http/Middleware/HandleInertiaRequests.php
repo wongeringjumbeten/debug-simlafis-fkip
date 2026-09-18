@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,9 +40,32 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $this->resolveUser($request),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * Resolve the authenticated user, converting the avatar storage path to a
+     * publicly accessible URL so the frontend <AvatarImage> can render it.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function resolveUser(Request $request): ?array
+    {
+        $user = $request->user();
+
+        if ($user === null) {
+            return null;
+        }
+
+        $data = $user->toArray();
+
+        $data['avatar'] = $user->avatar
+            ? Storage::disk('public')->url($user->avatar)
+            : null;
+
+        return $data;
     }
 }

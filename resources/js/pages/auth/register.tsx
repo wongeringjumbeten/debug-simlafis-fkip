@@ -1,4 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
+import { Camera, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -23,6 +24,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { FileUpload } from '@/components/file-upload';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
@@ -93,10 +95,44 @@ export default function Register({ passwordRules, referensi }: Props) {
         return data.kategori_pengguna !== '' && data.name.trim() !== '' && data.no_hp.trim() !== '' && data.email.trim() !== '';
     }
 
+    function langkahDuaValid() {
+        // Foto identitas wajib; foto profil boleh dikosongkan.
+        if (!data.foto_identitas) return false;
+        if (data.password === '' || data.password !== data.password_confirmation) return false;
+
+        if (data.kategori_pengguna === 'mahasiswa') {
+            return data.nim.trim() !== '' && data.id_fakultas !== '' && data.prodi.trim() !== '';
+        }
+        if (data.kategori_pengguna === 'dosen') {
+            return data.nip.trim() !== '' && data.id_fakultas !== '' && data.prodi.trim() !== '';
+        }
+        if (data.kategori_pengguna === 'eksternal') {
+            return (
+                data.kategori_tarif !== '' &&
+                data.nik.trim() !== '' &&
+                data.instansi.trim() !== '' &&
+                data.id_provinsi !== '' &&
+                data.id_kabupaten !== '' &&
+                data.id_kecamatan !== '' &&
+                data.id_kelurahandesa !== '' &&
+                data.alamat_lengkap.trim() !== ''
+            );
+        }
+        return false;
+    }
+
+    const FIELD_LANGKAH_SATU = ['kategori_pengguna', 'name', 'no_hp', 'email'];
+
+    function lompatKeLangkahError(er: Record<string, string>) {
+        const adaDiLangkahSatu = FIELD_LANGKAH_SATU.some((f) => er[f]);
+        setLangkah(adaDiLangkahSatu ? 1 : 2);
+    }
+
     function kirim(e?: React.FormEvent) {
         e?.preventDefault();
         post(store.url(), {
             forceFormData: true,
+            onError: lompatKeLangkahError,
             onSuccess: () => {
                 reset('password', 'password_confirmation');
                 setKonfirmasiTerbuka(false);
@@ -356,18 +392,24 @@ export default function Register({ passwordRules, referensi }: Props) {
                             </>
                         )}
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="foto_profil">Foto Profil (JPG/PNG, maks 2 MB)</Label>
-                            <Input id="foto_profil" type="file" accept=".jpg,.jpeg,.png" onChange={(e) => setData('foto_profil', e.target.files?.[0] ?? null)} />
-                            <InputError message={errors.foto_profil} />
-                        </div>
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <FileUpload
+                                id="foto_profil"
+                                label="Foto Profil (Opsional)"
+                                file={data.foto_profil}
+                                error={errors.foto_profil}
+                                onChange={(f) => setData('foto_profil', f)}
+                                icon={Camera}
+                            />
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="foto_identitas">
-                                {data.kategori_pengguna === 'mahasiswa' ? 'Foto KTM (JPG/PNG, maks 2 MB)' : data.kategori_pengguna === 'dosen' ? 'Foto Kartu Pegawai (JPG/PNG, maks 2 MB)' : 'Foto KTP (JPG/PNG, maks 2 MB)'}
-                            </Label>
-                            <Input id="foto_identitas" type="file" accept=".jpg,.jpeg,.png" onChange={(e) => setData('foto_identitas', e.target.files?.[0] ?? null)} />
-                            <InputError message={errors.foto_identitas} />
+                            <FileUpload
+                                id="foto_identitas"
+                                label={data.kategori_pengguna === 'mahasiswa' ? 'Foto KTM (Wajib)' : data.kategori_pengguna === 'dosen' ? 'Foto Kartu Pegawai (Wajib)' : 'Foto KTP (Wajib)'}
+                                file={data.foto_identitas}
+                                error={errors.foto_identitas}
+                                onChange={(f) => setData('foto_identitas', f)}
+                                icon={CreditCard}
+                            />
                         </div>
 
                         <div className="grid gap-2">
@@ -386,7 +428,7 @@ export default function Register({ passwordRules, referensi }: Props) {
                             <Button type="button" variant="secondary" className="flex-1" onClick={() => setLangkah(1)}>
                                 Kembali
                             </Button>
-                            <Button type="button" className="flex-1" onClick={() => setLangkah(3)}>
+                            <Button type="button" className="flex-1" disabled={!langkahDuaValid()} onClick={() => setLangkah(3)}>
                                 Lanjut
                             </Button>
                         </div>
@@ -403,6 +445,35 @@ export default function Register({ passwordRules, referensi }: Props) {
                                 <div className="flex justify-between gap-4"><dt>Email</dt><dd className="font-medium text-foreground">{data.email}</dd></div>
                                 <div className="flex justify-between gap-4"><dt>No. HP</dt><dd className="font-medium text-foreground">{data.no_hp}</dd></div>
                             </dl>
+
+                            {(data.foto_profil || data.foto_identitas) && (
+                                <div className="mt-4 flex gap-4 border-t pt-4">
+                                    {data.foto_profil && (
+                                        <div className="space-y-1 text-center">
+                                            <div className="mx-auto h-14 w-14 overflow-hidden rounded-full border bg-muted">
+                                                <img
+                                                    src={URL.createObjectURL(data.foto_profil)}
+                                                    alt="Pratinjau foto profil"
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">Profil</p>
+                                        </div>
+                                    )}
+                                    {data.foto_identitas && (
+                                        <div className="space-y-1 text-center">
+                                            <div className="mx-auto h-14 w-14 overflow-hidden rounded-lg border bg-muted">
+                                                <img
+                                                    src={URL.createObjectURL(data.foto_identitas)}
+                                                    alt="Pratinjau foto identitas"
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">Identitas</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                         <div className="flex gap-2">
                             <Button type="button" variant="secondary" className="flex-1" onClick={() => setLangkah(2)}>
@@ -427,7 +498,7 @@ export default function Register({ passwordRules, referensi }: Props) {
                     <DialogHeader>
                         <DialogTitle>Yakin ingin melakukan registrasi?</DialogTitle>
                         <DialogDescription>
-                            Data akun akan disimpan sesuai kategori pengguna yang dipilih.
+                            Akun akan dibuat sesuai kategori pengguna yang dipilih, lalu tautan verifikasi dikirim ke email {data.email}. Verifikasi email diperlukan sebelum dapat masuk.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

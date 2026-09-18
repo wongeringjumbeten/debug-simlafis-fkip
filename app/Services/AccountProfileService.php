@@ -58,6 +58,8 @@ class AccountProfileService
                 }
             }
 
+            $emailBerubah = $data['email'] !== $user->email;
+
             DB::table('pengguna')
                 ->where('id_pengguna', $account->id_pengguna)
                 ->update($pengguna);
@@ -78,9 +80,16 @@ class AccountProfileService
                     ->update(['id_instansi' => $instansiId]);
             }
 
+            $akunUpdate = ['updated_at' => now()];
+
+            // Email baru harus diverifikasi ulang sebelum akun kembali berlaku penuh.
+            if ($emailBerubah) {
+                $akunUpdate['email_verified_at'] = null;
+            }
+
             DB::table('akun')
                 ->where('id_akun', $user->getAuthIdentifier())
-                ->update(['updated_at' => now()]);
+                ->update($akunUpdate);
         });
     }
 }

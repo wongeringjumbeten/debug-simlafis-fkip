@@ -18,7 +18,7 @@ Route::get('/wilayah/kabupaten/{province}', [WilayahController::class, 'kabupate
 Route::get('/wilayah/kecamatan/{regency}', [WilayahController::class, 'kecamatan'])->name('wilayah.kecamatan');
 Route::get('/wilayah/desa/{district}', [WilayahController::class, 'desa'])->name('wilayah.desa');
 
-Route::middleware(['auth', 'account.active'])->group(function () {
+Route::middleware(['auth', 'verified', 'account.active'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog');
 
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'account.active'])->group(function () {
 });
 
 // Manajemen pengguna: khusus Admin (BR-1, ADM-08..10, REQ-06).
-Route::middleware(['auth', 'account.active', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'account.active', 'admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');

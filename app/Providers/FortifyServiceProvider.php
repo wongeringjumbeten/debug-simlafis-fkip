@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Actions\Fortify\RegisterResponse;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +15,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\RegisterResponseContract;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 
@@ -42,6 +46,9 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureActions(): void
     {
+        // Pendaftar baru diarahkan ke halaman verifikasi email, bukan dashboard.
+        $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
+
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::createUsersUsing(CreateNewUser::class);
 
@@ -50,6 +57,12 @@ class FortifyServiceProvider extends ServiceProvider
 
             if ($user === null || ! Hash::check($request->string('password')->toString(), $user->password)) {
                 return null;
+            }
+
+            if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+                throw ValidationException::withMessages([
+                    Fortify::username() => __('Email Anda belum diverifikasi. Silakan periksa kotak masuk untuk tautan verifikasi.'),
+                ]);
             }
 
             return $user->isBlocked() ? null : $user;
