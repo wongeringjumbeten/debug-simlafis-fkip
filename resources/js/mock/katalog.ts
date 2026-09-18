@@ -14,7 +14,8 @@ export const mockAset: Aset[] = [
         kategori: 'alat',
         unitLab: 'elektronika',
         lokasi: 'Ruang Praktikum Elektronika',
-        spesifikasi: '2 kanal, bandwidth 100 MHz, sampling 1 GS/s, layar 7 inci.',
+        spesifikasi:
+            '2 kanal, bandwidth 100 MHz, sampling 1 GS/s, layar 7 inci.',
         stokTotal: 12,
         stokTersedia: 9,
         kondisi: 'baik',
@@ -56,7 +57,8 @@ export const mockAset: Aset[] = [
         kategori: 'alat',
         unitLab: 'dasar',
         lokasi: 'Gudang Alat Dasar',
-        spesifikasi: 'Monocrystalline 50 Wp, dilengkapi pengukur intensitas cahaya.',
+        spesifikasi:
+            'Monocrystalline 50 Wp, dilengkapi pengukur intensitas cahaya.',
         stokTotal: 10,
         stokTersedia: 10,
         kondisi: 'baik',
@@ -70,7 +72,8 @@ export const mockAset: Aset[] = [
         kategori: 'alat',
         unitLab: 'lanjut',
         lokasi: 'Ruang Optika',
-        spesifikasi: 'Panjang gelombang 632,8 nm, daya 5 mW, stabilisasi termal.',
+        spesifikasi:
+            'Panjang gelombang 632,8 nm, daya 5 mW, stabilisasi termal.',
         stokTotal: 4,
         stokTersedia: 2,
         kondisi: 'perlu_perawatan',
@@ -84,7 +87,8 @@ export const mockAset: Aset[] = [
         kategori: 'alat',
         unitLab: 'elf',
         lokasi: 'Ruang Karakterisasi ELF',
-        spesifikasi: 'Pengukuran respons elektromagnetik frekuensi sangat rendah.',
+        spesifikasi:
+            'Pengukuran respons elektromagnetik frekuensi sangat rendah.',
         stokTotal: 3,
         stokTersedia: 3,
         kondisi: 'baik',
@@ -158,7 +162,8 @@ export const mockAset: Aset[] = [
         kategori: 'ruangan',
         unitLab: 'lanjut',
         lokasi: 'Gedung Lab Fisika Lt. 2',
-        spesifikasi: 'Ruang gelap (dark room) untuk optika dan penelitian mahasiswa.',
+        spesifikasi:
+            'Ruang gelap (dark room) untuk optika dan penelitian mahasiswa.',
         stokTotal: 1,
         stokTersedia: 1,
         kondisi: 'baik',

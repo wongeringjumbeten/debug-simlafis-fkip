@@ -8,7 +8,13 @@ import InputError from '@/components/input-error';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
@@ -61,16 +67,24 @@ export default function Profile({
                 <Card>
                     <CardContent className="flex items-center gap-4 pt-6">
                         <Avatar className="h-16 w-16">
-                            <AvatarImage src={auth.user?.avatar} alt={auth.user?.name} />
+                            <AvatarImage
+                                src={auth.user?.avatar}
+                                alt={auth.user?.name}
+                            />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-lg text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(auth.user?.name ?? '')}
                             </AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">
-                            <h2 className="text-lg font-semibold">{auth.user?.name}</h2>
-                            <p className="text-sm text-muted-foreground">{auth.user?.email}</p>
+                            <h2 className="text-lg font-semibold">
+                                {auth.user?.name}
+                            </h2>
+                            <p className="text-muted-foreground text-sm">
+                                {auth.user?.email}
+                            </p>
                             <Badge variant="secondary">
-                                {roleLabels[auth.user?.role as UserRole] ?? auth.user?.role}
+                                {roleLabels[auth.user?.role as UserRole] ??
+                                    auth.user?.role}
                             </Badge>
                         </div>
                     </CardContent>
@@ -112,7 +126,9 @@ export default function Profile({
                                     </div>
 
                                     <div className="grid gap-2">
-                                        <Label htmlFor="email">Alamat Email</Label>
+                                        <Label htmlFor="email">
+                                            Alamat Email
+                                        </Label>
                                         <Input
                                             id="email"
                                             type="email"
@@ -135,22 +151,31 @@ export default function Profile({
                             {identitas && (
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle>Identitas Terdaftar</CardTitle>
+                                        <CardTitle>
+                                            Identitas Terdaftar
+                                        </CardTitle>
                                         <CardDescription>
-                                            Data identitas bersifat read-only. Perubahan melalui Admin.
+                                            Data identitas bersifat read-only.
+                                            Perubahan melalui Admin.
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         {identitas.foto_profil_url && (
                                             <div className="flex items-center gap-4">
                                                 <img
-                                                    src={identitas.foto_profil_url}
+                                                    src={
+                                                        identitas.foto_profil_url
+                                                    }
                                                     alt="Foto profil"
                                                     className="h-14 w-14 rounded-full border object-cover"
                                                 />
                                                 <div className="text-sm">
-                                                    <p className="font-medium">{auth.user.name}</p>
-                                                    <p className="text-muted-foreground">{auth.user.email}</p>
+                                                    <p className="font-medium">
+                                                        {auth.user.name}
+                                                    </p>
+                                                    <p className="text-muted-foreground">
+                                                        {auth.user.email}
+                                                    </p>
                                                 </div>
                                             </div>
                                         )}
@@ -158,31 +183,50 @@ export default function Profile({
                                         <dl className="grid gap-3 rounded-lg border p-4 text-sm sm:grid-cols-2">
                                             {identitas.jenis_identitas && (
                                                 <div>
-                                                    <dt className="text-muted-foreground text-xs">{identitas.jenis_identitas}</dt>
-                                                    <dd className="font-mono">{identitas.nomor_identitas ?? '—'}</dd>
+                                                    <dt className="text-muted-foreground text-xs">
+                                                        {
+                                                            identitas.jenis_identitas
+                                                        }
+                                                    </dt>
+                                                    <dd className="font-mono">
+                                                        {identitas.nomor_identitas ??
+                                                            '—'}
+                                                    </dd>
                                                 </div>
                                             )}
                                             {identitas.fakultas && (
                                                 <div>
-                                                    <dt className="text-muted-foreground text-xs">Fakultas</dt>
-                                                    <dd>{identitas.fakultas}</dd>
+                                                    <dt className="text-muted-foreground text-xs">
+                                                        Fakultas
+                                                    </dt>
+                                                    <dd>
+                                                        {identitas.fakultas}
+                                                    </dd>
                                                 </div>
                                             )}
                                             {identitas.prodi && (
                                                 <div>
-                                                    <dt className="text-muted-foreground text-xs">Program Studi</dt>
+                                                    <dt className="text-muted-foreground text-xs">
+                                                        Program Studi
+                                                    </dt>
                                                     <dd>{identitas.prodi}</dd>
                                                 </div>
                                             )}
                                             {identitas.instansi && (
                                                 <div>
-                                                    <dt className="text-muted-foreground text-xs">Instansi</dt>
-                                                    <dd>{identitas.instansi}</dd>
+                                                    <dt className="text-muted-foreground text-xs">
+                                                        Instansi
+                                                    </dt>
+                                                    <dd>
+                                                        {identitas.instansi}
+                                                    </dd>
                                                 </div>
                                             )}
                                             {identitas.alamat && (
                                                 <div className="sm:col-span-2">
-                                                    <dt className="text-muted-foreground text-xs">Alamat</dt>
+                                                    <dt className="text-muted-foreground text-xs">
+                                                        Alamat
+                                                    </dt>
                                                     <dd>{identitas.alamat}</dd>
                                                 </div>
                                             )}
@@ -205,51 +249,73 @@ export default function Profile({
                             {isEksternal && (
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle>Informasi Institusi</CardTitle>
+                                        <CardTitle>
+                                            Informasi Institusi
+                                        </CardTitle>
                                         <CardDescription>
-                                            Data ini menentukan layanan dan tarif sewa Anda. Kategori tarif hanya dapat diubah Admin (BR-2).
+                                            Data ini menentukan layanan dan
+                                            tarif sewa Anda. Kategori tarif
+                                            hanya dapat diubah Admin (BR-2).
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="instansi">Instansi</Label>
+                                            <Label htmlFor="instansi">
+                                                Instansi
+                                            </Label>
                                             <Input
                                                 id="instansi"
                                                 className="mt-1 block w-full"
-                                                defaultValue={auth.user.instansi ?? ''}
+                                                defaultValue={
+                                                    auth.user.instansi ?? ''
+                                                }
                                                 name="instansi"
                                                 required
                                                 autoComplete="organization"
                                                 placeholder="Contoh: Universitas Jember, PT. XYZ"
                                             />
-                                            <InputError message={errors.instansi} />
+                                            <InputError
+                                                message={errors.instansi}
+                                            />
                                         </div>
 
                                         <div className="grid gap-2">
                                             <Label>Kategori Pengguna</Label>
                                             <div>
-                                                <Badge variant="secondary" className="text-sm">
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="text-sm"
+                                                >
                                                     {auth.user.kategori
-                                                        ? kategoriLabels[auth.user.kategori]
+                                                        ? kategoriLabels[
+                                                              auth.user.kategori
+                                                          ]
                                                         : 'Belum ditetapkan'}
                                                 </Badge>
                                             </div>
                                         </div>
 
                                         <div className="grid gap-2">
-                                            <Label htmlFor="no_hp">Nomor HP / WhatsApp</Label>
+                                            <Label htmlFor="no_hp">
+                                                Nomor HP / WhatsApp
+                                            </Label>
                                             <Input
                                                 id="no_hp"
                                                 type="tel"
                                                 className="mt-1 block w-full"
-                                                defaultValue={auth.user.no_hp ?? ''}
+                                                defaultValue={
+                                                    auth.user.no_hp ?? ''
+                                                }
                                                 name="no_hp"
                                                 autoComplete="tel"
                                                 placeholder="08xxxxxxxxxx atau +628xxxxxxxxx"
                                             />
-                                            <InputError message={errors.no_hp} />
-                                            <p className="text-xs text-muted-foreground">
-                                                Format: 08xxxxxxxxxx atau +628xxxxxxxxx.
+                                            <InputError
+                                                message={errors.no_hp}
+                                            />
+                                            <p className="text-muted-foreground text-xs">
+                                                Format: 08xxxxxxxxxx atau
+                                                +628xxxxxxxxx.
                                             </p>
                                         </div>
                                     </CardContent>

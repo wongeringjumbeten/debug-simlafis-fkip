@@ -13,8 +13,7 @@ export default function AuthSplitLayout({
                 <div
                     className="absolute inset-0 bg-cover bg-center opacity-20"
                     style={{
-                        backgroundImage:
-                            "url('/images/lab-fisika.png')",
+                        backgroundImage: "url('/images/lab-fisika.png')",
                     }}
                 />
                 <Link
@@ -42,8 +41,8 @@ export default function AuthSplitLayout({
                         Laboratorium Fisika
                     </p>
                     <p className="mt-2 text-sm text-[#A8DADC]">
-                        Kelola peminjaman alat, ruangan, dan
-                        inventaris laboratorium secara terpadu.
+                        Kelola peminjaman alat, ruangan, dan inventaris
+                        laboratorium secara terpadu.
                     </p>
                 </div>
             </div>
@@ -63,9 +62,7 @@ export default function AuthSplitLayout({
                         <h1 className="text-xl font-semibold text-[#1D3557]">
                             {title}
                         </h1>
-                        <p className="text-sm text-[#4A6274]">
-                            {description}
-                        </p>
+                        <p className="text-sm text-[#4A6274]">{description}</p>
                     </div>
                     {children}
                 </div>

@@ -84,7 +84,9 @@ export function FileUpload({
 
     return (
         <div className="grid gap-2">
-            <label className="text-sm font-medium text-foreground">{label}</label>
+            <label className="text-foreground text-sm font-medium">
+                {label}
+            </label>
 
             <input
                 ref={inputRef}
@@ -119,10 +121,10 @@ export function FileUpload({
                         )}
                     />
                     <div className="space-y-0.5 text-center">
-                        <p className="font-medium text-foreground/80">
+                        <p className="text-foreground/80 font-medium">
                             Klik untuk unggah
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-muted-foreground text-xs">
                             JPG/PNG, maks {maxSizeMB} MB
                         </p>
                     </div>
@@ -134,7 +136,7 @@ export function FileUpload({
                         displayError ? 'border-destructive/50' : '',
                     )}
                 >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border bg-muted">
+                    <div className="bg-muted relative h-20 w-20 shrink-0 overflow-hidden rounded-md border">
                         <img
                             src={preview}
                             alt={`Pratinjau ${label.toLowerCase()}`}
@@ -143,8 +145,17 @@ export function FileUpload({
                     </div>
 
                     <div className="min-w-0 flex-1 space-y-0.5">
-                        <p className="truncate text-sm font-medium">{file?.name}</p>
-                        <p className={cn('text-xs', isLarge ? 'text-warning' : 'text-muted-foreground')}>
+                        <p className="truncate text-sm font-medium">
+                            {file?.name}
+                        </p>
+                        <p
+                            className={cn(
+                                'text-xs',
+                                isLarge
+                                    ? 'text-warning'
+                                    : 'text-muted-foreground',
+                            )}
+                        >
                             {fileSizeMB} MB
                             {isLarge &&
                                 ` — mendekati batas ${maxSizeMB} MB, disarankan kompres`}
@@ -165,7 +176,7 @@ export function FileUpload({
             )}
 
             {displayError && (
-                <p className="text-sm text-destructive" role="alert">
+                <p className="text-destructive text-sm" role="alert">
                     {displayError}
                 </p>
             )}

@@ -74,8 +74,12 @@ function formatRupiah(amount: number): string {
 }
 
 export default function Riwayat({ transaksi, isLab }: Props) {
-    const [detailTransaksi, setDetailTransaksi] = useState<Transaksi | null>(null);
-    const [batalTransaksi, setBatalTransaksi] = useState<Transaksi | null>(null);
+    const [detailTransaksi, setDetailTransaksi] = useState<Transaksi | null>(
+        null,
+    );
+    const [batalTransaksi, setBatalTransaksi] = useState<Transaksi | null>(
+        null,
+    );
     const [sedangMembatalkan, setSedangMembatalkan] = useState(false);
 
     function handleBatal() {
@@ -99,62 +103,105 @@ export default function Riwayat({ transaksi, isLab }: Props) {
             <Head title="Riwayat Peminjaman" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <header>
-                    <h1 className="text-[28px] leading-tight font-semibold">Riwayat Peminjaman</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Pantau status transaksi peminjaman alat dan ruangan beserta persetujuan per-item (BR-4, BR-5).
+                    <h1 className="text-[28px] leading-tight font-semibold">
+                        Riwayat Peminjaman
+                    </h1>
+                    <p className="text-muted-foreground text-sm">
+                        Pantau status transaksi peminjaman alat dan ruangan
+                        beserta persetujuan per-item (BR-4, BR-5).
                     </p>
                 </header>
 
                 {transaksi.length === 0 ? (
                     <div className="rounded-xl border border-dashed px-6 py-16 text-center">
-                        <p className="text-sm font-medium">Belum ada riwayat peminjaman</p>
-                        <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                            Pengajuan peminjaman yang Anda buat dari katalog laboratorium akan tampil di halaman ini.
+                        <p className="text-sm font-medium">
+                            Belum ada riwayat peminjaman
+                        </p>
+                        <p className="text-muted-foreground mx-auto mt-2 max-w-md text-xs">
+                            Pengajuan peminjaman yang Anda buat dari katalog
+                            laboratorium akan tampil di halaman ini.
                         </p>
                     </div>
                 ) : (
-                    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+                    <div className="bg-card overflow-hidden rounded-xl border shadow-sm">
                         <table className="w-full text-left text-sm">
-                            <thead className="border-b bg-muted/50 text-xs font-semibold uppercase text-muted-foreground">
+                            <thead className="bg-muted/50 text-muted-foreground border-b text-xs font-semibold uppercase">
                                 <tr>
                                     <th className="px-4 py-3">No. Transaksi</th>
                                     <th className="px-4 py-3">Tanggal</th>
-                                    {isLab && <th className="px-4 py-3">Peminjam</th>}
+                                    {isLab && (
+                                        <th className="px-4 py-3">Peminjam</th>
+                                    )}
                                     <th className="px-4 py-3">Jenis & Biaya</th>
                                     <th className="px-4 py-3">Item</th>
                                     <th className="px-4 py-3">Status</th>
-                                    <th className="px-4 py-3 text-right">Aksi</th>
+                                    <th className="px-4 py-3 text-right">
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y">
                                 {transaksi.map((t) => {
-                                    const badge = statusProps(t.statusKeseluruhan);
+                                    const badge = statusProps(
+                                        t.statusKeseluruhan,
+                                    );
                                     return (
-                                        <tr key={t.id} className="hover:bg-muted/30">
-                                            <td className="px-4 py-3 font-mono font-medium">{t.kode}</td>
-                                            <td className="px-4 py-3 text-muted-foreground">{t.tanggalPeminjaman}</td>
-                                            {isLab && <td className="px-4 py-3">{t.peminjam}</td>}
+                                        <tr
+                                            key={t.id}
+                                            className="hover:bg-muted/30"
+                                        >
+                                            <td className="px-4 py-3 font-mono font-medium">
+                                                {t.kode}
+                                            </td>
+                                            <td className="text-muted-foreground px-4 py-3">
+                                                {t.tanggalPeminjaman}
+                                            </td>
+                                            {isLab && (
+                                                <td className="px-4 py-3">
+                                                    {t.peminjam}
+                                                </td>
+                                            )}
                                             <td className="px-4 py-3">
-                                                <div className="font-medium capitalize">{t.jenisPeminjaman}</div>
-                                                <div className="text-xs text-muted-foreground">
-                                                    {t.totalBiaya > 0 ? formatRupiah(t.totalBiaya) : 'Gratis (Internal)'}
+                                                <div className="font-medium capitalize">
+                                                    {t.jenisPeminjaman}
+                                                </div>
+                                                <div className="text-muted-foreground text-xs">
+                                                    {t.totalBiaya > 0
+                                                        ? formatRupiah(
+                                                              t.totalBiaya,
+                                                          )
+                                                        : 'Gratis (Internal)'}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <span className="text-xs text-muted-foreground">
-                                                    {t.items.length} item ({t.items.map((i) => i.nama).slice(0, 2).join(', ')}
-                                                    {t.items.length > 2 ? '...' : ''})
+                                                <span className="text-muted-foreground text-xs">
+                                                    {t.items.length} item (
+                                                    {t.items
+                                                        .map((i) => i.nama)
+                                                        .slice(0, 2)
+                                                        .join(', ')}
+                                                    {t.items.length > 2
+                                                        ? '...'
+                                                        : ''}
+                                                    )
                                                 </span>
                                             </td>
                                             <td className="px-4 py-3">
-                                                <StatusBadge label={badge.label} tone={badge.tone} />
+                                                <StatusBadge
+                                                    label={badge.label}
+                                                    tone={badge.tone}
+                                                />
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => setDetailTransaksi(t)}
+                                                        onClick={() =>
+                                                            setDetailTransaksi(
+                                                                t,
+                                                            )
+                                                        }
                                                         className="h-8 gap-1 px-2"
                                                     >
                                                         <Eye className="h-4 w-4" />
@@ -164,8 +211,12 @@ export default function Riwayat({ transaksi, isLab }: Props) {
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            onClick={() => setBatalTransaksi(t)}
-                                                            className="h-8 gap-1 border-destructive/30 px-2 text-destructive hover:bg-destructive/10"
+                                                            onClick={() =>
+                                                                setBatalTransaksi(
+                                                                    t,
+                                                                )
+                                                            }
+                                                            className="border-destructive/30 text-destructive hover:bg-destructive/10 h-8 gap-1 px-2"
                                                         >
                                                             <Ban className="h-4 w-4" />
                                                             <span>Batal</span>
@@ -183,31 +234,53 @@ export default function Riwayat({ transaksi, isLab }: Props) {
             </div>
 
             {/* Dialog Detail Transaksi & Persetujuan Per-Item */}
-            <Dialog open={detailTransaksi !== null} onOpenChange={(open) => !open && setDetailTransaksi(null)}>
+            <Dialog
+                open={detailTransaksi !== null}
+                onOpenChange={(open) => !open && setDetailTransaksi(null)}
+            >
                 <DialogContent className="sm:max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Rincian Peminjaman {detailTransaksi?.kode}</DialogTitle>
+                        <DialogTitle>
+                            Rincian Peminjaman {detailTransaksi?.kode}
+                        </DialogTitle>
                         <DialogDescription>
-                            Peminjam: <span className="font-medium text-foreground">{detailTransaksi?.peminjam}</span> ·
-                            Tanggal: {detailTransaksi?.tanggalPeminjaman}
+                            Peminjam:{' '}
+                            <span className="text-foreground font-medium">
+                                {detailTransaksi?.peminjam}
+                            </span>{' '}
+                            · Tanggal: {detailTransaksi?.tanggalPeminjaman}
                         </DialogDescription>
                     </DialogHeader>
 
                     {detailTransaksi && (
                         <div className="space-y-4">
-                            <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted p-3 text-sm">
+                            <div className="bg-muted flex flex-wrap items-center justify-between gap-2 rounded-lg p-3 text-sm">
                                 <div>
-                                    <span className="text-muted-foreground">Status Keseluruhan: </span>
+                                    <span className="text-muted-foreground">
+                                        Status Keseluruhan:{' '}
+                                    </span>
                                     <StatusBadge
-                                        label={statusProps(detailTransaksi.statusKeseluruhan).label}
-                                        tone={statusProps(detailTransaksi.statusKeseluruhan).tone}
+                                        label={
+                                            statusProps(
+                                                detailTransaksi.statusKeseluruhan,
+                                            ).label
+                                        }
+                                        tone={
+                                            statusProps(
+                                                detailTransaksi.statusKeseluruhan,
+                                            ).tone
+                                        }
                                     />
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground">Total Biaya: </span>
+                                    <span className="text-muted-foreground">
+                                        Total Biaya:{' '}
+                                    </span>
                                     <span className="font-semibold">
                                         {detailTransaksi.totalBiaya > 0
-                                            ? formatRupiah(detailTransaksi.totalBiaya)
+                                            ? formatRupiah(
+                                                  detailTransaksi.totalBiaya,
+                                              )
                                             : 'Rp 0 (Internal)'}
                                     </span>
                                 </div>
@@ -215,12 +288,14 @@ export default function Riwayat({ transaksi, isLab }: Props) {
 
                             {detailTransaksi.buktiPembayaran && (
                                 <div className="rounded-lg border p-3">
-                                    <p className="text-xs font-semibold">Bukti Pembayaran (Transfer Bank):</p>
+                                    <p className="text-xs font-semibold">
+                                        Bukti Pembayaran (Transfer Bank):
+                                    </p>
                                     <a
                                         href={detailTransaksi.buktiPembayaran}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="mt-1 inline-block text-xs text-primary underline"
+                                        className="text-primary mt-1 inline-block text-xs underline"
                                     >
                                         Buka lampiran bukti transfer
                                     </a>
@@ -228,10 +303,14 @@ export default function Riwayat({ transaksi, isLab }: Props) {
                             )}
 
                             <div>
-                                <h3 className="mb-2 text-sm font-semibold">Daftar Item (Item-Level Status)</h3>
+                                <h3 className="mb-2 text-sm font-semibold">
+                                    Daftar Item (Item-Level Status)
+                                </h3>
                                 <div className="space-y-2">
                                     {detailTransaksi.items.map((item) => {
-                                        const itemBadge = statusProps(item.statusItem);
+                                        const itemBadge = statusProps(
+                                            item.statusItem,
+                                        );
                                         return (
                                             <div
                                                 key={item.id}
@@ -240,24 +319,34 @@ export default function Riwayat({ transaksi, isLab }: Props) {
                                                 <div>
                                                     <div className="font-medium">
                                                         {item.nama}{' '}
-                                                        <span className="text-xs text-muted-foreground capitalize">
-                                                            ({item.jenis}, {item.jumlah} unit)
+                                                        <span className="text-muted-foreground text-xs capitalize">
+                                                            ({item.jenis},{' '}
+                                                            {item.jumlah} unit)
                                                         </span>
                                                     </div>
-                                                    <div className="text-xs text-muted-foreground">
-                                                        {item.waktuMulai} s.d. {item.waktuSelesai}
+                                                    <div className="text-muted-foreground text-xs">
+                                                        {item.waktuMulai} s.d.{' '}
+                                                        {item.waktuSelesai}
                                                     </div>
                                                     {item.alasanPenolakan && (
-                                                        <div className="mt-1 text-xs text-destructive">
-                                                            Catatan: {item.alasanPenolakan}
+                                                        <div className="text-destructive mt-1 text-xs">
+                                                            Catatan:{' '}
+                                                            {
+                                                                item.alasanPenolakan
+                                                            }
                                                         </div>
                                                     )}
                                                 </div>
                                                 <div className="text-right">
-                                                    <StatusBadge label={itemBadge.label} tone={itemBadge.tone} />
+                                                    <StatusBadge
+                                                        label={itemBadge.label}
+                                                        tone={itemBadge.tone}
+                                                    />
                                                     {item.totalBiaya > 0 && (
-                                                        <div className="mt-1 text-xs font-medium text-muted-foreground">
-                                                            {formatRupiah(item.totalBiaya)}
+                                                        <div className="text-muted-foreground mt-1 text-xs font-medium">
+                                                            {formatRupiah(
+                                                                item.totalBiaya,
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
@@ -270,7 +359,10 @@ export default function Riwayat({ transaksi, isLab }: Props) {
                     )}
 
                     <DialogFooter>
-                        <Button variant="secondary" onClick={() => setDetailTransaksi(null)}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setDetailTransaksi(null)}
+                        >
                             Tutup
                         </Button>
                     </DialogFooter>
@@ -278,22 +370,38 @@ export default function Riwayat({ transaksi, isLab }: Props) {
             </Dialog>
 
             {/* Dialog Konfirmasi Pembatalan Mandiri (BR-5) */}
-            <Dialog open={batalTransaksi !== null} onOpenChange={(open) => !open && setBatalTransaksi(null)}>
+            <Dialog
+                open={batalTransaksi !== null}
+                onOpenChange={(open) => !open && setBatalTransaksi(null)}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Konfirmasi Pembatalan</DialogTitle>
                         <DialogDescription>
-                            Apakah Anda yakin ingin membatalkan pengajuan peminjaman{' '}
-                            <span className="font-semibold text-foreground">{batalTransaksi?.kode}</span>? Seluruh
-                            alokasi alat dan ruangan pada transaksi ini akan dilepaskan (BR-5).
+                            Apakah Anda yakin ingin membatalkan pengajuan
+                            peminjaman{' '}
+                            <span className="text-foreground font-semibold">
+                                {batalTransaksi?.kode}
+                            </span>
+                            ? Seluruh alokasi alat dan ruangan pada transaksi
+                            ini akan dilepaskan (BR-5).
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button variant="secondary" onClick={() => setBatalTransaksi(null)}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setBatalTransaksi(null)}
+                        >
                             Kembali
                         </Button>
-                        <Button variant="destructive" onClick={handleBatal} disabled={sedangMembatalkan}>
-                            {sedangMembatalkan ? 'Membatalkan...' : 'Ya, Batalkan Peminjaman'}
+                        <Button
+                            variant="destructive"
+                            onClick={handleBatal}
+                            disabled={sedangMembatalkan}
+                        >
+                            {sedangMembatalkan
+                                ? 'Membatalkan...'
+                                : 'Ya, Batalkan Peminjaman'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
