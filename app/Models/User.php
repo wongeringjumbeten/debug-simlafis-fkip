@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB; // Tambahan Facade DB
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
+ * @property string $name
  * @property string $email
  * @property string|null $no_hp
  * @property string $role
@@ -21,10 +23,12 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $status
  * @property string|null $suspension_reason
  * @property string $password
+ * @property string|null $foto_profil
+ * @property string|null $instansi
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-class User extends Authenticatable implements PasskeyUser
+class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
@@ -75,35 +79,59 @@ class User extends Authenticatable implements PasskeyUser
         ];
     }
 
+    /**
+     * OVERRIDE: Mencegah Error saat Laravel/Fortify melakukan auto-update.
+     * Karena model ini menggunakan View (v_auth_users), operasi update
+     * (seperti remember_token atau update password) harus diarahkan ke tabel fisik 'users'.
+     */
+    public function save(array $options = [])
+    {
+        if ($this->exists) {
+            $dirty = $this->getDirty();
+
+            // Jika ada perubahan kolom, lakukan update langsung ke tabel fisik 'users'
+            if (count($dirty) > 0) {
+                DB::table('users')
+                    ->where('id', $this->id)
+                    ->update($dirty);
+
+                $this->syncOriginal();
+            }
+            return true;
+        }
+
+        // Return false karena insert baru (Register) harus ditangani via service DB Transaction, bukan via save() model ini.
+        return false;
+    }
+
+    /**
+     * Accessor untuk standar fitur Laravel/Fortify yang membutuhkan properti $user->name
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->attributes['nama_lengkap'] ?? $this->attributes['name'] ?? 'User';
+    }
+
     public function isBlocked(): bool
     {
         return $this->status === 'blocked';
     }
 
-    public function isSuspended(): bool
-    {
-        $status = $this->getRawOriginal('status');
-
-        if ($status !== null) {
-            return $status === 'suspended';
-        }
-
-        return ! (bool) $this->getRawOriginal('active');
-    }
-
     public function getActiveAttribute(): bool
     {
-        $status = $this->getRawOriginal('status');
-
-        if ($status !== null) {
-            return $status === 'active';
+        if (array_key_exists('status', $this->attributes)) {
+            return $this->attributes['status'] === 'active';
         }
 
-        return (bool) $this->getRawOriginal('active');
+        return (bool) ($this->attributes['active'] ?? false);
     }
 
-    public function getTable(): string
+    public function isSuspended(): bool
     {
-        return config('database.default') === 'pgsql' ? 'v_auth_users' : 'users';
+        if (array_key_exists('status', $this->attributes)) {
+            return $this->attributes['status'] === 'suspended';
+        }
+
+        return !$this->active;
     }
 }

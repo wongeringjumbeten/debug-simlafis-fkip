@@ -24,9 +24,17 @@ interface AsetCardProps {
     onUbah: (aset: Aset) => void;
 }
 
-export function AsetCard({ aset, role, subKategori, onDetail, onTambahKeCart, onUbah }: AsetCardProps) {
+export function AsetCard({
+    aset,
+    role,
+    subKategori,
+    onDetail,
+    onTambahKeCart,
+    onUbah,
+}: AsetCardProps) {
     const habis = aset.stokTersedia === 0;
-    const tampilkanTarif = canSeeTarif(role) && aset.tarifInternalUnej !== undefined;
+    const tampilkanTarif =
+        canSeeTarif(role) && aset.tarifInternalUnej !== undefined;
 
     return (
         <Card className="gap-3 py-4">
@@ -42,22 +50,32 @@ export function AsetCard({ aset, role, subKategori, onDetail, onTambahKeCart, on
             )}
             <div className="flex flex-col gap-3 px-4">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[13px] text-muted-foreground">{aset.kode}</span>
-                    <StatusBadge label={kondisiLabels[aset.kondisi]} tone={kondisiTone[aset.kondisi]} />
+                    <span className="text-muted-foreground font-mono text-[13px]">
+                        {aset.kode}
+                    </span>
+                    <StatusBadge
+                        label={kondisiLabels[aset.kondisi]}
+                        tone={kondisiTone[aset.kondisi]}
+                    />
                 </div>
 
                 <div className="space-y-1">
                     <h3 className="leading-snug font-medium">{aset.nama}</h3>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                         {unitLabLabels[aset.unitLab]}
-                        {aset.kapasitas !== undefined && ` · Kapasitas ${aset.kapasitas} orang`}
+                        {aset.kapasitas !== undefined &&
+                            ` · Kapasitas ${aset.kapasitas} orang`}
                         {aset.lokasi && ` · ${aset.lokasi}`}
                     </p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge
-                        label={habis ? 'Stok habis' : `Tersedia ${aset.stokTersedia} dari ${aset.stokTotal}`}
+                        label={
+                            habis
+                                ? 'Stok habis'
+                                : `Tersedia ${aset.stokTersedia} dari ${aset.stokTotal}`
+                        }
                         tone={habis ? 'destructive' : 'success'}
                     />
                 </div>
@@ -72,7 +90,11 @@ export function AsetCard({ aset, role, subKategori, onDetail, onTambahKeCart, on
             </div>
 
             <div className="flex flex-wrap items-center gap-2 px-4">
-                <Button variant="secondary" size="sm" onClick={() => onDetail(aset)}>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => onDetail(aset)}
+                >
                     Detail
                 </Button>
                 {canBorrow(role) && !habis && (
@@ -81,7 +103,11 @@ export function AsetCard({ aset, role, subKategori, onDetail, onTambahKeCart, on
                     </Button>
                 )}
                 {canManageKategori(role, aset.kategori) && (
-                    <Button variant="ghost" size="sm" onClick={() => onUbah(aset)}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onUbah(aset)}
+                    >
                         <Pencil /> Ubah
                     </Button>
                 )}

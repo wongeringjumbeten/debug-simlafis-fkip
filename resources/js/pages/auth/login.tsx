@@ -89,7 +89,7 @@ export default function Login({ status, canResetPassword }: Props) {
                             </Button>
                         </div>
 
-                        <div className="text-[#4A6274] text-center text-sm">
+                        <div className="text-center text-sm text-[#4A6274]">
                             Belum punya akun?{' '}
                             <TextLink href={register()} tabIndex={5}>
                                 Daftar akun eksternal

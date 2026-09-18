@@ -1,4 +1,11 @@
-import type { Aset, KategoriAset, KondisiAset, Role, SubKategoriEksternal, UnitLab } from '@/types';
+import type {
+    Aset,
+    KategoriAset,
+    KondisiAset,
+    Role,
+    SubKategoriEksternal,
+    UnitLab,
+} from '@/types';
 
 export const kategoriLabels: Record<KategoriAset, string> = {
     alat: 'Alat',
@@ -20,7 +27,10 @@ export const kondisiLabels: Record<KondisiAset, string> = {
     rusak: 'Rusak',
 };
 
-export const kondisiTone: Record<KondisiAset, 'success' | 'warning' | 'destructive'> = {
+export const kondisiTone: Record<
+    KondisiAset,
+    'success' | 'warning' | 'destructive'
+> = {
     baik: 'success',
     perlu_perawatan: 'warning',
     rusak: 'destructive',
@@ -51,15 +61,25 @@ export function canBorrow(role: Role): boolean {
 
 /** Harga disembunyikan dari Dosen/Mahasiswa (REQ-12). */
 export function canSeeTarif(role: Role): boolean {
-    return role === 'admin' || role === 'kalab' || role === 'plp' || role === 'ekst';
+    return (
+        role === 'admin' ||
+        role === 'kalab' ||
+        role === 'plp' ||
+        role === 'ekst'
+    );
 }
 
 /** Tarif yang relevan bagi pengguna eksternal sesuai sub-kategorinya (BR-2). */
-export function tarifUntuk(aset: Aset, subKategori?: SubKategoriEksternal): number | undefined {
+export function tarifUntuk(
+    aset: Aset,
+    subKategori?: SubKategoriEksternal,
+): number | undefined {
     if (aset.tarifInternalUnej === undefined) {
         return undefined;
     }
-    return subKategori === 'luar_unej' ? aset.tarifLuarUnej : aset.tarifInternalUnej;
+    return subKategori === 'luar_unej'
+        ? aset.tarifLuarUnej
+        : aset.tarifInternalUnej;
 }
 
 const rupiah = new Intl.NumberFormat('id-ID', {
@@ -73,12 +93,20 @@ export function formatRupiah(value: number): string {
 }
 
 export function formatTanggal(iso: string): string {
-    return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    return new Date(iso).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+    });
 }
 
 /** Jumlah hari kalender inklusif antara dua tanggal (min. 1). */
-export function hitungHari(tanggalMulai: string, tanggalSelesai: string): number {
-    const selisih = new Date(tanggalSelesai).getTime() - new Date(tanggalMulai).getTime();
+export function hitungHari(
+    tanggalMulai: string,
+    tanggalSelesai: string,
+): number {
+    const selisih =
+        new Date(tanggalSelesai).getTime() - new Date(tanggalMulai).getTime();
     if (Number.isNaN(selisih)) {
         return 1;
     }

@@ -33,7 +33,9 @@ class RegistrationService
             'no_hp' => ['required', 'string', 'max:20', 'regex:/^(\+62|62|0)8[1-9][0-9]{6,10}$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:pengguna,email'],
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
-            'foto_profil' => ['required', 'image', 'mimes:jpg,png', 'max:2048'],
+            // Foto profil opsional (bisa dilengkapi nanti di pengaturan profil);
+            // dokumen identitas tetap wajib untuk verifikasi pendaftar.
+            'foto_profil' => ['nullable', 'image', 'mimes:jpg,png', 'max:2048'],
             'foto_identitas' => ['required', 'image', 'mimes:jpg,png', 'max:2048'],
         ];
 
@@ -103,7 +105,9 @@ class RegistrationService
         $data = $this->validate($input);
 
         $idAkun = DB::transaction(function () use ($data) {
-            $fotoProfil = $data['foto_profil']->store('profiles', 'public');
+            $fotoProfil = ($data['foto_profil'] ?? null) instanceof UploadedFile
+                ? $data['foto_profil']->store('profiles', 'public')
+                : null;
             // Dokumen identitas disimpan di disk private (tidak dapat diakses langsung via URL).
             $fotoIdentitas = $data['foto_identitas']->store('', 'identities');
 
@@ -196,16 +200,20 @@ class RegistrationService
 
     private function resolveProdi(int $idFakultas, string $namaProdi): int
     {
-        $namaProdi = trim($namaProdi);
+        $namaProdi = trim(preg_replace('/\s+/', ' ', strtolower($namaProdi)));
 
         $existing = DB::table('prodi')
             ->where('id_fakultas', $idFakultas)
-            ->where('nama_prodi', $namaProdi)
+            ->whereRaw('LOWER(nama_prodi) = ?', [$namaProdi])
             ->value('id_prodi');
 
-        return $existing ?? DB::table('prodi')->insertGetId([
+        if ($existing) {
+            return $existing;
+        }
+
+        return DB::table('prodi')->insertGetId([
             'id_fakultas' => $idFakultas,
-            'nama_prodi' => $namaProdi,
+            'nama_prodi' => ucwords($namaProdi),
         ], 'id_prodi');
     }
 

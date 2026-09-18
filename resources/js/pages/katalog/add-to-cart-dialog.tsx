@@ -23,7 +23,12 @@ interface AddToCartDialogProps {
 
 const hariIni = () => new Date().toISOString().slice(0, 10);
 
-export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCartDialogProps) {
+export function AddToCartDialog({
+    aset,
+    role,
+    onOpenChange,
+    onSimpan,
+}: AddToCartDialogProps) {
     const [tanggalMulai, setTanggalMulai] = useState(hariIni());
     const [tanggalSelesai, setTanggalSelesai] = useState(hariIni());
     const [jamMulai, setJamMulai] = useState('08:00');
@@ -62,7 +67,9 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
         }
         const durasi = hitungHari(tanggalMulai, tanggalSelesai);
         if (role === 'mhs' && durasi > 7) {
-            setError('Durasi peminjaman mahasiswa maksimal 7 hari kalender (REQ-15).');
+            setError(
+                'Durasi peminjaman mahasiswa maksimal 7 hari kalender (REQ-15).',
+            );
             return;
         }
         if (!Number.isInteger(jumlahAngka) || jumlahAngka < 1) {
@@ -70,14 +77,29 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
             return;
         }
         if (jumlahAngka > aset.stokTersedia) {
-            setError(`Jumlah melebihi ketersediaan (maksimal ${aset.stokTersedia}).`);
+            setError(
+                `Jumlah melebihi ketersediaan (maksimal ${aset.stokTersedia}).`,
+            );
             return;
         }
         if (!jamMulai || !jamSelesai) {
             setError('Jam mulai dan selesai wajib diisi.');
             return;
         }
-        onSimpan({ aset, tanggalMulai, tanggalSelesai, jamMulai, jamSelesai, jumlah: jumlahAngka });
+        if (tanggalMulai === tanggalSelesai && jamSelesai <= jamMulai) {
+            setError('Jam selesai tidak boleh lebih awal atau sama dengan jam mulai pada hari yang sama.');
+            return;
+        }
+        // -----------------------------------------------------------
+
+        onSimpan({
+            aset,
+            tanggalMulai,
+            tanggalSelesai,
+            jamMulai,
+            jamSelesai,
+            jumlah: jumlahAngka,
+        });
     }
 
     return (
@@ -86,7 +108,10 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
                 <DialogHeader>
                     <DialogTitle>Tambah ke Keranjang</DialogTitle>
                     <DialogDescription>
-                        <span className="font-mono text-[13px]">{aset.kode}</span> — {aset.nama}
+                        <span className="font-mono text-[13px]">
+                            {aset.kode}
+                        </span>{' '}
+                        — {aset.nama}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -98,16 +123,22 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
                                 id="tanggal-mulai"
                                 type="date"
                                 value={tanggalMulai}
-                                onChange={(e) => setTanggalMulai(e.target.value)}
+                                onChange={(e) =>
+                                    setTanggalMulai(e.target.value)
+                                }
                             />
                         </div>
                         <div className="space-y-1.5">
-                            <Label htmlFor="tanggal-selesai">Tanggal Selesai</Label>
+                            <Label htmlFor="tanggal-selesai">
+                                Tanggal Selesai
+                            </Label>
                             <Input
                                 id="tanggal-selesai"
                                 type="date"
                                 value={tanggalSelesai}
-                                onChange={(e) => setTanggalSelesai(e.target.value)}
+                                onChange={(e) =>
+                                    setTanggalSelesai(e.target.value)
+                                }
                             />
                         </div>
                     </div>
@@ -143,9 +174,11 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
                             value={jumlah}
                             onChange={(e) => setJumlah(e.target.value)}
                         />
-                        <p className="text-xs text-muted-foreground">
-                            Tersedia {aset.stokTersedia} dari {aset.stokTotal} pada rentang tanggal ini.
-                            {role === 'mhs' && ' Maksimal 7 hari kalender untuk mahasiswa.'}
+                        <p className="text-muted-foreground text-xs">
+                            Tersedia {aset.stokTersedia} dari {aset.stokTotal}{' '}
+                            pada rentang tanggal ini.
+                            {role === 'mhs' &&
+                                ' Maksimal 7 hari kalender untuk mahasiswa.'}
                         </p>
                     </div>
 
@@ -157,7 +190,10 @@ export function AddToCartDialog({ aset, role, onOpenChange, onSimpan }: AddToCar
                 </div>
 
                 <DialogFooter>
-                    <Button variant="secondary" onClick={() => onOpenChange(false)}>
+                    <Button
+                        variant="secondary"
+                        onClick={() => onOpenChange(false)}
+                    >
                         Batal
                     </Button>
                     <Button onClick={simpan}>Tambahkan</Button>

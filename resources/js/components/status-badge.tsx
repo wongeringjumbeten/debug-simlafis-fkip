@@ -1,7 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-export type StatusTone = 'success' | 'info' | 'warning' | 'destructive' | 'neutral';
+export type StatusTone =
+    | 'success'
+    | 'info'
+    | 'warning'
+    | 'destructive'
+    | 'neutral';
 
 const toneClasses: Record<StatusTone, string> = {
     success: 'border-success/25 bg-success/15 text-[#1E7050]',

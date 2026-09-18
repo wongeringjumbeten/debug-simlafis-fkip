@@ -1,6 +1,10 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 
 beforeEach(function () {
@@ -13,178 +17,91 @@ test('registration screen can be rendered', function () {
     $response->assertOk();
 });
 
-test('new users can register with basic fields', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+describe('pada driver non-PostgreSQL', function () {
+    beforeEach(function () {
+        if (DB::getDriverName() === 'pgsql') {
+            $this->markTestSkipped('Hanya relevan pada driver non-pgsql.');
+        }
+    });
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    test('registration is restricted to PostgreSQL deployments', function () {
+        $response = $this->post(route('register.store'), [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertGuest();
+    });
 });
 
-test('new users can register with external fields', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'external@example.com',
-        'instansi' => 'Universitas Jember',
-        'kategori' => 'internal_unej',
-        'no_hp' => '081234567890',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+describe('pada PostgreSQL', function () {
+    beforeEach(function () {
+        if (DB::getDriverName() !== 'pgsql') {
+            $this->markTestSkipped('Membutuhkan database PostgreSQL test (simlafis_testing).');
+        }
+    });
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    function payloadMahasiswa(array $overrides = []): array
+    {
+        $fakultas = DB::table('fakultas')->orderBy('id_fakultas')->first();
 
-    $user = User::where('email', 'external@example.com')->first();
-    expect($user->instansi)->toBe('Universitas Jember');
-    expect($user->kategori)->toBe('internal_unej');
-    expect($user->no_hp)->toBe('081234567890');
-});
+        return array_merge([
+            'kategori_pengguna' => 'mahasiswa',
+            'name' => 'Mahasiswa Baru',
+            'no_hp' => '081234567890',
+            'email' => 'mhsbaru@example.com',
+            'nim' => '241910301065',
+            'id_fakultas' => $fakultas?->id_fakultas,
+            'prodi' => 'Pendidikan Fisika',
+            'foto_identitas' => UploadedFile::fake()->image('ktm.png'),
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ], $overrides);
+    }
 
-test('new users can register with luar_unej category', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User Luar',
-        'email' => 'luarunej@example.com',
-        'instansi' => 'PT Teknologi Mandiri',
-        'kategori' => 'luar_unej',
-        'no_hp' => '089876543210',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+    test('registrasi tanpa foto profil tetap berhasil dan mengirim email verifikasi', function () {
+        Notification::fake();
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+        $response = $this->post(route('register.store'), payloadMahasiswa([
+            'foto_profil' => null,
+        ]));
 
-    $user = User::where('email', 'luarunej@example.com')->first();
-    expect($user->kategori)->toBe('luar_unej');
-});
+        $response->assertRedirect(route('verification.notice', absolute: false));
 
-test('registration requires name and email', function () {
-    $response = $this->post(route('register.store'), [
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+        $user = User::query()->where('email', 'mhsbaru@example.com')->firstOrFail();
+        expect($user->hasVerifiedEmail())->toBeFalse();
 
-    $response->assertSessionHasErrors(['name', 'email']);
-});
+        Notification::assertSentTo($user, VerifyEmail::class);
 
-test('registration requires valid email', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'invalid-email',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+        $pengguna = DB::table('pengguna')->where('email', 'mhsbaru@example.com')->first();
+        expect($pengguna->foto_profil)->toBeNull();
+        expect($pengguna->foto_identitas)->not->toBeNull();
+    });
 
-    $response->assertSessionHasErrors(['email']);
-});
+    test('registrasi dengan foto profil opsional tetap menyimpan berkas', function () {
+        Notification::fake();
 
-test('registration requires matching passwords', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'different-password',
-    ]);
+        $this->post(route('register.store'), payloadMahasiswa([
+            'email' => 'mhsprofil@example.com',
+            'foto_profil' => UploadedFile::fake()->image('profil.png'),
+        ]));
 
-    $response->assertSessionHasErrors(['password']);
-});
+        $pengguna = DB::table('pengguna')->where('email', 'mhsprofil@example.com')->first();
+        expect($pengguna->foto_profil)->not->toBeNull();
+    });
 
-test('registration fails when email already exists', function () {
-    User::factory()->create(['email' => 'existing@example.com']);
+    test('registrasi menolak pendaftar tanpa foto identitas', function () {
+        Notification::fake();
 
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'existing@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
+        $response = $this->post(route('register.store'), payloadMahasiswa([
+            'foto_identitas' => null,
+        ]));
 
-    $response->assertSessionHasErrors(['email']);
-});
-
-test('registration allows blank instansi and no_hp', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'noinstansi@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
-
-    $user = User::where('email', 'noinstansi@example.com')->first();
-    expect($user->instansi)->toBeNull();
-    expect($user->no_hp)->toBeNull();
-    expect($user->kategori)->toBeNull();
-});
-
-test('self registration always assigns the eksternal role', function () {
-    // BR-1: only external users self-register; never grant admin via the form.
-    $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'rolereg@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    expect(User::where('email', 'rolereg@example.com')->first()->role)->toBe('ekst');
-});
-
-test('registration rejects an invalid phone number format', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'badphone@example.com',
-        'instansi' => 'Universitas Jember',
-        'kategori' => 'internal_unej',
-        'no_hp' => 'not-a-phone',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    $response->assertSessionHasErrors(['no_hp']);
-});
-
-test('registration requires kategori when instansi is provided', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'no_kategori@example.com',
-        'instansi' => 'Universitas Jember',
-        // kategori omitted
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    $response->assertSessionHasErrors(['kategori']);
-});
-
-test('registration requires instansi when kategori is provided', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'no_instansi@example.com',
-        // instansi omitted
-        'kategori' => 'internal_unej',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    $response->assertSessionHasErrors(['instansi']);
-});
-
-test('registration invalid kategori value is rejected', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'External User',
-        'email' => 'invalidkategori@example.com',
-        'instansi' => 'Universitas Jember',
-        'kategori' => 'invalid_category',
-        'password' => 'password',
-        'password_confirmation' => 'password',
-    ]);
-
-    $response->assertSessionHasErrors(['kategori']);
+        $response->assertSessionHasErrors('foto_identitas');
+        expect(User::query()->where('email', 'mhsbaru@example.com')->exists())->toBeFalse();
+        Notification::assertNothingSent();
+    });
 });

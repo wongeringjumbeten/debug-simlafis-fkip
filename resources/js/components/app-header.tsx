@@ -71,7 +71,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 side="left"
                                 className="bg-sidebar flex h-full w-64 flex-col items-stretch justify-between"
                             >
-                                <SheetTitle className="sr-only">Menu navigasi</SheetTitle>
+                                <SheetTitle className="sr-only">
+                                    Menu navigasi
+                                </SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
                                     <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
                                 </SheetHeader>
@@ -91,7 +93,6 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 </Link>
                                             ))}
                                         </div>
-
                                     </div>
                                 </div>
                             </SheetContent>

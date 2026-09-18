@@ -31,9 +31,19 @@ interface CartDialogProps {
 
 type CartTab = 'alat' | 'ruangan';
 
-export function CartDialog({ open, items, role, subKategori, onOpenChange, onHapus, onAjukan }: CartDialogProps) {
+export function CartDialog({
+    open,
+    items,
+    role,
+    subKategori,
+    onOpenChange,
+    onHapus,
+    onAjukan,
+}: CartDialogProps) {
     const [tab, setTab] = useState<CartTab>('alat');
-    const [metodePembayaran, setMetodePembayaran] = useState<'transfer' | 'cash'>('transfer');
+    const [metodePembayaran, setMetodePembayaran] = useState<
+        'transfer' | 'cash'
+    >('transfer');
     const [buktiPembayaran, setBuktiPembayaran] = useState<File | null>(null);
 
     const isEkst = role === 'ekst';
@@ -41,7 +51,12 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
     const totalBiaya = isEkst
         ? items.reduce((total, item) => {
               const tarif = tarifUntuk(item.aset, subKategori) ?? 0;
-              return total + tarif * item.jumlah * hitungHari(item.tanggalMulai, item.tanggalSelesai);
+              return (
+                  total +
+                  tarif *
+                      item.jumlah *
+                      hitungHari(item.tanggalMulai, item.tanggalSelesai)
+              );
           }, 0)
         : 0;
 
@@ -53,7 +68,9 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
             role="tab"
             className={cn(
                 'flex-1 rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
-                tab === 'alat' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
+                tab === 'alat'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground',
             )}
         >
             Alat ({items.filter((i) => i.aset.kategori === 'alat').length})
@@ -72,7 +89,8 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                     : 'text-muted-foreground hover:text-foreground',
             )}
         >
-            Ruangan ({items.filter((i) => i.aset.kategori === 'ruangan').length})
+            Ruangan ({items.filter((i) => i.aset.kategori === 'ruangan').length}
+            )
         </button>
     );
 
@@ -82,41 +100,73 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                 <DialogHeader>
                     <DialogTitle>Keranjang Sesi</DialogTitle>
                     <DialogDescription>
-                        Item sementara sebelum diajukan. Ajuan dibuat per item — persetujuan diproses terpisah (BR-4).
+                        Item sementara sebelum diajukan. Ajuan dibuat per item —
+                        persetujuan diproses terpisah (BR-4).
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="flex gap-1 rounded-lg bg-muted p-1" role="tablist">
+                <div
+                    className="bg-muted flex gap-1 rounded-lg p-1"
+                    role="tablist"
+                >
                     {[tabAlat, tabRuangan]}
                 </div>
 
                 <div className="max-h-[320px] space-y-2 overflow-y-auto">
                     {itemTab.length === 0 && (
-                        <p className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
-                            Belum ada item di tab ini. Pilih item dari katalog lalu klik "Keranjang".
+                        <p className="text-muted-foreground rounded-lg border border-dashed px-4 py-8 text-center text-sm">
+                            Belum ada item di tab ini. Pilih item dari katalog
+                            lalu klik "Keranjang".
                         </p>
                     )}
 
                     {itemTab.map((item) => {
                         const index = items.indexOf(item);
                         const tarif = tarifUntuk(item.aset, subKategori);
-                        const biaya = isEkst && tarif !== undefined ? tarif * item.jumlah * hitungHari(item.tanggalMulai, item.tanggalSelesai) : null;
+                        const biaya =
+                            isEkst && tarif !== undefined
+                                ? tarif *
+                                  item.jumlah *
+                                  hitungHari(
+                                      item.tanggalMulai,
+                                      item.tanggalSelesai,
+                                  )
+                                : null;
 
                         return (
-                            <div key={`${item.aset.id}-${index}`} className="flex items-start gap-3 rounded-lg border p-3">
+                            <div
+                                key={`${item.aset.id}-${index}`}
+                                className="flex items-start gap-3 rounded-lg border p-3"
+                            >
                                 <div className="min-w-0 flex-1">
-                                    <p className="font-mono text-[13px] text-muted-foreground">{item.aset.kode}</p>
-                                    <p className="text-sm font-medium">{item.aset.nama}</p>
-                                    <p className="mt-0.5 text-xs text-muted-foreground">
-                                        {formatTanggal(item.tanggalMulai)} – {formatTanggal(item.tanggalSelesai)} ·{' '}
-                                        {hitungHari(item.tanggalMulai, item.tanggalSelesai)} hari · {item.jamMulai}–
-                                        {item.jamSelesai} · {item.jumlah} unit
+                                    <p className="text-muted-foreground font-mono text-[13px]">
+                                        {item.aset.kode}
+                                    </p>
+                                    <p className="text-sm font-medium">
+                                        {item.aset.nama}
+                                    </p>
+                                    <p className="text-muted-foreground mt-0.5 text-xs">
+                                        {formatTanggal(item.tanggalMulai)} –{' '}
+                                        {formatTanggal(item.tanggalSelesai)} ·{' '}
+                                        {hitungHari(
+                                            item.tanggalMulai,
+                                            item.tanggalSelesai,
+                                        )}{' '}
+                                        hari · {item.jamMulai}–{item.jamSelesai}{' '}
+                                        · {item.jumlah} unit
                                     </p>
                                     {biaya !== null && (
-                                        <p className="mt-0.5 text-sm">{formatRupiah(biaya)}</p>
+                                        <p className="mt-0.5 text-sm">
+                                            {formatRupiah(biaya)}
+                                        </p>
                                     )}
                                 </div>
-                                <Button variant="ghost" size="icon" aria-label={`Hapus ${item.aset.nama}`} onClick={() => onHapus(index)}>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    aria-label={`Hapus ${item.aset.nama}`}
+                                    onClick={() => onHapus(index)}
+                                >
                                     <Trash2 className="text-muted-foreground" />
                                 </Button>
                             </div>
@@ -125,20 +175,24 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                 </div>
 
                 {isEkst && items.length > 0 && (
-                    <div className="space-y-3 rounded-lg border bg-muted/40 p-3">
-                        <p className="text-sm font-semibold">Opsi Pembayaran Sewa (REQ-15)</p>
+                    <div className="bg-muted/40 space-y-3 rounded-lg border p-3">
+                        <p className="text-sm font-semibold">
+                            Opsi Pembayaran Sewa (REQ-15)
+                        </p>
                         <div className="flex gap-4 text-sm">
-                            <label className="flex items-center gap-2 cursor-pointer">
+                            <label className="flex cursor-pointer items-center gap-2">
                                 <input
                                     type="radio"
                                     name="metodePembayaran"
                                     value="transfer"
                                     checked={metodePembayaran === 'transfer'}
-                                    onChange={() => setMetodePembayaran('transfer')}
+                                    onChange={() =>
+                                        setMetodePembayaran('transfer')
+                                    }
                                 />
                                 Transfer Bank
                             </label>
-                            <label className="flex items-center gap-2 cursor-pointer">
+                            <label className="flex cursor-pointer items-center gap-2">
                                 <input
                                     type="radio"
                                     name="metodePembayaran"
@@ -151,12 +205,18 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                         </div>
                         {metodePembayaran === 'transfer' && (
                             <div className="space-y-1">
-                                <label className="text-xs text-muted-foreground">Unggah Bukti Transfer (JPG/PNG max 2MB):</label>
+                                <label className="text-muted-foreground text-xs">
+                                    Unggah Bukti Transfer (JPG/PNG max 2MB):
+                                </label>
                                 <input
                                     type="file"
                                     accept="image/png,image/jpeg,image/jpg"
-                                    onChange={(e) => setBuktiPembayaran(e.target.files?.[0] ?? null)}
-                                    className="block w-full text-xs text-muted-foreground file:mr-2 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-1 file:text-xs file:font-semibold file:text-primary-foreground hover:file:bg-primary/90"
+                                    onChange={(e) =>
+                                        setBuktiPembayaran(
+                                            e.target.files?.[0] ?? null,
+                                        )
+                                    }
+                                    className="text-muted-foreground file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 block w-full text-xs file:mr-2 file:rounded-md file:border-0 file:px-3 file:py-1 file:text-xs file:font-semibold"
                                 />
                             </div>
                         )}
@@ -166,17 +226,32 @@ export function CartDialog({ open, items, role, subKategori, onOpenChange, onHap
                 <DialogFooter className="items-center sm:justify-between">
                     {isEkst ? (
                         <p className="text-sm">
-                            Total: <span className="font-semibold">{formatRupiah(totalBiaya)}</span>
+                            Total:{' '}
+                            <span className="font-semibold">
+                                {formatRupiah(totalBiaya)}
+                            </span>
                         </p>
                     ) : (
-                        <p className="text-sm text-muted-foreground">{items.length} item di keranjang</p>
+                        <p className="text-muted-foreground text-sm">
+                            {items.length} item di keranjang
+                        </p>
                     )}
                     <div className="flex gap-2">
-                        <Button variant="secondary" onClick={() => onOpenChange(false)}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => onOpenChange(false)}
+                        >
                             Tutup
                         </Button>
                         <Button
-                            onClick={() => onAjukan({ metodePembayaran: isEkst ? metodePembayaran : undefined, buktiPembayaran })}
+                            onClick={() =>
+                                onAjukan({
+                                    metodePembayaran: isEkst
+                                        ? metodePembayaran
+                                        : undefined,
+                                    buktiPembayaran,
+                                })
+                            }
                             disabled={items.length === 0}
                         >
                             Ajukan Peminjaman

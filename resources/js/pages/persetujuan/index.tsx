@@ -76,7 +76,10 @@ export default function Persetujuan({ pengajuan }: Props) {
     const [memproses, setMemproses] = useState(false);
 
     function handleApprove(jenis: 'alat' | 'ruangan', id: number) {
-        const url = jenis === 'alat' ? `/persetujuan/alat/${id}/approve` : `/persetujuan/ruangan/${id}/approve`;
+        const url =
+            jenis === 'alat'
+                ? `/persetujuan/alat/${id}/approve`
+                : `/persetujuan/ruangan/${id}/approve`;
 
         router.patch(url, {}, { preserveScroll: true });
     }
@@ -109,38 +112,54 @@ export default function Persetujuan({ pengajuan }: Props) {
             <Head title="Persetujuan Peminjaman" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <header>
-                    <h1 className="text-[28px] leading-tight font-semibold">Persetujuan Peminjaman</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Tinjau dan setujui atau tolak setiap item alat dan ruangan secara independen (BR-4 Item-Level
-                        Approval).
+                    <h1 className="text-[28px] leading-tight font-semibold">
+                        Persetujuan Peminjaman
+                    </h1>
+                    <p className="text-muted-foreground text-sm">
+                        Tinjau dan setujui atau tolak setiap item alat dan
+                        ruangan secara independen (BR-4 Item-Level Approval).
                     </p>
                 </header>
 
                 {pengajuan.length === 0 ? (
                     <div className="rounded-xl border border-dashed px-6 py-16 text-center">
-                        <p className="text-sm font-medium">Tidak ada pengajuan yang menunggu persetujuan</p>
-                        <p className="mx-auto mt-2 max-w-md text-xs text-muted-foreground">
-                            Semua permohonan peminjaman alat dan ruangan sudah diproses.
+                        <p className="text-sm font-medium">
+                            Tidak ada pengajuan yang menunggu persetujuan
+                        </p>
+                        <p className="text-muted-foreground mx-auto mt-2 max-w-md text-xs">
+                            Semua permohonan peminjaman alat dan ruangan sudah
+                            diproses.
                         </p>
                     </div>
                 ) : (
                     <div className="space-y-6">
                         {pengajuan.map((p) => (
-                            <div key={p.id} className="overflow-hidden rounded-xl border bg-card shadow-sm">
-                                <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-muted/40 p-4">
+                            <div
+                                key={p.id}
+                                className="bg-card overflow-hidden rounded-xl border shadow-sm"
+                            >
+                                <div className="bg-muted/40 flex flex-wrap items-center justify-between gap-3 border-b p-4">
                                     <div>
-                                        <span className="font-mono text-base font-bold">{p.kode}</span>
-                                        <span className="ml-3 text-sm text-muted-foreground">
-                                            Pemohon: <strong className="text-foreground">{p.peminjam}</strong> ·{' '}
-                                            {p.tanggalPeminjaman}
+                                        <span className="font-mono text-base font-bold">
+                                            {p.kode}
+                                        </span>
+                                        <span className="text-muted-foreground ml-3 text-sm">
+                                            Pemohon:{' '}
+                                            <strong className="text-foreground">
+                                                {p.peminjam}
+                                            </strong>{' '}
+                                            · {p.tanggalPeminjaman}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-3 text-sm">
-                                        <span className="capitalize text-muted-foreground">
-                                            Jenis: <strong className="text-foreground">{p.jenisPeminjaman}</strong>
+                                        <span className="text-muted-foreground capitalize">
+                                            Jenis:{' '}
+                                            <strong className="text-foreground">
+                                                {p.jenisPeminjaman}
+                                            </strong>
                                         </span>
                                         {p.totalBiaya > 0 && (
-                                            <span className="font-semibold text-primary">
+                                            <span className="text-primary font-semibold">
                                                 {formatRupiah(p.totalBiaya)}
                                             </span>
                                         )}
@@ -149,7 +168,7 @@ export default function Persetujuan({ pengajuan }: Props) {
                                                 href={p.buktiPembayaran}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="rounded-md border bg-background px-2.5 py-1 text-xs text-primary underline hover:bg-muted"
+                                                className="bg-background text-primary hover:bg-muted rounded-md border px-2.5 py-1 text-xs underline"
                                             >
                                                 Bukti Transfer
                                             </a>
@@ -161,59 +180,93 @@ export default function Persetujuan({ pengajuan }: Props) {
                                     {/* Item Alat */}
                                     {p.alat.length > 0 && (
                                         <div className="py-2">
-                                            <h3 className="mb-2 text-xs font-bold uppercase text-muted-foreground">
+                                            <h3 className="text-muted-foreground mb-2 text-xs font-bold uppercase">
                                                 Item Alat ({p.alat.length})
                                             </h3>
                                             <div className="space-y-2">
                                                 {p.alat.map((alat) => {
-                                                    const badge = statusProps(alat.statusItem);
+                                                    const badge = statusProps(
+                                                        alat.statusItem,
+                                                    );
                                                     return (
                                                         <div
                                                             key={alat.id}
-                                                            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-background p-3 text-sm"
+                                                            className="bg-background flex flex-wrap items-center justify-between gap-3 rounded-lg border p-3 text-sm"
                                                         >
                                                             <div>
                                                                 <div className="font-medium">
-                                                                    {alat.nama} ({alat.jumlah} unit)
+                                                                    {alat.nama}{' '}
+                                                                    (
+                                                                    {
+                                                                        alat.jumlah
+                                                                    }{' '}
+                                                                    unit)
                                                                 </div>
-                                                                <div className="text-xs text-muted-foreground">
-                                                                    {alat.waktuMulai} s.d. {alat.waktuSelesai}
+                                                                <div className="text-muted-foreground text-xs">
+                                                                    {
+                                                                        alat.waktuMulai
+                                                                    }{' '}
+                                                                    s.d.{' '}
+                                                                    {
+                                                                        alat.waktuSelesai
+                                                                    }
                                                                 </div>
                                                                 {alat.alasanPenolakan && (
-                                                                    <div className="mt-1 text-xs text-destructive">
-                                                                        Alasan tolak: {alat.alasanPenolakan}
+                                                                    <div className="text-destructive mt-1 text-xs">
+                                                                        Alasan
+                                                                        tolak:{' '}
+                                                                        {
+                                                                            alat.alasanPenolakan
+                                                                        }
                                                                     </div>
                                                                 )}
                                                             </div>
                                                             <div className="flex items-center gap-2">
-                                                                <StatusBadge label={badge.label} tone={badge.tone} />
-                                                                {alat.statusItem === 'menunggu' && (
+                                                                <StatusBadge
+                                                                    label={
+                                                                        badge.label
+                                                                    }
+                                                                    tone={
+                                                                        badge.tone
+                                                                    }
+                                                                />
+                                                                {alat.statusItem ===
+                                                                    'menunggu' && (
                                                                     <>
                                                                         <Button
                                                                             size="sm"
                                                                             variant="default"
-                                                                            className="h-8 gap-1 bg-success text-success-foreground hover:bg-success/90"
+                                                                            className="bg-success text-success-foreground hover:bg-success/90 h-8 gap-1"
                                                                             onClick={() =>
-                                                                                handleApprove('alat', alat.id)
+                                                                                handleApprove(
+                                                                                    'alat',
+                                                                                    alat.id,
+                                                                                )
                                                                             }
                                                                         >
                                                                             <Check className="h-4 w-4" />
-                                                                            <span>Setujui</span>
+                                                                            <span>
+                                                                                Setujui
+                                                                            </span>
                                                                         </Button>
                                                                         <Button
                                                                             size="sm"
                                                                             variant="destructive"
                                                                             className="h-8 gap-1"
                                                                             onClick={() =>
-                                                                                setDialogTolak({
-                                                                                    jenis: 'alat',
-                                                                                    id: alat.id,
-                                                                                    nama: alat.nama,
-                                                                                })
+                                                                                setDialogTolak(
+                                                                                    {
+                                                                                        jenis: 'alat',
+                                                                                        id: alat.id,
+                                                                                        nama: alat.nama,
+                                                                                    },
+                                                                                )
                                                                             }
                                                                         >
                                                                             <X className="h-4 w-4" />
-                                                                            <span>Tolak</span>
+                                                                            <span>
+                                                                                Tolak
+                                                                            </span>
                                                                         </Button>
                                                                     </>
                                                                 )}
@@ -228,57 +281,89 @@ export default function Persetujuan({ pengajuan }: Props) {
                                     {/* Item Ruangan */}
                                     {p.ruangan.length > 0 && (
                                         <div className="py-2">
-                                            <h3 className="mb-2 text-xs font-bold uppercase text-muted-foreground">
-                                                Item Ruangan ({p.ruangan.length})
+                                            <h3 className="text-muted-foreground mb-2 text-xs font-bold uppercase">
+                                                Item Ruangan ({p.ruangan.length}
+                                                )
                                             </h3>
                                             <div className="space-y-2">
                                                 {p.ruangan.map((ruang) => {
-                                                    const badge = statusProps(ruang.statusItem);
+                                                    const badge = statusProps(
+                                                        ruang.statusItem,
+                                                    );
                                                     return (
                                                         <div
                                                             key={ruang.id}
-                                                            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-background p-3 text-sm"
+                                                            className="bg-background flex flex-wrap items-center justify-between gap-3 rounded-lg border p-3 text-sm"
                                                         >
                                                             <div>
-                                                                <div className="font-medium">{ruang.nama}</div>
-                                                                <div className="text-xs text-muted-foreground">
-                                                                    {ruang.waktuMulai} s.d. {ruang.waktuSelesai}
+                                                                <div className="font-medium">
+                                                                    {ruang.nama}
+                                                                </div>
+                                                                <div className="text-muted-foreground text-xs">
+                                                                    {
+                                                                        ruang.waktuMulai
+                                                                    }{' '}
+                                                                    s.d.{' '}
+                                                                    {
+                                                                        ruang.waktuSelesai
+                                                                    }
                                                                 </div>
                                                                 {ruang.alasanPenolakan && (
-                                                                    <div className="mt-1 text-xs text-destructive">
-                                                                        Alasan tolak: {ruang.alasanPenolakan}
+                                                                    <div className="text-destructive mt-1 text-xs">
+                                                                        Alasan
+                                                                        tolak:{' '}
+                                                                        {
+                                                                            ruang.alasanPenolakan
+                                                                        }
                                                                     </div>
                                                                 )}
                                                             </div>
                                                             <div className="flex items-center gap-2">
-                                                                <StatusBadge label={badge.label} tone={badge.tone} />
-                                                                {ruang.statusItem === 'menunggu' && (
+                                                                <StatusBadge
+                                                                    label={
+                                                                        badge.label
+                                                                    }
+                                                                    tone={
+                                                                        badge.tone
+                                                                    }
+                                                                />
+                                                                {ruang.statusItem ===
+                                                                    'menunggu' && (
                                                                     <>
                                                                         <Button
                                                                             size="sm"
                                                                             variant="default"
-                                                                            className="h-8 gap-1 bg-success text-success-foreground hover:bg-success/90"
+                                                                            className="bg-success text-success-foreground hover:bg-success/90 h-8 gap-1"
                                                                             onClick={() =>
-                                                                                handleApprove('ruangan', ruang.id)
+                                                                                handleApprove(
+                                                                                    'ruangan',
+                                                                                    ruang.id,
+                                                                                )
                                                                             }
                                                                         >
                                                                             <Check className="h-4 w-4" />
-                                                                            <span>Setujui</span>
+                                                                            <span>
+                                                                                Setujui
+                                                                            </span>
                                                                         </Button>
                                                                         <Button
                                                                             size="sm"
                                                                             variant="destructive"
                                                                             className="h-8 gap-1"
                                                                             onClick={() =>
-                                                                                setDialogTolak({
-                                                                                    jenis: 'ruangan',
-                                                                                    id: ruang.id,
-                                                                                    nama: ruang.nama,
-                                                                                })
+                                                                                setDialogTolak(
+                                                                                    {
+                                                                                        jenis: 'ruangan',
+                                                                                        id: ruang.id,
+                                                                                        nama: ruang.nama,
+                                                                                    },
+                                                                                )
                                                                             }
                                                                         >
                                                                             <X className="h-4 w-4" />
-                                                                            <span>Tolak</span>
+                                                                            <span>
+                                                                                Tolak
+                                                                            </span>
                                                                         </Button>
                                                                     </>
                                                                 )}
@@ -297,13 +382,18 @@ export default function Persetujuan({ pengajuan }: Props) {
             </div>
 
             {/* Dialog Penolakan Item dengan Alasan */}
-            <Dialog open={dialogTolak !== null} onOpenChange={(open) => !open && setDialogTolak(null)}>
+            <Dialog
+                open={dialogTolak !== null}
+                onOpenChange={(open) => !open && setDialogTolak(null)}
+            >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Tolak Item {dialogTolak?.nama}</DialogTitle>
+                        <DialogTitle>
+                            Tolak Item {dialogTolak?.nama}
+                        </DialogTitle>
                         <DialogDescription>
-                            Tuliskan alasan penolakan untuk item ini (misal: bentrok jadwal, pemeliharaan, atau stok
-                            kurang).
+                            Tuliskan alasan penolakan untuk item ini (misal:
+                            bentrok jadwal, pemeliharaan, atau stok kurang).
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-2 py-2">
@@ -316,10 +406,17 @@ export default function Persetujuan({ pengajuan }: Props) {
                         />
                     </div>
                     <DialogFooter>
-                        <Button variant="secondary" onClick={() => setDialogTolak(null)}>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setDialogTolak(null)}
+                        >
                             Batal
                         </Button>
-                        <Button variant="destructive" onClick={handleReject} disabled={memproses}>
+                        <Button
+                            variant="destructive"
+                            onClick={handleReject}
+                            disabled={memproses}
+                        >
                             {memproses ? 'Menyimpan...' : 'Tolak Item Ini'}
                         </Button>
                     </DialogFooter>

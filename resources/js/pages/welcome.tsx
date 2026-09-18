@@ -74,10 +74,7 @@ export default function Welcome() {
                 {/* Header */}
                 <header className="w-full border-b border-[#D7E3E8] bg-white">
                     <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-                        <Link
-                            href="/"
-                            className="flex items-center gap-3"
-                        >
+                        <Link href="/" className="flex items-center gap-3">
                             <img
                                 src="/images/logo-fkip.png"
                                 alt="Logo FKIP UNEJ"
@@ -95,9 +92,7 @@ export default function Welcome() {
                         <nav className="flex items-center gap-3">
                             {auth.user ? (
                                 <Button asChild>
-                                    <Link href={dashboard()}>
-                                        Dashboard
-                                    </Link>
+                                    <Link href={dashboard()}>Dashboard</Link>
                                 </Button>
                             ) : (
                                 <>
@@ -106,14 +101,10 @@ export default function Welcome() {
                                         asChild
                                         className="text-[#0F4C81]"
                                     >
-                                        <Link href={login()}>
-                                            Masuk
-                                        </Link>
+                                        <Link href={login()}>Masuk</Link>
                                     </Button>
                                     <Button asChild>
-                                        <Link href={register()}>
-                                            Daftar
-                                        </Link>
+                                        <Link href={register()}>Daftar</Link>
                                     </Button>
                                 </>
                             )}
@@ -125,16 +116,15 @@ export default function Welcome() {
                 <section className="w-full bg-linear-to-br from-[#1D3557] via-[#0F4C81] to-[#2A9D6F]">
                     <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-20">
                         <div className="text-white">
-                            <h1 className="text-2xl font-semibold leading-tight sm:text-3xl">
+                            <h1 className="text-2xl leading-tight font-semibold sm:text-3xl">
                                 Sistem Informasi Manajemen
                                 <br />
                                 Laboratorium Fisika
                             </h1>
                             <p className="mt-4 max-w-lg text-sm leading-relaxed text-[#A8DADC]">
-                                Kelola peminjaman alat, ruangan, dan
-                                inventaris laboratorium Pendidikan
-                                Fisika FKIP Universitas Jember secara
-                                terpadu.
+                                Kelola peminjaman alat, ruangan, dan inventaris
+                                laboratorium Pendidikan Fisika FKIP Universitas
+                                Jember secara terpadu.
                             </p>
                             {!auth.user && (
                                 <div className="mt-8 flex gap-3">
@@ -173,22 +163,45 @@ export default function Welcome() {
                     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
                         <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
                             <div>
-                                <h2 className="text-lg font-semibold text-[#1D3557]">Ringkasan Katalog</h2>
+                                <h2 className="text-lg font-semibold text-[#1D3557]">
+                                    Ringkasan Katalog
+                                </h2>
                                 <p className="text-xs text-[#4A6274]">
-                                    Data contoh dari katalog UI-first, akan diperbarui saat master data backend tersedia.
+                                    Data contoh dari katalog UI-first, akan
+                                    diperbarui saat master data backend
+                                    tersedia.
                                 </p>
                             </div>
                         </div>
                         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                             {[
-                                { label: 'Total aset', value: ringkasanKatalog.totalAset },
-                                { label: 'Alat laboratorium', value: ringkasanKatalog.totalAlat },
-                                { label: 'Ruangan tersedia', value: ringkasanKatalog.totalRuangan },
-                                { label: 'Unit laboratorium', value: ringkasanKatalog.totalUnitLab },
+                                {
+                                    label: 'Total aset',
+                                    value: ringkasanKatalog.totalAset,
+                                },
+                                {
+                                    label: 'Alat laboratorium',
+                                    value: ringkasanKatalog.totalAlat,
+                                },
+                                {
+                                    label: 'Ruangan tersedia',
+                                    value: ringkasanKatalog.totalRuangan,
+                                },
+                                {
+                                    label: 'Unit laboratorium',
+                                    value: ringkasanKatalog.totalUnitLab,
+                                },
                             ].map((item) => (
-                                <div key={item.label} className="rounded-xl border border-[#D7E3E8] bg-white p-4">
-                                    <p className="text-2xl font-semibold text-[#1D3557]">{item.value}</p>
-                                    <p className="mt-1 text-xs text-[#4A6274]">{item.label}</p>
+                                <div
+                                    key={item.label}
+                                    className="rounded-xl border border-[#D7E3E8] bg-white p-4"
+                                >
+                                    <p className="text-2xl font-semibold text-[#1D3557]">
+                                        {item.value}
+                                    </p>
+                                    <p className="mt-1 text-xs text-[#4A6274]">
+                                        {item.label}
+                                    </p>
                                 </div>
                             ))}
                         </div>
@@ -207,9 +220,9 @@ export default function Welcome() {
                                     4 Unit Laboratorium
                                 </h3>
                                 <p className="mt-1 text-xs leading-relaxed text-[#4A6274]">
-                                    Fisika Dasar, Elektronika, Fisika
-                                    Lanjut, dan ELF tersedia untuk
-                                    kegiatan praktikum dan penelitian.
+                                    Fisika Dasar, Elektronika, Fisika Lanjut,
+                                    dan ELF tersedia untuk kegiatan praktikum
+                                    dan penelitian.
                                 </p>
                             </div>
                         </div>
@@ -222,9 +235,8 @@ export default function Welcome() {
                                     Peminjaman Terjadwal
                                 </h3>
                                 <p className="mt-1 text-xs leading-relaxed text-[#4A6274]">
-                                    Ajukan peminjaman alat dan ruangan
-                                    secara daring dengan pengecekan
-                                    jadwal otomatis.
+                                    Ajukan peminjaman alat dan ruangan secara
+                                    daring dengan pengecekan jadwal otomatis.
                                 </p>
                             </div>
                         </div>
@@ -237,8 +249,8 @@ export default function Welcome() {
                                     FKIP Universitas Jember
                                 </h3>
                                 <p className="mt-1 text-xs leading-relaxed text-[#4A6274]">
-                                    Jl. Kalimantan No. 37, Kampus
-                                    Tegalboto, Jember, Jawa Timur.
+                                    Jl. Kalimantan No. 37, Kampus Tegalboto,
+                                    Jember, Jawa Timur.
                                 </p>
                             </div>
                         </div>
@@ -251,8 +263,8 @@ export default function Welcome() {
                         Tarif Layanan Alat
                     </h2>
                     <p className="mt-1 text-sm text-[#4A6274]">
-                        Tarif berikut berlaku untuk pengguna eksternal.
-                        Civitas UNEJ tidak dikenakan biaya.
+                        Tarif berikut berlaku untuk pengguna eksternal. Civitas
+                        UNEJ tidak dikenakan biaya.
                     </p>
                     <div className="mt-4 overflow-hidden rounded-xl border border-[#D7E3E8] bg-white">
                         <table className="w-full text-left text-sm">
@@ -274,9 +286,7 @@ export default function Welcome() {
                                     <tr
                                         key={item.nama}
                                         className={
-                                            i % 2 === 1
-                                                ? 'bg-[#FAFCFA]'
-                                                : ''
+                                            i % 2 === 1 ? 'bg-[#FAFCFA]' : ''
                                         }
                                     >
                                         <td className="px-4 py-3 text-[#0F1E30]">
@@ -294,9 +304,9 @@ export default function Welcome() {
                         </table>
                     </div>
                     <p className="mt-2 text-xs text-[#4A6274]">
-                        Data tarif di atas adalah contoh placeholder.
-                        Tarif sesungguhnya akan ditampilkan setelah
-                        data backend tersedia.
+                        Data tarif di atas adalah contoh placeholder. Tarif
+                        sesungguhnya akan ditampilkan setelah data backend
+                        tersedia.
                     </p>
                 </section>
 
@@ -307,9 +317,8 @@ export default function Welcome() {
                             Tarif Layanan Ruangan
                         </h2>
                         <p className="mt-1 text-sm text-[#4A6274]">
-                            Ruangan laboratorium tersedia untuk
-                            kegiatan praktikum, penelitian, dan
-                            pelatihan.
+                            Ruangan laboratorium tersedia untuk kegiatan
+                            praktikum, penelitian, dan pelatihan.
                         </p>
                         <div className="mt-4 overflow-hidden rounded-xl border border-[#D7E3E8]">
                             <table className="w-full text-left text-sm">
@@ -351,9 +360,9 @@ export default function Welcome() {
                             </table>
                         </div>
                         <p className="mt-2 text-xs text-[#4A6274]">
-                            Data tarif di atas adalah contoh
-                            placeholder. Tarif sesungguhnya akan
-                            ditampilkan setelah data backend tersedia.
+                            Data tarif di atas adalah contoh placeholder. Tarif
+                            sesungguhnya akan ditampilkan setelah data backend
+                            tersedia.
                         </p>
                     </div>
                 </section>
@@ -379,9 +388,7 @@ export default function Welcome() {
                             </div>
                             <div className="flex items-center gap-2 text-xs text-[#A8DADC]">
                                 <Phone className="h-3.5 w-3.5" />
-                                <span>
-                                    FKIP Universitas Jember
-                                </span>
+                                <span>FKIP Universitas Jember</span>
                             </div>
                         </div>
                         <p className="mt-6 text-xs text-[#A8DADC]/60">

@@ -60,14 +60,25 @@ class PeminjamanService
             $alatRecords = [];
             $ruanganRecords = [];
 
-            foreach ($items as $item) {
+            foreach ($items as $index => $item) {
                 $kategori = $item['kategori'] ?? $item['aset']['kategori'] ?? null;
-                $waktuMulai = isset($item['waktu_mulai'])
-                    ? Carbon::parse($item['waktu_mulai'])
-                    : Carbon::parse(($item['tanggalMulai'] ?? Carbon::now()->toDateString()).' '.($item['jamMulai'] ?? '08:00'));
-                $waktuSelesai = isset($item['waktu_selesai'])
-                    ? Carbon::parse($item['waktu_selesai'])
-                    : Carbon::parse(($item['tanggalSelesai'] ?? Carbon::now()->toDateString()).' '.($item['jamSelesai'] ?? '17:00'));
+
+                // Tangkap fleksibilitas key tanggal & jam dari front-end
+                $tglMulai = $item['tanggalMulai'] ?? $item['tanggal_mulai'] ?? Carbon::now()->toDateString();
+                $jamMulai = $item['waktu_mulai'] ?? $item['jamMulai'] ?? $item['jam_mulai'] ?? $item['waktuMulai'] ?? '08:00';
+
+                $tglSelesai = $item['tanggalSelesai'] ?? $item['tanggal_selesai'] ?? $tglMulai;
+                $jamSelesai = $item['waktu_selesai'] ?? $item['jamSelesai'] ?? $item['jam_selesai'] ?? $item['waktuSelesai'] ?? '17:00';
+
+                $waktuMulai = Carbon::parse("{$tglMulai} {$jamMulai}");
+                $waktuSelesai = Carbon::parse("{$tglSelesai} {$jamSelesai}");
+
+                // PENANGKAL MESIN WAKTU MUTLAK DI LEVEL SERVICE
+                if ($waktuSelesai->lessThanOrEqualTo($waktuMulai)) {
+                    throw ValidationException::withMessages([
+                        'waktu_selesai' => 'Waktu selesai pada item ke-' . ($index + 1) . ' tidak boleh lebih awal atau sama dengan waktu mulai.',
+                    ]);
+                }
 
                 // REQ-14: Pembatasan durasi peminjaman Mahasiswa maksimal 7 hari.
                 if ($user->role === 'mhs') {

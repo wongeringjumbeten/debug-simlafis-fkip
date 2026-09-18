@@ -25,7 +25,8 @@ function niceStep(max: number): number {
     const rough = Math.max(max, 1) / TICK_TARGET;
     const magnitude = 10 ** Math.floor(Math.log10(rough));
     const normalized = rough / magnitude;
-    const factor = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
+    const factor =
+        normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10;
     return Math.max(1, Math.round(factor * magnitude));
 }
 
@@ -35,7 +36,12 @@ function computeScale(max: number): { niceMax: number; step: number } {
     return { niceMax, step };
 }
 
-export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLabel }: DashboardBarChartProps) {
+export function DashboardBarChart({
+    labels,
+    series,
+    height = PLOT_HEIGHT,
+    ariaLabel,
+}: DashboardBarChartProps) {
     const [hidden, setHidden] = useState<Set<string>>(() => new Set());
     const [ready, setReady] = useState(false);
 
@@ -66,7 +72,8 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
         });
     }
 
-    const isEmpty = labels.length === 0 || peak === 0 || visibleSeries.length === 0;
+    const isEmpty =
+        labels.length === 0 || peak === 0 || visibleSeries.length === 0;
 
     if (isEmpty) {
         return (
@@ -92,20 +99,34 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
                             onClick={() => toggle(s.key)}
                             aria-pressed={!off}
                             className={cn(
-                                'inline-flex items-center gap-2 rounded-md px-2 py-1 text-xs font-medium transition-colors hover:bg-accent focus-visible:ring-ring/50 focus-visible:ring-2 focus-visible:outline-none',
+                                'hover:bg-accent focus-visible:ring-ring/50 inline-flex items-center gap-2 rounded-md px-2 py-1 text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                                 off && 'text-muted-foreground opacity-50',
                             )}
                         >
-                            <span className={cn('h-2.5 w-2.5 rounded-sm', s.barClass, off && 'bg-muted-foreground')} />
+                            <span
+                                className={cn(
+                                    'h-2.5 w-2.5 rounded-sm',
+                                    s.barClass,
+                                    off && 'bg-muted-foreground',
+                                )}
+                            />
                             {s.label}
                         </button>
                     );
                 })}
             </div>
 
-            <div className="flex" role="group" aria-label={ariaLabel ?? 'Grafik batang peminjaman per bulan'}>
+            <div
+                className="flex"
+                role="group"
+                aria-label={ariaLabel ?? 'Grafik batang peminjaman per bulan'}
+            >
                 {/* Sumbu Y */}
-                <div className="relative w-9 shrink-0" style={{ height }} aria-hidden="true">
+                <div
+                    className="relative w-9 shrink-0"
+                    style={{ height }}
+                    aria-hidden="true"
+                >
                     {ticks.map((t) => (
                         <span
                             key={t}
@@ -119,14 +140,25 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
 
                 {/* Area plot (scroll horizontal saat sempit; lebar mengikuti jumlah label) */}
                 <div className="min-w-0 flex-1 overflow-x-auto">
-                    <div style={{ minWidth: `${Math.max(labels.length * 34, 352)}px` }}>
+                    <div
+                        style={{
+                            minWidth: `${Math.max(labels.length * 34, 352)}px`,
+                        }}
+                    >
                         <div className="relative" style={{ height }}>
                             {/* Garis kisi */}
                             {ticks.map((t) => (
                                 <div
                                     key={t}
-                                    className={cn('absolute inset-x-0 border-t', t === 0 ? 'border-border' : 'border-border/60')}
-                                    style={{ bottom: `${(t / niceMax) * 100}%` }}
+                                    className={cn(
+                                        'absolute inset-x-0 border-t',
+                                        t === 0
+                                            ? 'border-border'
+                                            : 'border-border/60',
+                                    )}
+                                    style={{
+                                        bottom: `${(t / niceMax) * 100}%`,
+                                    }}
                                 />
                             ))}
 
@@ -137,7 +169,7 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
                                         key={label}
                                         tabIndex={0}
                                         aria-label={`${label}: ${visibleSeries.map((s) => `${s.label} ${s.data[i] ?? 0}`).join(', ')}`}
-                                        className="group relative flex h-full flex-1 items-end justify-center gap-1 rounded-md focus-visible:ring-ring/50 focus-visible:ring-2 focus-visible:outline-none"
+                                        className="group focus-visible:ring-ring/50 relative flex h-full flex-1 items-end justify-center gap-1 rounded-md focus-visible:ring-2 focus-visible:outline-none"
                                     >
                                         {visibleSeries.map((s) => {
                                             const value = s.data[i] ?? 0;
@@ -150,20 +182,31 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
                                                     className={cn(
                                                         'w-full max-w-6 rounded-t transition-[height] duration-500 ease-out motion-reduce:transition-none',
                                                         s.barClass,
-                                                        value === 0 && 'bg-muted',
+                                                        value === 0 &&
+                                                            'bg-muted',
                                                     )}
-                                                    style={{ height: ready ? `${pct}%` : '0%' }}
+                                                    style={{
+                                                        height: ready
+                                                            ? `${pct}%`
+                                                            : '0%',
+                                                    }}
                                                 />
                                             );
                                         })}
 
                                         {/* Tooltip */}
-                                        <div className="pointer-events-none absolute top-1 left-1/2 z-10 -translate-x-1/2 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+                                        <div className="pointer-events-none absolute top-1 left-1/2 z-10 -translate-x-1/2 opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                                             <div className="bg-popover text-popover-foreground w-max rounded-md border px-2 py-1 text-[11px] shadow-md">
-                                                <span className="font-medium">{label}</span>
+                                                <span className="font-medium">
+                                                    {label}
+                                                </span>
                                                 {visibleSeries.map((s) => (
-                                                    <span key={s.key} className="ml-2 tabular-nums">
-                                                        {s.label} {s.data[i] ?? 0}
+                                                    <span
+                                                        key={s.key}
+                                                        className="ml-2 tabular-nums"
+                                                    >
+                                                        {s.label}{' '}
+                                                        {s.data[i] ?? 0}
                                                     </span>
                                                 ))}
                                             </div>
@@ -176,7 +219,10 @@ export function DashboardBarChart({ labels, series, height = PLOT_HEIGHT, ariaLa
                         {/* Sumbu X */}
                         <div className="text-muted-foreground mt-1 flex gap-2 text-[10px]">
                             {labels.map((label) => (
-                                <span key={label} className="flex-1 text-center">
+                                <span
+                                    key={label}
+                                    className="flex-1 text-center"
+                                >
                                     {label}
                                 </span>
                             ))}

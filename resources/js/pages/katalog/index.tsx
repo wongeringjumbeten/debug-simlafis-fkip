@@ -6,17 +6,36 @@ import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { mockAset } from '@/mock/katalog';
 import { dashboard } from '@/routes';
 import { cn } from '@/lib/utils';
-import type { Aset, CartItem, KategoriAset, Role, SubKategoriEksternal, UnitLab } from '@/types';
+import type {
+    Aset,
+    CartItem,
+    KategoriAset,
+    Role,
+    SubKategoriEksternal,
+    UnitLab,
+} from '@/types';
 import { AddToCartDialog } from './add-to-cart-dialog';
 import { AsetCard } from './aset-card';
 import { CartDialog } from './cart-dialog';
 import { DetailDialog } from './detail-dialog';
 import { ItemFormDialog } from './item-form-dialog';
-import { canBorrow, canManageKategori, kategoriLabels, tabsByRole, unitLabLabels } from './helpers';
+import {
+    canBorrow,
+    canManageKategori,
+    kategoriLabels,
+    tabsByRole,
+    unitLabLabels,
+} from './helpers';
 
 type Props = {
     /** Role user terautentikasi (REQ-1). */
@@ -27,9 +46,45 @@ type Props = {
     asets?: Aset[] | null;
 };
 
-const unitLabOptions: ('semua' | UnitLab)[] = ['semua', 'dasar', 'elektronika', 'lanjut', 'elf'];
+const unitLabOptions: ('semua' | UnitLab)[] = [
+    'semua',
+    'dasar',
+    'elektronika',
+    'lanjut',
+    'elf',
+];
 
-export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) {
+/**
+ * Cek apakah satu CartItem valid. Return null kalau valid,
+ * atau string pesan error kalau tidak.
+ */
+function validasiCartItem(item: CartItem): string | null {
+    if (!item.tanggalMulai || !item.tanggalSelesai) {
+        return 'Tanggal mulai dan selesai wajib diisi.';
+    }
+    if (item.tanggalSelesai < item.tanggalMulai) {
+        return 'Tanggal selesai tidak boleh sebelum tanggal mulai.';
+    }
+    if (
+        item.tanggalMulai === item.tanggalSelesai &&
+        item.jamSelesai <= item.jamMulai
+    ) {
+        return 'Jam selesai harus setelah jam mulai pada hari yang sama.';
+    }
+    if (!Number.isInteger(item.jumlah) || item.jumlah < 1) {
+        return 'Jumlah minimal 1.';
+    }
+    if (item.jumlah > item.aset.stokTersedia) {
+        return `Jumlah melebihi ketersediaan (maksimal ${item.aset.stokTersedia}).`;
+    }
+    return null;
+}
+
+export default function Katalog({
+    role,
+    subKategori,
+    asets: asetsAwal,
+}: Props) {
     const tabs = tabsByRole[role];
     const kategoriEksternal = subKategori ?? undefined;
 
@@ -43,8 +98,12 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
     const [cartTerbuka, setCartTerbuka] = useState(false);
     const [detail, setDetail] = useState<Aset | null>(null);
     const [tambahKeCart, setTambahKeCart] = useState<Aset | null>(null);
-    const [formAset, setFormAset] = useState<{ mode: 'buat' | 'ubah'; aset?: Aset } | null>(null);
+    const [formAset, setFormAset] = useState<{
+        mode: 'buat' | 'ubah';
+        aset?: Aset;
+    } | null>(null);
     const [pengajuanTerkirim, setPengajuanTerkirim] = useState(false);
+    const [cartError, setCartError] = useState<string | null>(null);
 
     const hasil = useMemo(() => {
         const kata = pencarian.trim().toLowerCase();
@@ -52,7 +111,9 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
             (a) =>
                 a.kategori === kategori &&
                 (unitLab === 'semua' || a.unitLab === unitLab) &&
-                (kata === '' || a.nama.toLowerCase().includes(kata) || a.kode.toLowerCase().includes(kata)),
+                (kata === '' ||
+                    a.nama.toLowerCase().includes(kata) ||
+                    a.kode.toLowerCase().includes(kata)),
         );
     }, [asets, kategori, pencarian, unitLab]);
 
@@ -66,10 +127,28 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
     }
 
     function tambahItemKeCart(item: CartItem) {
-        setCart((sebelumnya) => [...sebelumnya, item]);
-        setTambahKeCart(null);
-        setPengajuanTerkirim(false);
+    console.log('[DEBUG] item yang masuk:', item);
+    console.log('[DEBUG] typeof jamMulai:', typeof item.jamMulai, '| nilai:', item.jamMulai);
+    console.log('[DEBUG] typeof jamSelesai:', typeof item.jamSelesai, '| nilai:', item.jamSelesai);
+    console.log('[DEBUG] typeof tanggalMulai:', typeof item.tanggalMulai, '| nilai:', item.tanggalMulai);
+    console.log('[DEBUG] typeof tanggalSelesai:', typeof item.tanggalSelesai, '| nilai:', item.tanggalSelesai);
+    console.log('[DEBUG] typeof jumlah:', typeof item.jumlah, '| nilai:', item.jumlah);
+    console.log('[DEBUG] typeof aset:', typeof item.aset, '| nilai:', item.aset);
+
+    const err = validasiCartItem(item);
+    console.log('[DEBUG] hasil validasi:', err);
+
+    setCartError(null);
+
+    if (err) {
+        setCartError(err);
+        return;
     }
+
+    setCart((sebelumnya) => [...sebelumnya, item]);
+    setTambahKeCart(null);
+    setPengajuanTerkirim(false);
+}
 
     function hapusDariCart(index: number) {
         setCart((sebelumnya) => sebelumnya.filter((_, i) => i !== index));
@@ -80,12 +159,17 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
         const formData = new FormData();
         formData.append('nama', aset.nama);
         if (aset.spesifikasi) formData.append('spesifikasi', aset.spesifikasi);
-        if (aset.stokTotal !== undefined) formData.append('stok_awal', String(aset.stokTotal));
-        if (aset.stokTersedia !== undefined) formData.append('stok_saat_ini', String(aset.stokTersedia));
+        if (aset.stokTotal !== undefined)
+            formData.append('stok_awal', String(aset.stokTotal));
+        if (aset.stokTersedia !== undefined)
+            formData.append('stok_saat_ini', String(aset.stokTersedia));
         if (aset.kondisi) formData.append('kondisi', aset.kondisi);
-        if (aset.kapasitas !== undefined) formData.append('kapasitas', String(aset.kapasitas));
-        if (aset.tarifInternalUnej !== undefined) formData.append('tarif_internal', String(aset.tarifInternalUnej));
-        if (aset.tarifLuarUnej !== undefined) formData.append('tarif_luar', String(aset.tarifLuarUnej));
+        if (aset.kapasitas !== undefined)
+            formData.append('kapasitas', String(aset.kapasitas));
+        if (aset.tarifInternalUnej !== undefined)
+            formData.append('tarif_internal', String(aset.tarifInternalUnej));
+        if (aset.tarifLuarUnej !== undefined)
+            formData.append('tarif_luar', String(aset.tarifLuarUnej));
         if (foto) formData.append('foto', foto);
 
         let url = `/katalog/${aset.kategori}`;
@@ -100,7 +184,9 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
             onSuccess: () => {
                 setAsets((sebelumnya) => {
                     const ada = sebelumnya.some((a) => a.id === aset.id);
-                    return ada ? sebelumnya.map((a) => (a.id === aset.id ? aset : a)) : [...sebelumnya, aset];
+                    return ada
+                        ? sebelumnya.map((a) => (a.id === aset.id ? aset : a))
+                        : [...sebelumnya, aset];
                 });
                 setFormAset(null);
             },
@@ -111,11 +197,26 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
         });
     }
 
-    function ajukanPeminjaman(data?: { metodePembayaran?: 'transfer' | 'cash'; buktiPembayaran?: File | null }) {
+    function ajukanPeminjaman(data?: {
+        metodePembayaran?: 'transfer' | 'cash';
+        buktiPembayaran?: File | null;
+    }) {
+        // ── Validasi semua item sebelum kirim ke backend ──
+        const itemInvalid = cart.find((item) => validasiCartItem(item) !== null);
+
+        if (itemInvalid) {
+            setCartError(
+                `Item "${itemInvalid.aset.nama}" memiliki data tidak valid. Hapus dulu dari keranjang sebelum mengajukan.`,
+            );
+            setCartTerbuka(false);
+            return;
+        }
+
         const itemsPayload = cart.map((item) => ({
             id: item.aset.id,
             id_alat: item.aset.kategori === 'alat' ? item.aset.id : undefined,
-            id_ruangan: item.aset.kategori === 'ruangan' ? item.aset.id : undefined,
+            id_ruangan:
+                item.aset.kategori === 'ruangan' ? item.aset.id : undefined,
             kategori: item.aset.kategori,
             tanggalMulai: item.tanggalMulai,
             tanggalSelesai: item.tanggalSelesai,
@@ -148,8 +249,10 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4">
                 <header className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                        <h1 className="text-[28px] leading-tight font-semibold">Katalog Laboratorium</h1>
-                        <p className="text-sm text-muted-foreground">
+                        <h1 className="text-[28px] leading-tight font-semibold">
+                            Katalog Laboratorium
+                        </h1>
+                        <p className="text-muted-foreground text-sm">
                             {canBorrow(role)
                                 ? 'Cari alat dan ruangan, lalu masukkan ke keranjang untuk membuat pengajuan peminjaman.'
                                 : 'Data alat, ruangan, bahan, dan mebeler pada empat unit laboratorium.'}
@@ -157,15 +260,20 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
                     </div>
                     <div className="flex items-center gap-2">
                         {canManageKategori(role, kategori) && (
-                            <Button onClick={() => setFormAset({ mode: 'buat' })}>
+                            <Button
+                                onClick={() => setFormAset({ mode: 'buat' })}
+                            >
                                 <Plus /> Tambah {kategoriLabels[kategori]}
                             </Button>
                         )}
                         {canBorrow(role) && (
-                            <Button variant="secondary" onClick={() => setCartTerbuka(true)}>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setCartTerbuka(true)}
+                            >
                                 <ShoppingCart /> Keranjang
                                 {cart.length > 0 && (
-                                    <span className="ml-1 min-w-5 rounded-full bg-primary px-1.5 py-0.5 text-center text-xs text-primary-foreground">
+                                    <span className="bg-primary text-primary-foreground ml-1 min-w-5 rounded-full px-1.5 py-0.5 text-center text-xs">
                                         {cart.length}
                                     </span>
                                 )}
@@ -175,19 +283,41 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
                 </header>
 
                 {pengajuanTerkirim && (
-                    <div className="flex items-center justify-between gap-4 rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-sm text-[#1E7050]">
+                    <div className="border-success/30 bg-success/10 flex items-center justify-between gap-4 rounded-xl border px-4 py-3 text-sm text-[#1E7050]">
                         <span>
-                            Pengajuan peminjaman terkirim (simulasi). Status akan tampil di Riwayat Peminjaman setelah
-                            integrasi backend.
+                            Pengajuan peminjaman terkirim. Status akan tampil
+                            di Riwayat Peminjaman.
                         </span>
-                        <button onClick={() => setPengajuanTerkirim(false)} className="shrink-0 font-medium hover:underline">
+                        <button
+                            onClick={() => setPengajuanTerkirim(false)}
+                            className="shrink-0 font-medium hover:underline"
+                        >
                             Tutup
                         </button>
                     </div>
                 )}
 
-                <div className="rounded-xl border bg-card p-4">
-                    <div className="flex flex-wrap gap-2" role="tablist" aria-label="Kategori katalog">
+                {cartError && (
+                    <div
+                        className="flex items-center justify-between gap-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-[#A32E38]"
+                        role="alert"
+                    >
+                        <span>{cartError}</span>
+                        <button
+                            onClick={() => setCartError(null)}
+                            className="shrink-0 font-medium hover:underline"
+                        >
+                            Tutup
+                        </button>
+                    </div>
+                )}
+
+                <div className="bg-card rounded-xl border p-4">
+                    <div
+                        className="flex flex-wrap gap-2"
+                        role="tablist"
+                        aria-label="Kategori katalog"
+                    >
                         {tabs.map((t) => (
                             <button
                                 key={t}
@@ -208,7 +338,7 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
 
                     <div className="mt-4 flex flex-wrap items-end gap-3">
                         <div className="relative min-w-56 flex-1">
-                            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                             <Input
                                 value={pencarian}
                                 onChange={(e) => setPencarian(e.target.value)}
@@ -218,42 +348,65 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
                             />
                         </div>
                         <div className="space-y-1">
-                            <Label htmlFor="filter-unit" className="text-xs font-medium text-muted-foreground">
+                            <Label
+                                htmlFor="filter-unit"
+                                className="text-muted-foreground text-xs font-medium"
+                            >
                                 Unit Lab
                             </Label>
-                            <Select value={unitLab} onValueChange={(v) => setUnitLab(v as 'semua' | UnitLab)}>
-                                <SelectTrigger id="filter-unit" className="w-44">
+                            <Select
+                                value={unitLab}
+                                onValueChange={(v) =>
+                                    setUnitLab(v as 'semua' | UnitLab)
+                                }
+                            >
+                                <SelectTrigger
+                                    id="filter-unit"
+                                    className="w-44"
+                                >
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {unitLabOptions.map((u) => (
                                         <SelectItem key={u} value={u}>
-                                            {u === 'semua' ? 'Semua unit' : unitLabLabels[u]}
+                                            {u === 'semua'
+                                                ? 'Semua unit'
+                                                : unitLabLabels[u]}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-1">
-                            <label htmlFor="filter-mulai" className="text-xs font-medium text-muted-foreground">
+                            <label
+                                htmlFor="filter-mulai"
+                                className="text-muted-foreground text-xs font-medium"
+                            >
                                 Tanggal Mulai
                             </label>
                             <Input
                                 id="filter-mulai"
                                 type="date"
                                 value={tanggalMulai}
-                                onChange={(e) => setTanggalMulai(e.target.value)}
+                                onChange={(e) =>
+                                    setTanggalMulai(e.target.value)
+                                }
                             />
                         </div>
                         <div className="space-y-1">
-                            <label htmlFor="filter-selesai" className="text-xs font-medium text-muted-foreground">
+                            <label
+                                htmlFor="filter-selesai"
+                                className="text-muted-foreground text-xs font-medium"
+                            >
                                 Tanggal Selesai
                             </label>
                             <Input
                                 id="filter-selesai"
                                 type="date"
                                 value={tanggalSelesai}
-                                onChange={(e) => setTanggalSelesai(e.target.value)}
+                                onChange={(e) =>
+                                    setTanggalSelesai(e.target.value)
+                                }
                             />
                         </div>
                         <Button variant="ghost" onClick={resetFilter}>
@@ -261,11 +414,12 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
                         </Button>
                     </div>
 
-                    <p className="mt-3 text-xs text-muted-foreground">
+                    <p className="text-muted-foreground mt-3 text-xs">
                         {filterTanggalAktif
                             ? `Ketersediaan diperhitungkan untuk rentang ${tanggalMulai} s.d. ${tanggalSelesai}. `
                             : 'Pilih rentang tanggal untuk melihat ketersediaan stok pada tanggal tersebut. '}
-                        Kalkulasi stok dinamis mengikuti transaksi aktif — aktif setelah integrasi backend (REQ-10).
+                        Kalkulasi stok dinamis mengikuti transaksi aktif — aktif
+                        setelah integrasi backend (REQ-10).
                     </p>
                 </div>
 
@@ -279,24 +433,27 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
                                 subKategori={kategoriEksternal}
                                 onDetail={setDetail}
                                 onTambahKeCart={setTambahKeCart}
-                                onUbah={(a) => setFormAset({ mode: 'ubah', aset: a })}
+                                onUbah={(a) =>
+                                    setFormAset({ mode: 'ubah', aset: a })
+                                }
                             />
                         ))}
                     </div>
                 ) : (
                     <div className="rounded-xl border border-dashed px-6 py-16 text-center">
-                        <p className="text-sm text-muted-foreground">
-                            Tidak ada {kategoriLabels[kategori].toLowerCase()} yang cocok dengan pencarian.
+                        <p className="text-muted-foreground text-sm">
+                            Tidak ada {kategoriLabels[kategori].toLowerCase()}{' '}
+                            yang cocok dengan pencarian.
                         </p>
                     </div>
                 )}
 
                 {canBorrow(role) && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground flex items-center gap-2 text-xs">
                         <StatusBadge label="Stok dinamis" tone="neutral" />
                         <span>
-                            Jumlah stok tampil berdasarkan data master; pengurangan otomatis per tanggal menyusul
-                            (REQ-10).
+                            Jumlah stok tampil berdasarkan data master;
+                            pengurangan otomatis per tanggal menyusul (REQ-10).
                         </span>
                     </div>
                 )}
@@ -316,13 +473,18 @@ export default function Katalog({ role, subKategori, asets: asetsAwal }: Props) 
             <AddToCartDialog
                 aset={tambahKeCart}
                 role={role}
-                onOpenChange={(open) => !open && setTambahKeCart(null)}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setTambahKeCart(null);
+                        setCartError(null);
+                    }
+                }}
                 onSimpan={tambahItemKeCart}
             />
 
             <CartDialog
                 open={cartTerbuka}
-                items={cart}
+                items={cart.filter((item) => item && item.aset)}
                 role={role}
                 subKategori={kategoriEksternal}
                 onOpenChange={setCartTerbuka}
