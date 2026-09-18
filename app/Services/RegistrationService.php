@@ -235,7 +235,7 @@ class RegistrationService
                 $pengguna['foto_profil'] = $data['foto_profil']->store('profiles', 'public');
             }
             if (($data['foto_identitas'] ?? null) instanceof UploadedFile) {
-                $pengguna['foto_identitas'] = $data['foto_identitas']->store('identities', 'public');
+                $pengguna['foto_identitas'] = $data['foto_identitas']->store('', 'identities');
             }
 
             $idPengguna = DB::table('pengguna')->insertGetId($pengguna, 'id_pengguna');

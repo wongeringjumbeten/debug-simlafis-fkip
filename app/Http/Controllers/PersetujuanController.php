@@ -13,18 +13,25 @@ use Inertia\Response;
 
 class PersetujuanController extends Controller
 {
+    private const LAB_ROLES = ['admin', 'kalab', 'plp'];
+
     /**
-     * Menampilkan daftar pengajuan yang memerlukan persetujuan per-item (BR-4).
+     * Pastikan hanya staf lab (Admin, KaLab, PLP) yang dapat mengakses dan memproses.
      */
+    private function authorizeLabRole(Request $request): void
+    {
+        $role = $request->user()?->role;
+        if (! in_array($role, self::LAB_ROLES, true)) {
+            abort(403, 'Hanya staf laboratorium yang berwenang memproses persetujuan peminjaman.');
+        }
+    }
+
     public function index(Request $request): Response
     {
+        $this->authorizeLabRole($request);
+
         /** @var User $user */
         $user = $request->user();
-
-        // Khusus peran lab (Admin, KaLab, PLP).
-        if (! in_array($user->role, ['admin', 'kalab', 'plp'], true)) {
-            abort(403, 'Hanya staf laboratorium yang dapat mengakses halaman persetujuan.');
-        }
 
         $pengajuanMenunggu = PengajuanPeminjaman::query()
             ->with([
@@ -73,8 +80,14 @@ class PersetujuanController extends Controller
         ]);
     }
 
-    public function approveAlat(DetailPengajuanPeminjamanAlat $item): RedirectResponse
+    public function approveAlat(Request $request, DetailPengajuanPeminjamanAlat $item): RedirectResponse
     {
+        $this->authorizeLabRole($request);
+
+        if (! in_array($item->pengajuan->status_keseluruhan, [PengajuanPeminjaman::STATUS_MENUNGGU, PengajuanPeminjaman::STATUS_DISETUJUI], true)) {
+            return back()->with('error', 'Item tidak dapat disetujui karena transaksi peminjaman sudah dibatalkan atau selesai.');
+        }
+
         $item->status_item = DetailPengajuanPeminjamanAlat::STATUS_DISETUJUI;
         $item->alasan_penolakan = null;
         $item->save();
@@ -86,6 +99,12 @@ class PersetujuanController extends Controller
 
     public function rejectAlat(Request $request, DetailPengajuanPeminjamanAlat $item): RedirectResponse
     {
+        $this->authorizeLabRole($request);
+
+        if (! in_array($item->pengajuan->status_keseluruhan, [PengajuanPeminjaman::STATUS_MENUNGGU, PengajuanPeminjaman::STATUS_DISETUJUI], true)) {
+            return back()->with('error', 'Item tidak dapat ditolak karena transaksi peminjaman sudah dibatalkan atau selesai.');
+        }
+
         $validated = $request->validate([
             'alasan' => ['nullable', 'string', 'max:255'],
         ]);
@@ -99,8 +118,14 @@ class PersetujuanController extends Controller
         return back()->with('success', 'Item alat telah ditolak.');
     }
 
-    public function approveRuangan(DetailPengajuanPeminjamanRuangan $item): RedirectResponse
+    public function approveRuangan(Request $request, DetailPengajuanPeminjamanRuangan $item): RedirectResponse
     {
+        $this->authorizeLabRole($request);
+
+        if (! in_array($item->pengajuan->status_keseluruhan, [PengajuanPeminjaman::STATUS_MENUNGGU, PengajuanPeminjaman::STATUS_DISETUJUI], true)) {
+            return back()->with('error', 'Item tidak dapat disetujui karena transaksi peminjaman sudah dibatalkan atau selesai.');
+        }
+
         $item->status_item = DetailPengajuanPeminjamanRuangan::STATUS_DISETUJUI;
         $item->alasan_penolakan = null;
         $item->save();
@@ -112,6 +137,12 @@ class PersetujuanController extends Controller
 
     public function rejectRuangan(Request $request, DetailPengajuanPeminjamanRuangan $item): RedirectResponse
     {
+        $this->authorizeLabRole($request);
+
+        if (! in_array($item->pengajuan->status_keseluruhan, [PengajuanPeminjaman::STATUS_MENUNGGU, PengajuanPeminjaman::STATUS_DISETUJUI], true)) {
+            return back()->with('error', 'Item tidak dapat ditolak karena transaksi peminjaman sudah dibatalkan atau selesai.');
+        }
+
         $validated = $request->validate([
             'alasan' => ['nullable', 'string', 'max:255'],
         ]);

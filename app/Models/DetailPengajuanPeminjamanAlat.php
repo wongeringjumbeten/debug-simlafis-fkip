@@ -35,6 +35,8 @@ class DetailPengajuanPeminjamanAlat extends Model
 
     public const STATUS_DIKEMBALIKAN = 'dikembalikan';
 
+    public const STATUS_DIBATALKAN = 'dibatalkan';
+
     protected $table = 'detail_pengajuan_peminjaman_alat';
 
     protected $primaryKey = 'id_detail_pengajuan_peminjaman_alat';

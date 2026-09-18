@@ -51,7 +51,10 @@ class User extends Authenticatable implements PasskeyUser
 
     protected $guarded = [];
 
-    protected $hidden = ['password'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     protected $appends = ['active'];
 

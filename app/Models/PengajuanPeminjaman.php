@@ -110,8 +110,18 @@ class PengajuanPeminjaman extends Model
     /**
      * Update status_keseluruhan berdasarkan status item-level (BR-4).
      */
-    public function refreshStatusKeseluruhan(): void
+        public function refreshStatusKeseluruhan(): void
     {
+        // Jangan pernah mengubah status transaksi yang sudah dibatalkan atau selesai dipinjam
+        if (in_array($this->status_keseluruhan, [
+            self::STATUS_DIBATALKAN,
+            self::STATUS_DIPINJAM,
+            self::STATUS_TERLAMBAT,
+            self::STATUS_DIKEMBALIKAN,
+        ], true)) {
+            return;
+        }
+
         $alatStatuses = $this->detailAlat()->pluck('status_item')->all();
         $ruangStatuses = $this->detailRuangan()->pluck('status_item')->all();
         $allStatuses = array_merge($alatStatuses, $ruangStatuses);
