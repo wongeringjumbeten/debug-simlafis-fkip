@@ -1,1675 +1,655 @@
-Login
-Admin
-User Story 
-Story Point
-Sebagai admin, saya ingin melakukan login. 
-
-Sehingga: Admin dapat mengakses sistem
-Title: Login
-Actor: Admin
-
-Scenario:
-Admin membuka website
-Sistem menampilkan homepage
-Admin klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-Admin harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab, saya ingin melakukan login. 
-
-Sehingga: Kalab dapat mengakses sistem
-Title: Kalab
-Actor: Admin
-
-Scenario:
-Kalab membuka website
-Sistem menampilkan homepage
-Kalab klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-Kalab harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melakukan login. 
-
-Sehingga: PLP dapat mengakses sistem
-Title: PLP
-Actor: Admin
-
-Scenario:
-PLP membuka website
-Sistem menampilkan homepage
-Kalab klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-PLP harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa, saya ingin melakukan login. 
-
-Sehingga: Mahasiswa dapat mengakses sistem
-Title: Login
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa membuka website
-Sistem menampilkan homepage
-Mahasiswa klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-Mahasiswa harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen, saya ingin melakukan login. 
-
-Sehingga: Dosen dapat mengakses sistem
-Title: Login
-Actor: Dosen
-
-Scenario:
-Dosen membuka website
-Sistem menampilkan homepage
-Dosen klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-Dosen harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal , saya ingin melakukan login. 
-
-Sehingga: Pengguna Eksternal dapat mengakses sistem
-Title: Login
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal membuka website
-Sistem menampilkan homepage
-Pengguna Eksternal klik “Login”
-Sistem menampilkan form login:
-- email
-- password
-Pengguna Eksternal harus mengisi email dan password
-Sistem memvalidasi email dan password
-Jika data benar, pengguna diarahkan ke dashboard
-Jika data salah, sistem menampilkan pesan kesalahan
-Password ditampilkan dalam bentuk tersembunyi
-
-
-Lupa Password 
-Admin
-User Story 
-Story Point
-Sebagai Admin yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: Admin
-
-Scenario:
-Admin mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-Admin menginputkan email dan mengklik Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-Admin membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: Kalab 
-
-Scenario:
-Kalab mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-Kalab menginputkan email dan mengklik Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-Kalab membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-PLP
-User Story 
-Story Point
-Sebagai PLP yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: PLP 
-
-Scenario:
-PLP mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-PLP menginputkan email dan mengklik  Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-PLP membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: Dosen 
-
-Scenario:
-Dosen mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-Dosen menginputkan email dan mengklik  Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-Dosen membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: Mahasiswa 
-
-Scenario:
-Mahasiswa mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-Mahasiswa menginputkan email dan mengklik  Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-Mahasiswa membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal yang lupa kata sandi, saya ingin mengajukan pemulihan password via email. 
-
-Sehingga: Saya dapat memperbarui kata sandi dan mengakses kembali akun saya. 
-Title: Lupa Password / Reset Password 
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal mengklik tautan Lupa Password di halaman Login.
-Sistem menampilkan form input email terdaftar.
-Pengguna Eksternal menginputkan email dan mengklik  Kirim Link Reset Password.
-Sistem memeriksa ketersediaan email:
-Jika email terdaftar, sistem mengirimkan email berisi link/token reset password.
-Jika email tidak ditemukan, sistem menampilkan pesan kesalahan.
-Pengguna Eksternal membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
-
-
-Register
-Dosen
-User Story 
-Story Point
-Sebagai Dosen, saya ingin mendaftarkan akun baru ke dalam sistem.
-  
-Sehingga: Saya memiliki akun terverifikasi untuk melakukan pengajuan sewa alat dan ruangan.  
-Title: Title: Registrasi Akun Dosen
-Actor: Dosen
-
-Scenario:
-Dosen membuka halaman Register.
-Sistem menampilkan form registrasi, berisi: 
-Nama Lengkap: Varchar (255 char)
-Kategori Pengguna: Enum (‘Mahasiswa UNEJ’, ‘Dosen UNEJ’, ‘Pengguna Umum (Non-UNEJ)')
-Nomor Telepon/WA: Varchar (20 char)
-Email: Varchar (255 char)
-Dosen mengisi seluruh data dan mengklik tombol "Lanjut".
-Sistem memvalidasi data masukan:
-Jika data tidak lengkap atau format email tidak valid atau email sudah terdaftar, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menampilkan form register dosen yang berisi:
-NIP:Integer (Unique)
-Fakultas: VarChar(255)
-Prodi: VarChar(255)
-Password: Varchar (255 char)
-Konfirmasi Password: Varchar (255 char)
-Unggah Foto Profil (format jpg/png): Varchar (255 char)
-Unggah Foto Kartu Pegawai (format jpg/png):  Varchar (255 char)
-Dosen mengisi seluruh data pada form registrasi dan mengklik tombol "Daftar Sekarang".
-Sistem melakukan validasi masukan:
-Jika ada field yang belum diisi, atau ukuran unggahan foto melebihi batas 2MB atau format bukan JPG/PNG atau Password dan Konfirmasi Password tidak sama, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menyimpan data akun pengguna baru sesuai kategori pengguna, menampilkan pesan "Registrasi akun berhasil, silakan login", dan mengarahkan pengguna ke halaman login.
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa, saya ingin mendaftarkan akun baru ke dalam sistem.
-  
-Sehingga: Saya memiliki akun terverifikasi untuk melakukan pengajuan sewa alat dan ruangan.  
-Title: Title: Registrasi Akun Mahasiswa
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa membuka halaman Register.
-Sistem menampilkan form registrasi, berisi: 
-Nama Lengkap: Varchar (255 char)
-Kategori Pengguna: Enum (‘Mahasiswa UNEJ’, ‘Dosen UNEJ’, ‘Pengguna Umum (Non-UNEJ)')
-Nomor Telepon/WA: Varchar (20 char)
-Email: Varchar (255 char)
-Mahasiswa mengisi seluruh data dan mengklik tombol "Lanjut".
-Sistem memvalidasi data masukan:
-Jika data tidak lengkap atau format email tidak valid atau email sudah terdaftar, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menampilkan form register mahasiswa yang berisi:
-NIM: Integer (Unique)
-Fakultas:VarChar(255)
-Prodi: VarChar(255)
-Password: Varchar (255 char)
-Konfirmasi Password: Varchar (255 char)
-Unggah Foto Profil (format jpg/png): Varchar (255 char)
-Unggah Foto Kartu Tanda Mahasiswa (format jpg/png):  Varchar (255 char)
-Mahasiswa mengisi seluruh data pada form registrasi dan mengklik tombol "Daftar Sekarang".
-Sistem melakukan validasi masukan:
-Jika ada field yang belum diisi, atau ukuran unggahan foto melebihi batas 2MB atau format bukan JPG/PNG atau Password dan Konfirmasi Password tidak sama, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menyimpan data akun pengguna baru sesuai kategori pengguna, menampilkan pesan "Registrasi akun berhasil, silakan login", dan mengarahkan pengguna ke halaman login.
-
-Pengguna Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal, saya ingin mendaftarkan akun baru ke dalam sistem.
-  
-Sehingga: Saya memiliki akun terverifikasi untuk melakukan pengajuan sewa alat dan ruangan.  
-Title: Title: Registrasi Akun Pengguna Eksternal
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal membuka halaman Register.
-Sistem menampilkan form registrasi, berisi: 
-Nama Lengkap: Varchar (255 char)
-Kategori Pengguna: Enum (‘Mahasiswa UNEJ’, ‘Dosen UNEJ’, ‘Pengguna Umum (Non-UNEJ)')
-Nomor Telepon/WA: Varchar (20 char)
-Email: Varchar (255 char)
-Pengguna Eksternal mengisi seluruh data dan mengklik tombol "Lanjut".
-Sistem memvalidasi data masukan:
-Jika data tidak lengkap atau format email tidak valid atau email sudah terdaftar, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menampilkan form register mahasiswa yang berisi:
-NIK: Integer (Unique)
-Instansi: Varchar (255 char)
-Provinsi (tempat tinggal):VarChar(100 char)
-Kabupaten (tempat tinggal): VarChar(100 char)
-Kecamatan (tempat tinggal): VarChar(100 char)
-Kelurahan/Desa (tempat tinggal): VarChar(100 char)
-Alamat Lengkap (tempat tinggal): Varchar (255 char)
-Password: Varchar (255 char)
-Konfirmasi Password: Varchar (255 char)
-Unggah Foto Profil (format jpg/png): Varchar (255 char)
-Unggah Foto Kartu Tanda Penduduk (format jpg/png):  Varchar (255 char)
-Pengguna Eksternal mengisi seluruh data pada form registrasi dan mengklik tombol "Daftar Sekarang".
-Sistem melakukan validasi masukan:
-Jika ada field yang belum diisi, atau ukuran unggahan foto melebihi batas 2MB atau format bukan JPG/PNG atau Password dan Konfirmasi Password tidak sama, sistem menampilkan pesan kesalahan.
-Jika seluruh data valid, sistem menyimpan data akun pengguna baru sesuai kategori pengguna, menampilkan pesan "Registrasi akun berhasil, silakan login", dan mengarahkan pengguna ke halaman login.
-
-
-Melihat Profil
-Admin
-User Story 
-Story Point
-Sebagai Admin terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: Admin
-
-Scenario:
-Admin mengklik “Profil Saya”.
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: Kalab 
-
-Scenario:
-Kalab mengklik “Profil Saya”.
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-PLP
-User Story 
-Story Point
-Sebagai PLP terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: PLP
-
-Scenario:
-PLP mengklik “Profil Saya”
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: Dosen
-
-Scenario:
-Dosen mengklik “Profil Saya”
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-Mahasiswa 
-User Story 
-Story Point
-Sebagai Mahasiswa terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa mengklik “Profil Saya”
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal terautentikasi, saya ingin melihat detail informasi profil akun saya. 
-
-Sehingga: Saya dapat memastikan data identitas dan kontak yang terdaftar di sistem sudah benar. 
-Title: Melihat Profil Akun 
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal mengklik “Profil Saya”.
-Sistem melakukan query dan menampilkan detail profil, berisi: 
-Foto Profil
-Nama Lengkap
-NIM / NIP / ID Identitas
-Instansi / Program Studi
-Email
-Nomor Telepon
-Hak Akses / Role
-File Identitas
-
-
-Mengubah Profil 
-Admin
-User Story 
-Story Point
-Sebagai Admin terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: Admin
-
-Scenario:
-Admin membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-Admin memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: Kalab 
-
-Scenario:
-Kalab membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-Kalab memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-PLP
-User Story 
-Story Point
-Sebagai PLP terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: PLP
-
-Scenario:
-PLP membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-PLP memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: Mahasiswa 
-
-Scenario:
-Mahasiswa membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-Mahasiswa memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: Dosen
-
-Scenario:
-Dosen membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-Dosen memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya.
-
-Sehingga: Informasi diri saya di sistem tetap akurat dan mutakhir.
-
-
-Title: Mengubah Informasi Profil 
-Actor: Pengguna Eksternal 
-
-Scenario:
-Pengguna Eksternal membuka halaman Profil Saya dan mengklik Ubah Profil.
-Sistem menampilkan form ubah profil (field sensitif seperti NIM/NIP, Email di-lock/read-only).
-Pengguna Eksternal memperbarui data (seperti Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik Simpan Perubahan.
-Sistem memvalidasi masukan data.
-Jika valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
-
-
-Mengubah Password 
-Admin
-User Story 
-Story Point
-Sebagai Admin terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: Admin
-
-Scenario:
-Admin membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-Admin mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: Kalab
-
-Scenario:
-Kalab membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-Kalab mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-PLP
-User Story 
-Story Point
-Sebagai PLP terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: PLP
-
-Scenario:
-PLP membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-PLP mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: Dosen
-
-Scenario:
-Dosen membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-Dosen mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-Mahasiswa mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-Eksternal 
-User Story 
-Story Point
-Sebagai Pengguna Eksternal terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala.
-Sehingga: Keamanan akun saya tetap terjaga dari akses yang tidak sah.
-
-
-Title: Mengubah Password Akun 
-Actor: Pengguna Eksternal
-
-Scenario:
-Mahasiswa membuka halaman Profil Saya dan mengklik Ubah Password.
-Sistem menampilkan form ubah password, berisi:
-Password Lama: Varchar (255 char)
-Password Baru: Varchar (255 char)
-Konfirmasi Password Baru: Varchar (255 char)
-Pengguna Eksternal mengisi form dan mengklik Perbarui Password.
-Sistem memvalidasi masukan:
-Jika password lama tidak sesuai atau password baru kurang dari kriteria keamanan, sistem menampilkan pesan kesalahan.
-Jika valid, sistem memperbarui password dan menampilkan pesan sukses.
-
-
-Melihat Daftar Pengguna 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat daftar seluruh pengguna terdaftar beserta role dan status akunnya.
-
-Sehingga: Saya dapat mengelola dan memantau akun pengguna di dalam sistem SIMLAFIS.
- 
-Title: Melihat Daftar Pengguna
-Actor: Admin
-
-Scenario:
-Admin memilih menu Manajemen Pengguna.
-Sistem menampilkan tabel daftar pengguna dengan kolom:
-Nama Lengkap
-Foto Profil
-Email
-Institusi
-Hak Akses (Role)
-Status Akses ('active', 'blocked', 'suspended')
-Aksi (Detail, Edit, Ubah Status)
-Pengguna mengklik tombol detail
-Sistem menampilkan pop-up berisi:
-ID Pengguna
-Nama Lengkap
-Foto Profil
-Email
-No Identitas
-No Telepon
-Institusi
-Hak Akses (Role)
-Status Akses ('active', 'blocked', 'suspended')
-Foto Identitas
-Sistem menyediakan filter berdasarkan Role (Mahasiswa, Dosen, PLP, KaLab, Eksternal) dan kolom pencarian (search bar).
-
-Membuat Data Pengguna 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin menambahkan akun pengguna baru (terutamanya akun pengelola seperti KaLab, PLP, atau Dosen).
-
-Sehingga: Pengguna baru tersebut dapat mengakses sistem sesuai hak akses yang diberikan.
- 
-Title: Tambah Pengguna Baru 
-Actor: Admin
-
-Scenario:
-Admin mengklik tombol Tambah Pengguna di halaman Manajemen Pengguna.
-Sistem menampilkan form penambahan pengguna  baru yang berisi:
-Nama Lengkap: Varchar (255 char)
-Instansi / Organisasi: Varchar (255 char)
-Role: Enum (‘Admin’, ‘Kalab’, ‘PLP’, ‘Mahasiswa’, ‘Internal-UNEJ’, 'Luar-UNEJ')
-Nomor Telepon/WA: Varchar (20 char)
-No Identitas: Varchar (100 char)
-Email: Varchar (255 char)
-Password: Varchar (255 char)
-Konfirmasi Password: Varchar (255 char)
-Foto Profil: Varchar (255 char)
-Foto Identitas (KTM atau KTP):  Varchar (255 char)
-Admin mengisi form dan mengklik Simpan.
-Sistem memvalidasi masukan data (pengecekan duplikasi NIP/Email).
-Jika valid, sistem menyimpan pengguna baru ke basis data.
-
-Mengubah Data Pengguna 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin memperbarui data akun pengguna lain (seperti perubahan role).
-
-Sehingga: Data akun pengguna sesuai dengan penetapan tugas.
-Title: Mengubah Data Pengguna 
-Actor: Admin
-
-Scenario:
-Admin memilih salah satu pengguna pada tabel dan mengklik tombol Edit.
-Sistem menampilkan form ubah pengguna terisi data saat ini.
-Admin melakukan penyesuaian (misal: mengubah role pengguna).
-Admin mengklik Simpan Perubahan.
-Sistem memvalidasi dan memperbarui data akun pada basis data.
-
-Mengubah Status Hak Akses Pengguna / Pembatasan Peminjaman (Admin) 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin mengaktifkan, menonaktifkan, atau membatasi hak akses peminjaman akun pengguna tertentu.
-Sehingga: Pengguna yang melanggar aturan/sanksi (misal: terlambat mengembalikan alat) dapat dibatasi akses peminjaman alat/ruangannya.
-Title: Mengelola Hak Akses & Status Peminjaman 
-Actor: Admin
-
-Scenario:
-Admin memilih akun pengguna yang ingin dikelola pada tabel Manajemen Pengguna.
-Admin mengklik tombol Ubah Status.
-Sistem menampilkan  pop-up modal pilihan status akses:
-Status Akses: Dropdown ('active', 'blocked', 'suspended') 
-Alasan Perubahan Status: TEXT
-Admin memilih status baru (misal: suspended) dan memasukkan Catatan Alasan Sanksi. 
-Admin mengklik Simpan Status.
-Sistem memperbarui status pengguna di basis data:
-Pengguna berstatus ‘suspended’ tetap bisa login, namun tombol/fitur Booking/Tambah ke Keranjang akan dinonaktifkan oleh sistem.
-
-Melihat Dashboard Publik / Sebelum Login (Pengguna Eksternal)
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal (Publik), saya ingin melihat informasi laboratorium, katalog alat, dan ketersediaan ruangan sebelum login.
-Sehingga: Pengguna dapat mengetahui layanan dan estimasi biaya sewa sebelum mendaftar/melakukan booking.
-Title: Dashboard Publik (Sebelum Login) 
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal mengakses URL utama SIMLAFIS.
-Sistem menampilkan landing page publik (banner/Informasi Ringkas SIMLAFIS, etalase alat dan katalog ruangan).
-Sistem menampilkan estimasi tarif sewa untuk kategori publik.
-Sistem dilengkapi search bar dan filter.
-Pengguna Eksternal mengklik tombol "Pinjam" / "Tambah ke Keranjang".
-Sistem mengarahkan pengguna ke halaman Login / Registrasi Akun.
-
-Melihat Dashboard (Setelah Login) 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium.
-
-Sehingga: Saya dapat memantau operasional seluruh laboratorium dan lalu lintas transaksi peminjaman secara menyeluruh.
-Title: Dashboard Admin
-Actor: Admin
-
-Scenario:
-Admin melakukan login ke sistem.
-Sistem menampilkan dashboard utama Admin.
-Sistem menyajikan total akumulasi pendapatan, statistik total inventaris alat/ruangan, statistik pengguna, ringkasan transaksi sewa publik, dan dan 10 peminjaman terbaru.
-
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium.
-
-Sehingga: Saya dapat memantau operasional seluruh laboratorium dan lalu lintas transaksi peminjaman secara menyeluruh.
-Title: Dashboard Kalab
-Actor: Kalab
-
-Scenario:
-Kalab melakukan login ke sistem.
-Sistem menampilkan dashboard utama Kalab.
-Sistem menyajikan total akumulasi pendapatan, statistik total inventaris alat/ruangan, statistik pengguna, ringkasan transaksi sewa publik, dan dan 10 peminjaman terbaru.
-
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium.
-
-Sehingga: Saya dapat memantau operasional seluruh laboratorium dan lalu lintas transaksi peminjaman secara menyeluruh.
-Title: Dashboard PLP
-Actor: PLP
-
-Scenario:
-PLP melakukan login ke sistem.
-Sistem menampilkan dashboard utama PLP.
-Sistem menyajikan total akumulasi pendapatan, statistik total inventaris alat/ruangan, statistik pengguna, ringkasan transaksi sewa publik, dan dan 10 peminjaman terbaru.
-
-
-Mahasiswa 
-User Story 
-Story Point
-Sebagai Mahasiswa, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard.
-Sehingga: Mahasiswa dapat memantau status pengajuan peminjaman alat/ruangan secara real-time.
-Title: Dashboard Mahasiswa 
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa melakukan login ke sistem.
-Sistem menampilkan dashboard khusus Mahasiswa.
-Sistem menyajikan ringkasan aktivitas peminjaman aktif, widget status peminjaman terkini, notifikasi pengembalian.
-Mahasiswa dapat mengklik Quick Links ke Katalog Alat/Ruangan.
-
-
-Dosen 
-User Story 
-Story Point
-Sebagai Dosen, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard.
-
-Sehingga: Dosen dapat memantau status pengajuan peminjaman alat/ruangan secara real-time.
-Title: Dashboard Dosen
-Actor: Dosen
-
-Scenario:
-Dosen melakukan login ke sistem.
-Sistem menampilkan dashboard khusus Dosen.
-Sistem menyajikan ringkasan aktivitas peminjaman aktif, widget status peminjaman terkini, notifikasi pengembalian.
-Dosen dapat mengklik Quick Links ke Katalog Alat/Ruangan.
-
-Eksternal 
-User Story 
-Story Point
-Sebagai Eksternal, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard.
-
-Sehingga: Eksternal dapat memantau status pengajuan peminjaman alat/ruangan secara real-time.
-Title: Dashboard Eksternal
-Actor: Eksternal
-
-Scenario:
-Eksternal melakukan login ke sistem.
-Sistem menampilkan dashboard khusus Eksternal.
-Sistem menyajikan ringkasan aktivitas peminjaman aktif, widget status peminjaman terkini, notifikasi pengembalian.
-Eksternal dapat mengklik Quick Links ke Katalog Alat/Ruangan.
-
-
-Membuat Data Katalog Layanan Tarif Alat (Admin) 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin menginputkan data master katalog alat beserta acuan tarif sewa.
-
-Sehingga: Master alat terdaftar di katalog publik dengan acuan harga sewa yang valid.
-
- 
-Title: Tambah Master Alat & Tarif
-Actor: Admin
-
-Scenario:
-Admin memilih menu Katalog Alat dan mengklik Tambah Alat & Tarif.
-Sistem menampilkan form tambah data alat dan layanan tarif yang berisi:
-Id Alat: Varchar (100 char)
-Nama Alat: Varchar (255 char)
-Foto Alat : VarChar(255) (file JPG/PNG max 2MB)
-Deskripsi : Text
-Tarif Eksternal Internal Unej : Decimal(12,2) (Default: 0.00)
-Tarif Eksternal Luar Unej: Decimal(12,2) (Default: 0.00)
-Admin mengisi form dan mengklik Simpan Data Alat.
-Sistem memvalidasi masukan:
-Jika ada field kosong/tarif tidak valid/foto >2MB, sistem menampilkan pesan kesalahan.
-Jika valid, sistem menampilkan dialog konfirmasi.
-Admin mengkonfirmasi dialog simpan.
-Sistem menyimpan data master ke basis data (stok dikalkulasi otomatis dari detail unit).
-
-Membuat Data Detail Alat / Register Unit Alat 
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin menginputkan data unit spesifik id_detail_alat ke dalam sistem.
-
-Sehingga: Setiap fisik alat terdata secara presisi dan stok pada katalog master bertambah otomatis.
-Title: Tambah Detail Unit Alat 
-Actor: PLP
-
-Scenario:
-PLP memilih menu Katalog Alat dan mengklik Tambah Unit Detail Alat.
-Sistem menampilkan form registrasi detail alat yang berisi:
-ID Detail Alat: VarChar(100) (PK)
-Nama Alat: Select Master Alat / Varchar
-Lokasi Penyimpanan: Dropdown ('Lab Fisika Dasar', 'Lab Elektronika', 'Lab Fisika Lanjut', 'Lab ELF')
-Kondisi: Dropdown Enum ('baik', 'rusak')
-Status: Dropdown Enum ('tersedia', 'tidak tersedia', 'sedang perbaikan')
-Tahun Pengadaan: Year / VarChar(4)
-Sumber Dana: VarChar(255)
-Status Kepemilikan: VarChar(100)
-Harga Beli: Decimal(12,2) (Nullable)
-Catatan: Text (Nullable)
-PLP mengisi data dan mengklik Simpan Detail Alat.
-Sistem memvalidasi masukan:
-Jika id_detail_alat duplikat (PK)/ada field wajib yang belum diisi/format inputan salah, sistem menampilkan pesan kesalahan.
-Jika valid, sistem menampilkan dialog konfirmasi.
-PLP mengonfirmasi dialog simpan.
-Sistem menyimpan data unit dan mengkalkulasi ulang stok total master alat (+1).
-
-
-Melihat Katalog Alat & Detail Unit (Admin, KaLab, PLP) 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat.
-Sehingga: Admin dapat memantau kuantitas stok riil dan kondisi fisik seluruh inventaris.
-Title: Lihat Detail Unit Alat
-Actor: Admin
-
-Scenario:
-Admin membuka menu "Katalog Laboratorium"
-Sistem menampilkan daftar master alat beserta kuantitas stok kalkulasi otomatis.
-Admin mengklik tombol Detail pada salah satu baris alat.
-Sistem menampilkan rincian spesifikasi unit berdasarkan id_detail_alat (Kondisi, Status, Lokasi, Sumber Dana, Harga Beli, Catatan).
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat.
-Sehingga: Kalab dapat memantau kuantitas stok riil dan kondisi fisik seluruh inventaris.
-Title: Lihat Detail Unit Alat
-Actor: Kalab
-
-Scenario:
-Kalab membuka menu "Katalog Laboratorium"
-Sistem menampilkan daftar master alat beserta kuantitas stok kalkulasi otomatis.
-Kalab mengklik tombol Detail pada salah satu baris alat.
-Sistem menampilkan rincian spesifikasi unit berdasarkan id_detail_alat (Kondisi, Status, Lokasi, Sumber Dana, Harga Beli, Catatan).
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat.
-Sehingga: PLP dapat memantau kuantitas stok riil dan kondisi fisik seluruh inventaris.
-Title: Lihat Detail Unit Alat
-Actor: PLP
-
-Scenario:
-PLP membuka menu "Katalog Laboratorium"
-Sistem menampilkan daftar master alat beserta kuantitas stok kalkulasi otomatis.
-PLP mengklik tombol Detail pada salah satu baris alat.
-Sistem menampilkan rincian spesifikasi unit berdasarkan id_detail_alat (Kondisi, Status, Lokasi, Sumber Dana, Harga Beli, Catatan).
-
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman.
-Sehingga: Saya dapat mengetahui alat yang tersedia untuk dipinjam/disewa.
-Title:Pencarian & Ketersediaan Alat 
-Actor: Dosen
-
-Scenario:
-Dosen membuka menu Katalog Laboratorium dan menginputkan kata kunci/rentang tanggal peminjaman.
-Sistem mengkalkulasi stok riil (Total unit baik & tersedia dikurangi unit ter-booking).
-Sistem menampilkan card daftar alat beserta kuantitas stok riil.
-
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman.
-
-Sehingga: Saya dapat mengetahui alat yang tersedia untuk dipinjam/disewa.
-Title:Pencarian & Ketersediaan Alat 
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa membuka menu Katalog Laboratorium dan menginputkan kata kunci/rentang tanggal peminjaman.
-Sistem mengkalkulasi stok riil (Total unit baik & tersedia dikurangi unit ter-booking).
-Sistem menampilkan card daftar alat beserta kuantitas stok riil.
-
-
-Eksternal
-User Story 
-Story Point
-Sebagai pengguna eksternal, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman.
-
-Sehingga: Saya dapat mengetahui alat yang tersedia untuk dipinjam/disewa.
-Title:Pencarian & Ketersediaan Alat 
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal membuka menu Katalog Laboratorium dan menginputkan kata kunci/rentang tanggal peminjaman.
-Sistem mengkalkulasi stok riil (Total unit baik & tersedia dikurangi unit ter-booking).
-Sistem menampilkan card daftar alat beserta kuantitas stok riil dan tarif.
-
-
-Mengubah Data Katalog Master dan Layanan Tarif Alat  
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin memperbarui informasi master alat atau nominal tarif sewa.
-
-Sehingga: Informasi katalog publik dan acuan biaya sewa tetap akurat.
-
-
-Title: Ubah Master Alat & Tarif 
-Actor: Admin 
-
-Scenario:
-Admin memilih tombol Ubah pada salah satu master alat.
-Sistem menampilkan form ubah data terisi informasi saat ini.
-Admin menyesuaikan data saat ini:
-Id Alat (Read-Only)
-Nama Alat
-Foto Alat
-Deskripsi 
-Tarif Eksternal Internal Unej
-Tarif Eksternal Luar Unej
-Admin mengklik Simpan Perubahan.
-Sistem memvalidasi data:
-Jika ada field yang kosong/inputan tidak valid/ ukuran foto bukan JPG/PNG atau ukuran > 2MB, maka  sistem menampilkan pesan kesalahan.
-Jika valid, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui basis data master alat.
-
-Mengubah Data Detail Alat  
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin memperbarui status operasional atau kondisi fisik unit id_detail_alat.
-Sehingga: Status ketersediaan fisik alat (tersedia, rusak, sedang perbaikan) selalu terbarui.
- 
-Title: Ubah Detail Unit Alat 
-Actor: PLP
-
-Scenario:
-PLP memilih salah satu id_detail_alat dan mengklik Ubah.
-Sistem menampilkan form ubah unit alat (id_detail_alat di-lock).
-PLP memperbarui Kondisi data seperti:
-ID Detail Alat (Read-only)
-Nama Alat
-Lokasi Penyimpanan
-Kondisi
-Status
-Tahun Pengadaan
-Sumber Dana
-Status Kepemilikan
-Harga Beli
-Catatan
-PLP mengklik Simpan Perubahan.
-Sistem memvalidasi data:
-Jika ada field yang kosong/inputan tidak valid, maka  sistem menampilkan pesan kesalahan.
-Jika valid, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui data unit fisik di basis data.
-
-Membuat Data Katalog dan Layanan Tarif Ruangan 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin menambahkan data ruangan laboratorium baru beserta tarif sewa eksternal.
-Sehingga: Ruangan terdaftar di katalog publik dan dapat dipinjam/di sewa.
-Title: Tambah Katalog Ruangan & Tarif 
-Actor: Admin
-
-Scenario:
-Admin mengklik Tambah Ruangan & Tarif di menu Katalog Ruangan.
-Sistem menampilkan  form tambah ruangan yang berisi:
-Id Ruangan : VarChar(100) (PK)
-Nama Ruangan : VarChar(255)
-Foto Ruangan : VarChar(255) 
-kapasitas : Int
-Tarif Sewa Eksternal (Internal UNEJ) : Decimal(12,2) (Default: 0.00) opsional
-Tarif Sewa Eksternal (Luar UNEJ) : Decimal(12,2) (Default: 0.00) opsional
-deskripsi : Text
-Admin mengisi form dan mengklik Simpan Data Ruangan.
-Sistem melakukan validasi data:
-Jika terdapat field wajib belum diisi/inputan tidak sesuai/ format gambar bukan jpg atau png serta ukuran > 2 MB,  sistem menampilkan pesan kesalahan.
-Jika valid, sistem menampilkan dialog konfirmasi.
-Sistem menyimpan data ruangan baru ke basis data.
-
-Membuat Jadwal Ruangan / Input Jadwal Reguler 
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin memasukkan jadwal reguler perkuliahan/praktikum ke dalam kalender ruangan.
-
-Sehingga: Slot waktu perkuliahan terblokir dan tidak dapat dibooking oleh pihak lain.
-Title: Input Jadwal Reguler Ruangan 
-Actor: PLP
-
-Scenario:
-PLP memilih Tambah Jadwal Reguler pada menu Jadwal Ruangan.
-Sistem menampilkan form tambah jadwal yang berisi:
-Pilihan Ruangan: Dropdown
-Nama Kegiatan / Mata Kuliah: Varchar (255 char)
-Penanggung Jawab / Dosen: Varchar (255 char)
-Hari: Dropdown
-Jam Mulai: Time
-Jam Selesai: Time
-PLP mengisi data dan mengklik Simpan Jadwal.
-Sistem melakukan anti-collision check:
-Jika jadwal bentrok/terdapat field yang wajib yang kosong/jam mulai lebih besar atau sama dengan jam selesai, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-sistem menyimpan jadwal reguler ke dalam kalender.
-
-
-Mengubah Data Katalog dan Layanan Tarif Ruangan 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin memperbarui informasi fasilitas, kapasitas, atau tarif sewa ruangan.
-
-Sehingga: Informasi data ruangan di katalog publik selalu mutakhir.
-Title: Ubah Katalog Ruangan & Tarif 
-Actor: Admin
-
-Scenario:
-Admin memilih tombol Ubah pada salah satu ruangan.
-Sistem menampilkan form ubah terisi data saat ini.
-Admin memperbarui informasi, seperti:
-Id Ruangan (read-only)
-Nama Ruangan
-Foto Ruangan 
-Kapasitas
-Tarif Sewa Eksternal (Internal UNEJ)
-Tarif Sewa Eksternal (Luar UNEJ)
-Deskripsi
-Admin mengklik Simpan Perubahan.
-Sistem memvalidasi data:
-Jika terdapat field wajib yang kosong/inputan tidak sesuai/format gambar bukan jpg atau png serta ukurannya melebihi 2MB, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui data ruangan di basis data.
-
-
-Mengubah Jadwal Ruangan 
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin menyesuaikan tanggal atau jam agenda ruangan yang telah terdaftar.
-Sehingga: Perubahan jadwal kuliah pengganti atau kegiatan lab terbaru di sistem.
-Title: Ubah Katalog Ruangan & Tarif 
-Actor: Admin
-
-Scenario:
-PLP memilih salah satu blok agenda di kalender dan mengklik Ubah Jadwal.
-Sistem menampilkan form ubah jadwal terisi data saat ini.
-PLP mengubah tanggal/jam operasional dan mengklik Simpan Perubahan.
-Sistem melakukan anti-collision check pada slot waktu baru:
-Jika jadwal bentrok, istem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui basis data jika aman.
-
-
-Melihat Katalog, Ketersediaan, dan Layanan Tarif Ruangan
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat daftar katalog ruangan, detail fasilitas, dan acuan tarif sewa.
-Sehingga: Saya dapat memantau dan mengelola seluruh ruangan lab yang terdaftar.
- 
-Title: Lihat Katalog Ruangan Admin
-Actor: Admin
-
-Scenario:
-Admin membuka menu Katalog Laboratorium dan memilih tab Jadwal Ruangan.
-Sistem menampilkan tabel daftar ruangan beserta kapasitas dan acuan tarif sewa.
-Admin mengklik tombol Detail pada salah satu ruangan.
-Sistem menampilkan nama ruangan dan deskripsi ruangan serta mengambil data jadwal dari basis data dan menyajikannya dalam bentuk kalender interaktif (weekly/monthly view).
-
-Kalab
-User Story 
-Story Point
-Sebagai KaLab, saya ingin melihat kalender jadwal penggunaan ruangan laboratorium.
-Sehingga: Saya dapat mengawasi seluruh agenda praktikum, riset, maupun sewa ruangan.
-
-
-Title: Lihat Jadwal Ruangan KaLab
-Actor: Kalab
-
-Scenario:
-KaLab membuka tab Jadwal Ruangan.
-Sistem menyajikan kalender interaktif (weekly/monthly view) dan menampilkan infromasi ruangan dalam bentuk tabel/kartu interaktif dibawah jadwal yang berbentuk kalender.
-KaLab mengklik salah satu blok jadwal untuk melihat rincian peminjaman/kegiatan.
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melihat tampilan kalender jadwal operasional ruangan di unit lab bertugas.
-Sehingga: Saya dapat mempersiapkan ruangan dan fasilitas sesuai jam kegiatan.
-
-
-Title: Lihat Katalog Ruangan PLP
-Actor: PLP
-
-Scenario:
-PLP membuka menu Jadwal Ruangan.
-Sistem menampilkan antarmuka kalender operasional ruangan unit lab PLP.
-PLP mengklik salah satu agenda untuk melihat detail kegiatan dan PJ.
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong.
-Sehingga: Saya dapat memilih slot waktu yang belum terisi (Available) untuk diajukan peminjaman.
-Title: Lihat Ketersediaan Ruangan Publik
-Actor: Dosen
-
-Scenario:
-Dosen membuka menu Katalog & Jadwal Ruangan.
-Sistem menampilkan daftar ruangan beserta kalender ketersediaan slot waktu.
-Dosen memilih tanggal untuk memeriksa jam yang kosong/terisi.
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong.
-Sehingga: Saya dapat memilih slot waktu yang belum terisi (Available) untuk diajukan peminjaman.
-Title: Lihat Ketersediaan Ruangan Publik
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa membuka menu Katalog & Jadwal Ruangan.
-Sistem menampilkan daftar ruangan beserta kalender ketersediaan slot waktu.
-Mahasiswa memilih tanggal untuk memeriksa jam yang kosong/terisi.
-
-Eksternal
-User Story 
-Story Point
-Sebagai Pengguna Eksternal, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong.
-Sehingga: Saya dapat memilih slot waktu yang belum terisi (Available) untuk diajukan peminjaman.
-Title: Lihat Ketersediaan Ruangan Publik
-Actor: Eksternal
-
-Scenario:
-Pengguna Eksternal membuka menu Katalog & Jadwal Ruangan.
-Sistem menampilkan daftar ruangan beserta kalender ketersediaan slot waktu.
-Pengguna Eksternal memilih tanggal untuk memeriksa jam yang kosong/terisi.
-
-Membuat Data Bahan
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin mencatatkan data bahan habis pakai baru ke dalam sistem.
-Sehingga: Stok awal dan spesifikasi bahan habis pakai terdata di inventaris lab.
-Title: Membuat Data Bahan 
-Actor: PLP
-
-Scenario:
-PLP mengklik Tambah Data Bahan pada menu Katalog Bahan.
-Sistem menampilkan form, berisi:
-Id Bahan: VarChar(100) (PK)
-Nama Bahan: VarChar (255 char)
-Foto Bahan: VarChar (255 char)
-Lokasi Penyimpanan: Dropdown ('Lab Fisika Dasar', 'Lab Elektronika', 'Lab Fisika Lanjut', 'Lab ELF')
-Stok Awal: integer
-Sisa Stok Ketersediaan: Integer
-Satuan: VarChar (50 char) (Gram, mL, Pcs, Botol)
-Tanggal Kadaluarsa: Date (Nullable)
-Status: Dropdown ('aman', 'menipis', 'habis') 
-Catatan: Text (Nullable)
-PLP mengisi form dan mengklik Simpan Data Bahan.
-Sistem memvalidasi data:
-Jika terdapat field wajib yang kosong/inputan tidak sesuai/format gambar bukan jpg atau png serta ukurannya melebihi 2MB, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem menyimpan data bahan ke dalam basis data.
-
-
-Mengubah Data Bahan
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin memperbarui sisa kuantitas stok atau tanggal kadaluarsa bahan.
-Sehingga: Catatan kuantitas bahan habis pakai di sistem sesuai dengan fisik dilapangan.
-Title: Mengubah Data Bahan 
-Actor: PLP
-
-Scenario:
-PLP memilih salah satu bahan dan mengklik Ubah.
-Sistem menampilkan form ubah bahan (id_bahan di-lock).
-PLP memperbarui data:
-Nama Bahan
-Foto Bahan
-Lokasi Penyimpanan
-Stok Awal
-Sisa Stok Ketersediaan
-Satuan
-Tanggal Kadaluarsa
-Status
-Catatan
-PLP mengklik Simpan Perubahan.
-Sistem memvalidasi data:
-Jika terdapat field wajib yang kosong/inputan tidak sesuai/format gambar bukan jpg atau png serta ukurannya melebihi 2MB, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui data bahan di basis data.
-
-
-Melihat Data Bahan dan Ketersediaan Bahan 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat daftar inventaris bahan habis pakai dan sisa stoknya.
-
-Sehingga: Pengelola dapat memantau ketersediaan bahan kimia/habis pakai di seluruh unit lab.
-Title: Lihat Data Bahan
-Actor: Admin
-
-Scenario:
-Admin memilih Tab Katalog Bahan.
-Sistem menampilkan tabel daftar bahan, berisi:
-Kode Bahan
-Nama Bahan
-Foto Bahan
-Lokasi Penyimpanan
-Stok Awal
-Sisa Stok Ketersediaan
-Satuan (Gram / mL / Pcs / Pack)
-Status
-Catatan
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab, saya ingin melihat daftar inventaris bahan habis pakai dan sisa stoknya.
-
-Sehingga: Pengelola dapat memantau ketersediaan bahan kimia/habis pakai di seluruh unit lab.
-Title: Lihat Data Bahan
-Actor: Kalab
-
-Scenario:
-Kalab memilih Tab Katalog Bahan.
-Sistem menampilkan tabel daftar bahan, berisi:
-Kode Bahan
-Nama Bahan
-Foto Bahan
-Lokasi Penyimpanan
-Stok Awal
-Sisa Stok Ketersediaan
-Satuan (Gram / mL / Pcs / Pack)
-Status
-Catatan
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melihat daftar lengkap bahan habis pakai di unit laboratorium tempat bertugas.
-Sehingga: Saya dapat melakukan pengecekan stok opnam bahan secara berkala.
-Title: Lihat Data Bahan 
-Actor: PLP
-
-Scenario:
-PLP memilih Tab Katalog Bahan.
-Sistem menampilkan tabel daftar bahan, berisi:
-Kode Bahan
-Nama Bahan
-Foto Bahan
-Lokasi Penyimpanan
-Stok Awal
-Sisa Stok Ketersediaan
-Satuan (Gram / mL / Pcs / Pack)
-Status
-Catatan
-Aksi: ‘Ubah’
-
-
-Membuat Data Mebeler
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin menginputkan data unit aset mebeler baru ke dalam inventaris lab.
-Sehingga: Aset fisik mebeler terdaftar secara lengkap dalam basis data.
-Title: Tambah Data Mebeler
-Actor: PLP
-
-Scenario:
-PLP mengklik Tambah Unit Mebeler pada menu Data Mebeler.
-Sistem menampilkan form data mebeler yang berisi:
-Id Mebeler:  VarChar(100) (PK)
-Nama Mebeler: VarChar(255)
-Foto Mebeler: VarChar(255)
-Lokasi Penyimpanan (Unit Lab)
-Kondisi:  Enum ('baik', 'rusak', 'sedang perbaikan')
-Tahun Pengadaan: Year / VarChar(4)
-Sumber Dana: VarChar(255)
-Status Kepemilikan: VarChar(100)
-Harga Beli: Decimal(12,2) (Opsional)
-Catatan: Text (Opsional)
-PLP mengisi data dan mengklik Simpan Data Mebeler.
-Sistem memvalidasi data:
-Jika terdapat field wajib yang kosong/inputan tidak sesuai/format gambar bukan jpg atau png serta ukurannya melebihi 2MB, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem menyimpan unit mebeler baru ke basis data.
-
-Mengubah Data Mebeler
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin memperbarui kondisi fisik atau status ketersediaan unit mebeler.
-
-Sehingga: Data kelayakan aset mebeler di sistem sesuai kondisi riil.
-Title: Mengubah Data Mebeler
-Actor: PLP
-
-Scenario:
-PLP memilih salah satu data mebeler dan mengklik Ubah.
-Sistem menampilkan form ubah mebeler (id_mebeler di-lock).
-Sistem menampilkan form ubah data mebeler yang terisi data saat ini:
-Nama Mebeler (Meja Lab / Kursi / Almari / Display)
-Foto Mebeler
-Lokasi Penyimpanan (Unit Lab)
-Kondisi
-Tahun Pengadaan
-Sumber Dana
-Status Kepemilikan
-Harga Beli
-Catatan
-PLP mengklik Simpan Perubahan.
-Sistem memvalidasi data:
-Jika terdapat field wajib yang kosong/inputan tidak sesuai/format gambar bukan jpg atau png serta ukurannya melebihi 2MB, sistem menolak dan menampilkan pesan kesalahan.
-Jika aman, sistem menampilkan dialog konfirmasi.
-Sistem memperbarui data mebeler di basis data.
-
-
-Melihat Data Bahan dan Ketersediaan Mebeler 
-Admin
-User Story 
-Story Point
-Sebagai Admin, saya ingin melihat daftar inventaris aset mebeler laboratorium.
-
-Sehingga: Pengelola dapat memantau kuantitas dan kondisi fisik mebeler di tiap unit lab.
-Title: Lihat Data Mebeler
-Actor: Admin
-
-Scenario:
-Admin memilih Tab Katalog Mebeler.
-Sistem menampilkan daftar seluruh aset mebeler laboratorium yang berisi:
-Id Mebeler
-Nama Mebeler (Meja Lab / Kursi / Almari / Display)
-Foto Mebeler
-Lokasi Penyimpanan (Unit Lab)
-Kondisi
-Tahun Pengadaan
-Sumber Dana
-Status Kepemilikan
-Harga Beli
-Catatan
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab, saya ingin melihat daftar inventaris aset mebeler laboratorium.
-
-Sehingga: Pengelola dapat memantau kuantitas dan kondisi fisik mebeler di tiap unit lab.
-Title: Lihat Data Mebeler
-Actor: Kalab
-
-Scenario:
-Kalab memilih Tab Katalog Mebeler.
-Sistem menampilkan daftar seluruh aset mebeler laboratorium yang berisi:
-Id Mebeler
-Nama Mebeler (Meja Lab / Kursi / Almari / Display)
-Foto Mebeler
-Lokasi Penyimpanan (Unit Lab)
-Kondisi
-Tahun Pengadaan
-Sumber Dana
-Status Kepemilikan
-Harga Beli
-Catatan
-
-PLP
-User Story 
-Story Point
-Sebagai PLP, saya ingin melihat daftar inventaris mebeler di unit lab penugasan.
-
-Sehingga: Saya dapat memantau keberadaan dan kelayakan aset mebeler.
-Title: Lihat Data Mebeler
-Actor: PLP
-
-Scenario:
-PLP memilih Tab Katalog Mebeler.
-Sistem menampilkan tabel daftar seluruh aset mebeler laboratorium yang berisi:
-Id Mebeler
-Nama Mebeler (Meja Lab / Kursi / Almari / Display)
-Foto Mebeler
-Lokasi Penyimpanan (Unit Lab)
-Kondisi
-Tahun Pengadaan
-Sumber Dana
-Status Kepemilikan
-Harga Beli
-Catatan
-Aksi: ‘Ubah’
-
-
-Log Out
-Admin
-User Story 
-Story Point
-Sebagai Admin yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: Admin
-
-Scenario:
-Admin mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-Admin mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login admin.
-Sistem mengarahkan admin kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
-
-Kalab
-User Story 
-Story Point
-Sebagai Kalab yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: Kalab 
-
-Scenario:
-Kalab mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-Kalab mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login kalab.
-Sistem mengarahkan admin kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar
-
-PLP
-User Story 
-Story Point
-Sebagai PLP yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: PLP
-
-Scenario:
-PLP mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-PLP mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login PLP.
-Sistem mengarahkan PLP kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
-
-Dosen
-User Story 
-Story Point
-Sebagai Dosen yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: Dosen
-
-Scenario:
-Dosen mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-Dosen mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login Dosen.
-Sistem mengarahkan dosen kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
-
-Mahasiswa
-User Story 
-Story Point
-Sebagai Mahasiswa yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: Mahasiswa
-
-Scenario:
-Mahasiswa mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-Mahasiswa mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login mahasiswa.
-Sistem mengarahkan mahasiswa kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
-
-Eksternal 
-User Story 
-Story Point
-Sebagai Pengguna Eksternal yang sedang login, saya ingin keluar dari sesi akun sistem SIMLAFIS.
-Sehingga: Sesi akun saya berakhir dengan aman dan tidak dapat diakses orang lain.
-Title: Log Out
-Actor: Pengguna Eksternal
-
-Scenario:
-Pengguna Eksternal mengklik tombol / menu Log Out.
-Sistem menampilkan dialog konfirmasi"Apakah Anda yakin ingin keluar dari sistem?"
-Pengguna Eksternal mengklik Ya, Log Out.
-Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login Pengguna Eksternal.
-Sistem mengarahkan Pengguna Eksternal kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
+# User Story — SIMLAFIS
+
+> Kumpulan user story per fitur, dikelompokkan menurut aktor.
+
+| Atribut | Nilai |
+| --- | --- |
+| Versi | 2.0 |
+| Fase | Sprint 1 |
+| Jumlah kelompok | 31 (`US-01` … `US-31`) |
+| Format ID | `US-<nomor>-<KODE AKTOR>` (contoh: `US-02-ADM`) |
+| Dokumen terkait | [Business Requirements](Business%20Requirements.md) · [System Features](System%20Features.md) · [sprint1.md](sprint1.md) |
+
+> **Catatan story point.** Kolom *Story Point* pada dokumen asli **kosong seluruhnya**. Pada dokumen ini nilainya ditulis `TBD` (*to be determined*) dan wajib diisi pada sesi *sprint planning*. Nilai tersebut **tidak** dikarang di sini.
+
+## Daftar Isi
+
+| ID | Fitur | Aktor | Rujukan |
+| --- | --- | --- | --- |
+| `US-01` | [Dashboard Publik](#us-01--dashboard-publik) | Guest | `PUB-01`…`PUB-03` |
+| `US-02` | [Login](#us-02--login) | 6 peran | `REQ-02` |
+| `US-03` | [Lupa Password](#us-03--lupa-password--reset-password) | 6 peran | `REQ-04` |
+| `US-04` | [Registrasi Akun](#us-04--registrasi-akun) | Mahasiswa, Dosen, Eksternal | `REQ-03` |
+| `US-05` | [Melihat Profil](#us-05--melihat-profil-akun) | 6 peran | `REQ-05` |
+| `US-06` | [Mengubah Profil](#us-06--mengubah-informasi-profil) | 6 peran | `REQ-05`, `BR-2` |
+| `US-07` | [Mengubah Password](#us-07--mengubah-password-akun) | 6 peran | `REQ-04` |
+| `US-08` | [Melihat Daftar Pengguna](#us-08--melihat-daftar-pengguna) | Admin | `ADM-09` |
+| `US-09` | [Tambah Pengguna](#us-09--tambah-pengguna-baru) | Admin | `ADM-08` |
+| `US-10` | [Mengubah Data Pengguna](#us-10--mengubah-data-pengguna) | Admin | `ADM-09` |
+| `US-11` | [Kelola Status Akses](#us-11--mengelola-hak-akses--status-peminjaman) | Admin | `ADM-10`, `BR-3` |
+| `US-12` | [Dashboard](#us-12--dashboard-setelah-login) | 6 peran | `ADM-04`…`ADM-07` |
+| `US-13` | [Tambah Master Alat & Tarif](#us-13--tambah-master-alat--tarif) | Admin | `ADM-11` |
+| `US-14` | [Tambah Detail Unit Alat](#us-14--tambah-detail-unit-alat) | PLP | `PLP-03` |
+| `US-15` | [Lihat Detail Unit Alat](#us-15--lihat-detail-unit-alat) | Admin, KaLab, PLP | `ADM-11`, `KLB-03`, `PLP-03` |
+| `US-16` | [Pencarian & Ketersediaan Alat](#us-16--pencarian--ketersediaan-alat) | Dosen, Mahasiswa, Eksternal | `REQ-09`, `REQ-10` |
+| `US-17` | [Ubah Master Alat & Tarif](#us-17--ubah-master-alat--tarif) | Admin | `ADM-11` |
+| `US-18` | [Ubah Detail Unit Alat](#us-18--ubah-detail-unit-alat) | PLP | `PLP-03` |
+| `US-19` | [Tambah Katalog Ruangan & Tarif](#us-19--tambah-katalog-ruangan--tarif) | Admin | `ADM-12` |
+| `US-20` | [Input Jadwal Reguler](#us-20--input-jadwal-reguler-ruangan) | PLP | `PLP-04`, `REQ-14` |
+| `US-21` | [Ubah Katalog Ruangan & Tarif](#us-21--ubah-katalog-ruangan--tarif) | Admin | `ADM-12` |
+| `US-22` | [Ubah Jadwal Ruangan](#us-22--ubah-jadwal-ruangan) | PLP | `PLP-04` |
+| `US-23` | [Lihat Katalog Ruangan](#us-23--lihat-katalog-ruangan) | Admin, KaLab, PLP | `ADM-12`, `KLB-04`, `PLP-04` |
+| `US-24` | [Lihat Ketersediaan Ruangan](#us-24--lihat-ketersediaan-ruangan-publik) | Dosen, Mahasiswa, Eksternal | `REQ-12` |
+| `US-25` | [Membuat Data Bahan](#us-25--membuat-data-bahan) | PLP | `PLP-05` |
+| `US-26` | [Mengubah Data Bahan](#us-26--mengubah-data-bahan) | PLP | `PLP-05` |
+| `US-27` | [Lihat Data Bahan](#us-27--lihat-data-bahan) | Admin, KaLab, PLP | `ADM-13`, `KLB-05`, `PLP-05` |
+| `US-28` | [Tambah Data Mebeler](#us-28--tambah-data-mebeler) | PLP | `PLP-06` |
+| `US-29` | [Mengubah Data Mebeler](#us-29--mengubah-data-mebeler) | PLP | `PLP-06` |
+| `US-30` | [Lihat Data Mebeler](#us-30--lihat-data-mebeler) | Admin, KaLab, PLP | `ADM-14`, `KLB-06`, `PLP-06` |
+| `US-31` | [Log Out](#us-31--log-out) | 6 peran | `REQ-05` |
+
+---
+
+## US-01 · Dashboard Publik
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-01-PUB` | Calon Pengguna (Publik) | Sebagai Calon Pengguna (Publik), saya ingin melihat informasi laboratorium, katalog alat, dan ketersediaan ruangan sebelum login | Dapat mengetahui layanan dan estimasi biaya sewa sebelum mendaftar/melakukan booking | TBD |
+
+**Skenario**
+
+1. Pengguna mengakses URL utama SIMLAFIS.
+2. Sistem menampilkan informasi umum operasional dan deskripsi layanan laboratorium.
+3. Sistem menampilkan daftar katalog alat dan ruangan, spesifikasi, dan tarif layanan sewa.
+4. Sistem menampilkan prosedur peminjaman, ringkasan persyaratan, dokumen SOP, dan FAQ.
+5. Sistem menampilkan bilah pencarian dan filter (kata kunci atau unit laboratorium).
+6. Sistem menampilkan alamat loket lab, jam operasional, serta kontak WhatsApp/email PLP.
+7. Calon Pengguna mengklik tombol "Pinjam" / "Tambah ke Keranjang".
+8. Sistem mengarahkan pengguna ke halaman Login / Registrasi Akun.
+
+---
+
+## US-02 · Login
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-02-ADM` | Admin | Sebagai Admin, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+| `US-02-KLB` | KaLab | Sebagai KaLab, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+| `US-02-PLP` | PLP | Sebagai PLP, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+| `US-02-DSN` | Dosen | Sebagai Dosen, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+| `US-02-MHS` | Mahasiswa | Sebagai Mahasiswa, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+| `US-02-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal, saya ingin melakukan login | Dapat mengakses sistem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka website dan sistem menampilkan homepage.
+2. Aktor mengklik "Login".
+3. Sistem menampilkan form login berisi email dan password.
+4. Aktor mengisi email dan password.
+5. Sistem memvalidasi email dan password.
+6. Jika data benar, pengguna diarahkan ke dashboard; jika salah, sistem menampilkan pesan kesalahan.
+7. Password ditampilkan dalam bentuk tersembunyi.
+
+---
+
+## US-03 · Lupa Password / Reset Password
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-03-ADM` | Admin | Sebagai Admin yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Dapat memperbarui kata sandi dan mengakses kembali akun | TBD |
+| `US-03-KLB` | KaLab | Sebagai KaLab yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Idem | TBD |
+| `US-03-PLP` | PLP | Sebagai PLP yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Idem | TBD |
+| `US-03-DSN` | Dosen | Sebagai Dosen yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Idem | TBD |
+| `US-03-MHS` | Mahasiswa | Sebagai Mahasiswa yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Idem | TBD |
+| `US-03-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal yang lupa kata sandi, saya ingin mengajukan pemulihan password via email | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor mengklik tautan "Lupa Password" di halaman Login.
+2. Sistem menampilkan form input email terdaftar.
+3. Aktor menginputkan email dan mengklik "Kirim Link Reset Password".
+4. Sistem memeriksa ketersediaan email: bila terdaftar, sistem mengirimkan email berisi tautan/token reset password; bila tidak ditemukan, sistem menampilkan pesan kesalahan.
+5. Aktor membuka tautan dari email, menginputkan password baru, dan menyimpan perubahan.
+
+---
+
+## US-04 · Registrasi Akun
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-04-DSN` | Dosen | Sebagai Dosen, saya ingin mendaftarkan akun baru ke dalam sistem | Memiliki akun terverifikasi untuk melakukan pengajuan sewa alat dan ruangan | TBD |
+| `US-04-MHS` | Mahasiswa | Sebagai Mahasiswa, saya ingin mendaftarkan akun baru ke dalam sistem | Idem | TBD |
+| `US-04-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal, saya ingin mendaftarkan akun baru ke dalam sistem | Idem | TBD |
+
+**Skenario**
+
+1. Aktor membuka halaman Register.
+2. Sistem menampilkan form registrasi tahap pertama: Nama Lengkap, Kategori Pengguna (enum: `Mahasiswa UNEJ` / `Dosen UNEJ` / `Pengguna Umum (Non-UNEJ)`), Nomor Telepon/WA, dan Email.
+3. Aktor mengisi seluruh data dan mengklik tombol "Lanjut".
+4. Sistem memvalidasi data masukan: bila data tidak lengkap, format email tidak valid, atau email sudah terdaftar, sistem menampilkan pesan kesalahan.
+5. Bila seluruh data valid, sistem menampilkan form registrasi lanjutan sesuai kategori:
+
+   | Aktor | Field form lanjutan |
+   | --- | --- |
+   | **Dosen** | NIP `integer` (unik), Fakultas, Prodi, Password, Konfirmasi Password, unggah Foto Profil (JPG/PNG), unggah Foto Kartu Pegawai (JPG/PNG) |
+   | **Mahasiswa** | NIM `integer` (unik), Fakultas, Prodi, Password, Konfirmasi Password, unggah Foto Profil (JPG/PNG), unggah Foto Kartu Tanda Mahasiswa (JPG/PNG) |
+   | **Pengguna Eksternal** | NIK `integer` (unik), Instansi, Provinsi/Kabupaten/Kecamatan/Kelurahan-Desa, Alamat Lengkap, Password, Konfirmasi Password, unggah Foto Profil (JPG/PNG), unggah Foto Kartu Tanda Penduduk (JPG/PNG) |
+
+6. Aktor mengisi seluruh data dan mengklik tombol "Daftar Sekarang".
+7. Sistem memvalidasi: bila ada field belum diisi, ukuran unggahan > 2 MB, format bukan JPG/PNG, atau Password dan Konfirmasi Password tidak sama, sistem menampilkan pesan kesalahan.
+8. Bila seluruh data valid, sistem menyimpan data akun baru sesuai kategori, menampilkan pesan "Registrasi akun berhasil, silakan login", dan mengarahkan ke halaman login.
+
+---
+
+## US-05 · Melihat Profil Akun
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-05-ADM` | Admin | Sebagai Admin terautentikasi, saya ingin melihat detail informasi profil akun saya | Dapat memastikan data identitas dan kontak yang terdaftar sudah benar | TBD |
+| `US-05-KLB` | KaLab | Sebagai KaLab terautentikasi, saya ingin melihat detail informasi profil akun saya | Idem | TBD |
+| `US-05-PLP` | PLP | Sebagai PLP terautentikasi, saya ingin melihat detail informasi profil akun saya | Idem | TBD |
+| `US-05-DSN` | Dosen | Sebagai Dosen terautentikasi, saya ingin melihat detail informasi profil akun saya | Idem | TBD |
+| `US-05-MHS` | Mahasiswa | Sebagai Mahasiswa terautentikasi, saya ingin melihat detail informasi profil akun saya | Idem | TBD |
+| `US-05-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal terautentikasi, saya ingin melihat detail informasi profil akun saya | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor mengklik "Profil Saya".
+2. Sistem melakukan query dan menampilkan detail profil: Foto Profil, Nama Lengkap, NIM/NIP/ID Identitas, Instansi/Program Studi, Email, Nomor Telepon, Hak Akses (Role), dan File Identitas.
+
+---
+
+## US-06 · Mengubah Informasi Profil
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-06-ADM` | Admin | Sebagai Admin terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Informasi diri di sistem tetap akurat dan mutakhir | TBD |
+| `US-06-KLB` | KaLab | Sebagai KaLab terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Idem | TBD |
+| `US-06-PLP` | PLP | Sebagai PLP terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Idem | TBD |
+| `US-06-DSN` | Dosen | Sebagai Dosen terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Idem | TBD |
+| `US-06-MHS` | Mahasiswa | Sebagai Mahasiswa terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Idem | TBD |
+| `US-06-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal terautentikasi, saya ingin memperbarui data kontak atau informasi profil saya | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka halaman Profil Saya dan mengklik "Ubah Profil".
+2. Sistem menampilkan form ubah profil — field sensitif seperti NIM/NIP dan Email bersifat terkunci (*read-only*).
+3. Aktor memperbarui data (Nama Lengkap, No. Telepon, Foto Profil, Instansi) lalu mengklik "Simpan Perubahan".
+4. Sistem memvalidasi masukan data.
+5. Bila valid, sistem memperbarui data di basis data dan menampilkan pesan sukses.
+
+**Kriteria tambahan:** peran (`role`) dan kategori tarif (`kategori`) **tidak dapat** diubah melalui alur ini ([BR-2](Business%20Rule.md#br-2--kategori-tarif-eksternal), [BR-6](Business%20Rule.md#br-6--eksklusivitas-peran-role)).
+
+---
+
+## US-07 · Mengubah Password Akun
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-07-ADM` | Admin | Sebagai Admin terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Keamanan akun tetap terjaga dari akses yang tidak sah | TBD |
+| `US-07-KLB` | KaLab | Sebagai KaLab terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Idem | TBD |
+| `US-07-PLP` | PLP | Sebagai PLP terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Idem | TBD |
+| `US-07-DSN` | Dosen | Sebagai Dosen terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Idem | TBD |
+| `US-07-MHS` | Mahasiswa | Sebagai Mahasiswa terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Idem | TBD |
+| `US-07-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal terautentikasi, saya ingin mengganti kata sandi akun saya secara berkala | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka halaman Profil Saya dan mengklik "Ubah Password".
+2. Sistem menampilkan form ubah password: Password Lama, Password Baru, dan Konfirmasi Password Baru.
+3. Aktor mengisi form dan mengklik "Perbarui Password".
+4. Sistem memvalidasi masukan: bila password lama tidak sesuai atau password baru tidak memenuhi kriteria keamanan, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem memperbarui password dan menampilkan pesan sukses.
+
+---
+
+## US-08 · Melihat Daftar Pengguna
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-08-ADM` | Admin | Sebagai Admin, saya ingin melihat daftar seluruh pengguna terdaftar beserta role dan status akunnya | Dapat mengelola dan memantau akun pengguna di dalam sistem | TBD |
+
+**Skenario**
+
+1. Admin memilih menu Manajemen Pengguna.
+2. Sistem menampilkan tabel daftar pengguna dengan kolom: Nama Lengkap, Foto Profil, Email, Institusi, Hak Akses (Role), Status Akses (`active`, `blocked`, `suspended`), dan Aksi (Detail, Edit, Ubah Status).
+3. Pengguna mengklik tombol Detail.
+4. Sistem menampilkan pop-up berisi: Nama Lengkap, Foto Profil, Email, No Identitas, No Telepon, Institusi, Hak Akses (Role), Status Akses, dan Foto Identitas.
+5. Sistem menyediakan filter berdasarkan Role (Mahasiswa, Dosen, PLP, KaLab, Eksternal) dan kolom pencarian.
+
+---
+
+## US-09 · Tambah Pengguna Baru
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-09-ADM` | Admin | Sebagai Admin, saya ingin menambahkan akun pengguna baru (terutama akun pengelola seperti KaLab, PLP, atau Dosen) | Pengguna baru dapat mengakses sistem sesuai hak akses yang diberikan | TBD |
+
+**Skenario**
+
+1. Admin mengklik tombol "Tambah Pengguna" di halaman Manajemen Pengguna.
+2. Sistem menampilkan form penambahan pengguna baru: Nama Lengkap, Instansi/Organisasi, Role (enum: Admin / KaLab / PLP / Mahasiswa / Internal-UNEJ / Luar-UNEJ), Nomor Telepon/WA, No Identitas, Email, Password, Konfirmasi Password, Foto Profil, dan Foto Identitas (KTM atau KTP).
+3. Admin mengisi form dan mengklik "Simpan".
+4. Sistem memvalidasi masukan data (termasuk pengecekan duplikasi NIP/Email).
+5. Bila valid, sistem menyimpan pengguna baru ke basis data.
+
+---
+
+## US-10 · Mengubah Data Pengguna
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-10-ADM` | Admin | Sebagai Admin, saya ingin memperbarui data akun pengguna lain (seperti perubahan role) | Data akun pengguna sesuai dengan penetapan tugas | TBD |
+
+**Skenario**
+
+1. Admin memilih salah satu pengguna pada tabel dan mengklik tombol "Edit".
+2. Sistem menampilkan form ubah pengguna yang terisi data saat ini.
+3. Admin melakukan penyesuaian (misalnya mengubah role pengguna).
+4. Admin mengklik "Simpan Perubahan".
+5. Sistem memvalidasi dan memperbarui data akun pada basis data.
+
+---
+
+## US-11 · Mengelola Hak Akses & Status Peminjaman
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-11-ADM` | Admin | Sebagai Admin, saya ingin mengaktifkan, menonaktifkan, atau membatasi hak akses peminjaman akun pengguna tertentu | Pengguna yang melanggar aturan/sanksi (misalnya terlambat mengembalikan alat) dapat dibatasi akses peminjaman alat/ruangannya | TBD |
+
+**Skenario**
+
+1. Admin memilih akun pengguna yang ingin dikelola pada tabel Manajemen Pengguna.
+2. Admin mengklik tombol "Ubah Status".
+3. Sistem menampilkan pop-up modal pilihan status akses: Status Akses (dropdown `active`, `blocked`, `suspended`) dan Alasan Perubahan Status (`TEXT`).
+4. Admin memilih status baru (misalnya `suspended`) dan memasukkan catatan alasan sanksi.
+5. Admin mengklik "Simpan Status".
+6. Sistem memperbarui status pengguna di basis data: pengguna berstatus `suspended` tetap bisa login, namun tombol/fitur Booking dan Tambah ke Keranjang dinonaktifkan oleh sistem.
+
+---
+
+## US-12 · Dashboard (Setelah Login)
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-12-ADM` | Admin | Sebagai Admin, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium | Dapat memantau operasional seluruh laboratorium dan lalu lintas transaksi peminjaman secara menyeluruh | TBD |
+| `US-12-KLB` | KaLab | Sebagai KaLab, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium | Idem | TBD |
+| `US-12-PLP` | PLP | Sebagai PLP, saya ingin melihat dashboard dengan statistik sistem dan aktivitas laboratorium | Idem | TBD |
+| `US-12-MHS` | Mahasiswa | Sebagai Mahasiswa, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard | Dapat memantau status pengajuan peminjaman alat/ruangan secara *real-time* | TBD |
+| `US-12-DSN` | Dosen | Sebagai Dosen, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard | Idem | TBD |
+| `US-12-EKS` | Eksternal | Sebagai Eksternal, saya ingin melihat ringkasan aktivitas dan status peminjaman di dashboard | Idem | TBD |
+
+**Skenario — dashboard pengelola (Admin, KaLab, PLP)**
+
+1. Aktor melakukan login ke sistem dan sistem menampilkan dashboard utama.
+2. Sistem menyajikan total akumulasi pendapatan (**khusus Admin**), statistik total inventaris alat/ruangan, statistik pengguna, ringkasan transaksi sewa publik, dan 10 peminjaman terbaru.
+
+**Skenario — dashboard peminjam (Mahasiswa, Dosen, Eksternal)**
+
+1. Aktor melakukan login ke sistem dan sistem menampilkan dashboard khusus.
+2. Sistem menyajikan ringkasan aktivitas peminjaman aktif, widget status peminjaman terkini, dan notifikasi pengembalian.
+3. Aktor dapat mengklik *Quick Links* ke Katalog Alat/Ruangan.
+
+---
+
+## US-13 · Tambah Master Alat & Tarif
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-13-ADM` | Admin | Sebagai Admin, saya ingin menginputkan data master katalog alat beserta acuan tarif sewa | Master alat terdaftar di katalog publik dengan acuan harga sewa yang valid | TBD |
+
+**Skenario**
+
+1. Admin memilih menu Katalog Alat dan mengklik "Tambah Alat & Tarif".
+2. Sistem menampilkan form tambah data alat: Nama Alat, Foto Alat (JPG/PNG maks 2 MB), Deskripsi, dan Tarif Eksternal `decimal(12,2)` (default 0.00).
+3. Admin mengisi form dan mengklik "Simpan Data Alat".
+4. Sistem memvalidasi masukan: bila ada field kosong, tarif tidak valid, atau foto > 2 MB, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem menampilkan dialog konfirmasi.
+6. Admin mengonfirmasi dialog simpan.
+7. Sistem menyimpan data master ke basis data (stok dikalkulasi otomatis dari detail unit).
+
+---
+
+## US-14 · Tambah Detail Unit Alat
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-14-PLP` | PLP | Sebagai PLP, saya ingin menginputkan data unit spesifik `id_detail_alat` ke dalam sistem | Setiap fisik alat terdata secara presisi dan stok pada katalog master bertambah otomatis | TBD |
+
+**Skenario**
+
+1. PLP memilih menu Katalog Alat dan mengklik "Tambah Unit Detail Alat".
+2. Sistem menampilkan form registrasi detail alat: No Seri Unit `varchar(100)` (PK), Nama Alat (pilih master), Lokasi Penyimpanan (dropdown: Lab Fisika Dasar / Lab Elektronika / Lab Fisika Lanjut / Lab ELF), Kondisi (enum `baik`, `rusak`), Status (enum `tersedia`, `tidak tersedia`, `sedang perbaikan`), Tahun Pengadaan, Sumber Dana, Harga Beli (nullable), dan Catatan (nullable).
+3. PLP mengisi data dan mengklik "Simpan Detail Alat".
+4. Sistem memvalidasi: bila `id_detail_alat` duplikat, ada field wajib belum diisi, atau format inputan salah, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem menampilkan dialog konfirmasi.
+6. PLP mengonfirmasi dialog simpan.
+7. Sistem menyimpan data unit dan mengkalkulasi ulang stok total master alat (+1).
+
+---
+
+## US-15 · Lihat Detail Unit Alat
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-15-ADM` | Admin | Sebagai Admin, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat | Dapat memantau kuantitas stok riil dan kondisi fisik seluruh inventaris | TBD |
+| `US-15-KLB` | KaLab | Sebagai KaLab, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat | Idem | TBD |
+| `US-15-PLP` | PLP | Sebagai PLP, saya ingin melihat daftar katalog dan rincian spesifikasi fisik tiap unit alat | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka menu "Katalog Laboratorium".
+2. Sistem menampilkan daftar master alat beserta kuantitas stok kalkulasi otomatis.
+3. Aktor mengklik tombol "Detail" pada salah satu baris alat.
+4. Sistem menampilkan rincian spesifikasi unit berdasarkan `id_detail_alat` (Kondisi, Status, Lokasi, Sumber Dana, Harga Beli, Catatan).
+
+---
+
+## US-16 · Pencarian & Ketersediaan Alat
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-16-DSN` | Dosen | Sebagai Dosen, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman | Dapat mengetahui alat yang tersedia untuk dipinjam/disewa | TBD |
+| `US-16-MHS` | Mahasiswa | Sebagai Mahasiswa, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman | Idem | TBD |
+| `US-16-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal, saya ingin mencari dan memeriksa stok ketersediaan alat berdasarkan tanggal peminjaman | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka menu Katalog Laboratorium dan menginputkan kata kunci serta rentang tanggal peminjaman.
+2. Sistem mengkalkulasi stok riil (total unit berkondisi baik dan tersedia, dikurangi unit yang sudah ter-booking).
+3. Sistem menampilkan kartu daftar alat beserta kuantitas stok riil.
+4. **Khusus Pengguna Eksternal:** sistem juga menampilkan tarif sewa ([REQ-12](System%20Features.md#43-modul-katalog-interaktif-dan-keranjang-sesi)).
+
+---
+
+## US-17 · Ubah Master Alat & Tarif
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-17-ADM` | Admin | Sebagai Admin, saya ingin memperbarui informasi master alat atau nominal tarif sewa | Informasi katalog publik dan acuan biaya sewa tetap akurat | TBD |
+
+**Skenario**
+
+1. Admin memilih tombol "Ubah" pada salah satu master alat.
+2. Sistem menampilkan form ubah data yang terisi informasi saat ini: Nama Alat, Foto Alat, Deskripsi, dan Tarif Eksternal.
+3. Admin menyesuaikan data dan mengklik "Simpan Perubahan".
+4. Sistem memvalidasi data: bila ada field kosong, inputan tidak valid, atau ukuran/format foto tidak sesuai, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem menampilkan dialog konfirmasi.
+6. Sistem memperbarui basis data master alat.
+
+---
+
+## US-18 · Ubah Detail Unit Alat
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-18-PLP` | PLP | Sebagai PLP, saya ingin memperbarui status operasional atau kondisi fisik unit `id_detail_alat` | Status ketersediaan fisik alat (tersedia, rusak, sedang perbaikan) selalu terbarui | TBD |
+
+**Skenario**
+
+1. PLP memilih salah satu `id_detail_alat` dan mengklik "Ubah".
+2. Sistem menampilkan form ubah unit alat (`id_detail_alat` terkunci): No Seri Unit (read-only), Nama Alat, Lokasi Penyimpanan, Kondisi, Status, Tahun Pengadaan, Sumber Dana, Harga Beli, dan Catatan.
+3. PLP memperbarui data dan mengklik "Simpan Perubahan".
+4. Sistem memvalidasi data: bila ada field kosong atau inputan tidak valid, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem menampilkan dialog konfirmasi.
+6. Sistem memperbarui data unit fisik di basis data.
+
+---
+
+## US-19 · Tambah Katalog Ruangan & Tarif
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-19-ADM` | Admin | Sebagai Admin, saya ingin menambahkan data ruangan laboratorium baru beserta tarif sewa eksternal | Ruangan terdaftar di katalog publik dan dapat dipinjam/disewa | TBD |
+
+**Skenario**
+
+1. Admin mengklik "Tambah Ruangan & Tarif" di menu Katalog Ruangan.
+2. Sistem menampilkan form tambah ruangan: Nama Ruangan, Foto Ruangan, Kapasitas `int`, Tarif Sewa Eksternal `decimal(12,2)` (default 0.00, opsional), dan Deskripsi.
+3. Admin mengisi form dan mengklik "Simpan Data Ruangan".
+4. Sistem memvalidasi: bila field wajib belum diisi, inputan tidak sesuai, atau format gambar/ukuran tidak sesuai, sistem menampilkan pesan kesalahan.
+5. Bila valid, sistem menampilkan dialog konfirmasi.
+6. Sistem menyimpan data ruangan baru ke basis data.
+
+---
+
+## US-20 · Input Jadwal Reguler Ruangan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-20-PLP` | PLP | Sebagai PLP, saya ingin memasukkan jadwal reguler perkuliahan/praktikum ke dalam kalender ruangan | Slot waktu perkuliahan terblokir dan tidak dapat dibooking oleh pihak lain | TBD |
+
+**Skenario**
+
+1. PLP memilih "Tambah Jadwal Reguler" pada menu Jadwal Ruangan.
+2. Sistem menampilkan form tambah jadwal: Pilihan Ruangan (dropdown), Nama Kegiatan/Mata Kuliah, Penanggung Jawab/Dosen, Hari (dropdown), Jam Mulai `time`, dan Jam Selesai `time`.
+3. PLP mengisi data dan mengklik "Simpan Jadwal".
+4. Sistem melakukan *anti-collision check*: bila jadwal bentrok, ada field wajib kosong, atau jam mulai ≥ jam selesai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem menyimpan jadwal reguler ke dalam kalender.
+
+---
+
+## US-21 · Ubah Katalog Ruangan & Tarif
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-21-ADM` | Admin | Sebagai Admin, saya ingin memperbarui informasi fasilitas, kapasitas, atau tarif sewa ruangan | Informasi data ruangan di katalog publik selalu mutakhir | TBD |
+
+**Skenario**
+
+1. Admin memilih tombol "Ubah" pada salah satu ruangan.
+2. Sistem menampilkan form ubah yang terisi data saat ini: ID Ruangan (read-only), Nama Ruangan, Foto Ruangan, Kapasitas, Tarif Sewa Eksternal, dan Deskripsi.
+3. Admin memperbarui informasi dan mengklik "Simpan Perubahan".
+4. Sistem memvalidasi: bila field wajib kosong, inputan tidak sesuai, atau format/ukuran gambar tidak sesuai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem memperbarui data ruangan di basis data.
+
+---
+
+## US-22 · Ubah Jadwal Ruangan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-22-PLP` | PLP | Sebagai PLP, saya ingin menyesuaikan tanggal atau jam agenda ruangan yang telah terdaftar | Perubahan jadwal kuliah pengganti atau kegiatan lab terbaru tercatat di sistem | TBD |
+
+**Skenario**
+
+1. PLP memilih salah satu blok agenda di kalender dan mengklik "Ubah Jadwal".
+2. Sistem menampilkan form ubah jadwal yang terisi data saat ini.
+3. PLP mengubah tanggal/jam operasional dan mengklik "Simpan Perubahan".
+4. Sistem melakukan *anti-collision check* pada slot waktu baru: bila bentrok, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi dan memperbarui basis data.
+
+---
+
+## US-23 · Lihat Katalog Ruangan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-23-ADM` | Admin | Sebagai Admin, saya ingin melihat daftar katalog ruangan, detail fasilitas, dan acuan tarif sewa | Dapat memantau dan mengelola seluruh ruangan lab yang terdaftar | TBD |
+| `US-23-KLB` | KaLab | Sebagai KaLab, saya ingin melihat kalender jadwal penggunaan ruangan laboratorium | Dapat mengawasi seluruh agenda praktikum, riset, maupun sewa ruangan | TBD |
+| `US-23-PLP` | PLP | Sebagai PLP, saya ingin melihat tampilan kalender jadwal operasional ruangan di unit lab bertugas | Dapat mempersiapkan ruangan dan fasilitas sesuai jam kegiatan | TBD |
+
+**Skenario**
+
+1. Aktor membuka menu Katalog Laboratorium dan memilih tab Jadwal Ruangan.
+2. Sistem menampilkan tabel daftar ruangan beserta kapasitas dan acuan tarif sewa.
+3. Aktor mengklik tombol "Detail" pada salah satu ruangan.
+4. Sistem menampilkan nama dan deskripsi ruangan, serta mengambil data jadwal dari basis data dan menyajikannya dalam bentuk kalender interaktif (*weekly*/*monthly view*).
+5. Aktor mengklik salah satu blok jadwal untuk melihat rincian peminjaman/kegiatan.
+
+---
+
+## US-24 · Lihat Ketersediaan Ruangan Publik
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-24-DSN` | Dosen | Sebagai Dosen, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong | Dapat memilih slot waktu yang belum terisi (*Available*) untuk diajukan peminjaman | TBD |
+| `US-24-MHS` | Mahasiswa | Sebagai Mahasiswa, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong | Idem | TBD |
+| `US-24-EKS` | Eksternal | Sebagai Pengguna Eksternal, saya ingin melihat katalog ruangan dan kalender ketersediaan jam kosong | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor membuka menu Katalog & Jadwal Ruangan.
+2. Sistem menampilkan daftar ruangan beserta kalender ketersediaan slot waktu.
+3. Aktor memilih tanggal untuk memeriksa jam yang kosong/terisi.
+
+---
+
+## US-25 · Membuat Data Bahan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-25-PLP` | PLP | Sebagai PLP, saya ingin mencatatkan data bahan habis pakai baru ke dalam sistem | Stok awal dan spesifikasi bahan habis pakai terdata di inventaris lab | TBD |
+
+**Skenario**
+
+1. PLP mengklik "Tambah Data Bahan" pada menu Katalog Bahan.
+2. Sistem menampilkan form: Nama Bahan, Foto Bahan, Lokasi Penyimpanan (dropdown unit lab), Stok Awal `integer`, Sisa Stok Ketersediaan `integer`, Satuan (Gram, mL, Pcs, Botol), Tanggal Kadaluarsa `date` (nullable), Status (dropdown `aman`, `menipis`, `habis`), dan Catatan (nullable).
+3. PLP mengisi form dan mengklik "Simpan Data Bahan".
+4. Sistem memvalidasi data: bila field wajib kosong, inputan tidak sesuai, atau format/ukuran gambar tidak sesuai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem menyimpan data bahan ke dalam basis data.
+
+---
+
+## US-26 · Mengubah Data Bahan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-26-PLP` | PLP | Sebagai PLP, saya ingin memperbarui sisa kuantitas stok atau tanggal kadaluarsa bahan | Catatan kuantitas bahan habis pakai di sistem sesuai dengan fisik di lapangan | TBD |
+
+**Skenario**
+
+1. PLP memilih salah satu bahan dan mengklik "Ubah".
+2. Sistem menampilkan form ubah bahan (`id_bahan` terkunci): Nama Bahan, Foto Bahan, Lokasi Penyimpanan, Stok Awal, Sisa Stok Ketersediaan, Satuan, Tanggal Kadaluarsa, Status, dan Catatan.
+3. PLP memperbarui data dan mengklik "Simpan Perubahan".
+4. Sistem memvalidasi data: bila field wajib kosong, inputan tidak sesuai, atau format/ukuran gambar tidak sesuai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem memperbarui data bahan di basis data.
+
+---
+
+## US-27 · Lihat Data Bahan
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-27-ADM` | Admin | Sebagai Admin, saya ingin melihat daftar inventaris bahan habis pakai dan sisa stoknya | Pengelola dapat memantau ketersediaan bahan kimia/habis pakai di seluruh unit lab | TBD |
+| `US-27-KLB` | KaLab | Sebagai KaLab, saya ingin melihat daftar inventaris bahan habis pakai dan sisa stoknya | Idem | TBD |
+| `US-27-PLP` | PLP | Sebagai PLP, saya ingin melihat daftar lengkap bahan habis pakai di unit laboratorium tempat bertugas | Dapat melakukan pengecekan stok opnam bahan secara berkala | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor memilih Tab Katalog Bahan.
+2. Sistem menampilkan tabel daftar bahan: Kode Bahan, Nama Bahan, Foto Bahan, Lokasi Penyimpanan, Stok Awal, Sisa Stok Ketersediaan, Satuan (Gram / mL / Pcs / Pack), Status, dan Catatan.
+3. **Khusus PLP:** tersedia kolom Aksi "Ubah".
+
+---
+
+## US-28 · Tambah Data Mebeler
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-28-PLP` | PLP | Sebagai PLP, saya ingin menginputkan data unit aset mebeler baru ke dalam inventaris lab | Aset fisik mebeler terdaftar secara lengkap dalam basis data | TBD |
+
+**Skenario**
+
+1. PLP mengklik "Tambah Unit Mebeler" pada menu Data Mebeler.
+2. Sistem menampilkan form data mebeler: Nama Mebeler, Foto Mebeler, Lokasi Penyimpanan (Unit Lab), Kondisi (enum `baik`, `rusak`, `sedang perbaikan`), Tahun Pengadaan, Sumber Dana, Harga Beli (opsional), dan Catatan (opsional).
+3. PLP mengisi data dan mengklik "Simpan Data Mebeler".
+4. Sistem memvalidasi data: bila field wajib kosong, inputan tidak sesuai, atau format/ukuran gambar tidak sesuai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem menyimpan unit mebeler baru ke basis data.
+
+---
+
+## US-29 · Mengubah Data Mebeler
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-29-PLP` | PLP | Sebagai PLP, saya ingin memperbarui kondisi fisik atau status ketersediaan unit mebeler | Data kelayakan aset mebeler di sistem sesuai kondisi riil | TBD |
+
+**Skenario**
+
+1. PLP memilih salah satu data mebeler dan mengklik "Ubah".
+2. Sistem menampilkan form ubah mebeler (`id_mebeler` terkunci): Nama Mebeler (Meja Lab / Kursi / Almari / Display), Foto Mebeler, Lokasi Penyimpanan (Unit Lab), Kondisi, Tahun Pengadaan, Sumber Dana, Harga Beli, dan Catatan.
+3. PLP mengklik "Simpan Perubahan".
+4. Sistem memvalidasi data: bila field wajib kosong, inputan tidak sesuai, atau format/ukuran gambar tidak sesuai, sistem menolak dan menampilkan pesan kesalahan.
+5. Bila aman, sistem menampilkan dialog konfirmasi.
+6. Sistem memperbarui data mebeler di basis data.
+
+---
+
+## US-30 · Lihat Data Mebeler
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-30-ADM` | Admin | Sebagai Admin, saya ingin melihat daftar inventaris aset mebeler laboratorium | Pengelola dapat memantau kuantitas dan kondisi fisik mebeler di tiap unit lab | TBD |
+| `US-30-KLB` | KaLab | Sebagai KaLab, saya ingin melihat daftar inventaris aset mebeler laboratorium | Idem | TBD |
+| `US-30-PLP` | PLP | Sebagai PLP, saya ingin melihat daftar inventaris mebeler di unit lab penugasan | Dapat memantau keberadaan dan kelayakan aset mebeler | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor memilih Tab Katalog Mebeler.
+2. Sistem menampilkan daftar seluruh aset mebeler laboratorium: Nama Mebeler (Meja Lab / Kursi / Almari / Display), Foto Mebeler, Lokasi Penyimpanan (Unit Lab), Kondisi, Tahun Pengadaan, Sumber Dana, Harga Beli, dan Catatan.
+3. **Khusus PLP:** tersedia kolom Aksi "Ubah".
+
+---
+
+## US-31 · Log Out
+
+| ID | Aktor | User Story | Manfaat | Story Point |
+| --- | --- | --- | --- | --- |
+| `US-31-ADM` | Admin | Sebagai Admin yang sedang login, saya ingin keluar dari sesi akun sistem | Sesi akun berakhir dengan aman dan tidak dapat diakses orang lain | TBD |
+| `US-31-KLB` | KaLab | Sebagai KaLab yang sedang login, saya ingin keluar dari sesi akun sistem | Idem | TBD |
+| `US-31-PLP` | PLP | Sebagai PLP yang sedang login, saya ingin keluar dari sesi akun sistem | Idem | TBD |
+| `US-31-DSN` | Dosen | Sebagai Dosen yang sedang login, saya ingin keluar dari sesi akun sistem | Idem | TBD |
+| `US-31-MHS` | Mahasiswa | Sebagai Mahasiswa yang sedang login, saya ingin keluar dari sesi akun sistem | Idem | TBD |
+| `US-31-EKS` | Pengguna Eksternal | Sebagai Pengguna Eksternal yang sedang login, saya ingin keluar dari sesi akun sistem | Idem | TBD |
+
+**Skenario** (berlaku untuk seluruh aktor di atas)
+
+1. Aktor mengklik tombol/menu "Log Out".
+2. Sistem menampilkan dialog konfirmasi "Apakah Anda yakin ingin keluar dari sistem?".
+3. Aktor mengklik "Ya, Log Out".
+4. Sistem menampilkan pesan "Anda telah berhasil logout" dan menghapus token autentikasi/sesi login.
+5. Sistem mengarahkan aktor kembali ke halaman Login / Dashboard Publik dengan notifikasi sukses keluar.
+
+---
+
+## Lampiran A · Perbaikan Redaksional
+
+Perbaikan berikut dilakukan terhadap dokumen asli tanpa mengubah makna.
+
+| # | Lokasi asli | Masalah | Perbaikan |
+| --- | --- | --- | --- |
+| 1 | US-04 (Dosen, Mahasiswa, Eksternal) | Judul tertulis ganda: `Title: Title: Registrasi Akun ...` | Menjadi `Registrasi Akun` |
+| 2 | US-02 (KaLab) | `Actor: Admin` — aktor salah | Menjadi `KaLab` |
+| 3 | US-02 (PLP) | `Actor: Admin` dan langkah "Kalab klik Login" — aktor salah | Menjadi `PLP` |
+| 4 | US-03 (urutan aktor) | Aktor tidak berurutan | Diurutkan: Admin, KaLab, PLP, Dosen, Mahasiswa, Eksternal |
+| 5 | US-07 (Eksternal) | Langkah pertama tertulis "Mahasiswa membuka halaman..." | Menjadi "Pengguna Eksternal membuka halaman..." |
+| 6 | US-22 | `Actor: Admin` padahal skenario berisi langkah PLP | Menjadi `PLP` |
+| 7 | US-21 | Judul tidak konsisten | Menjadi `Ubah Katalog Ruangan & Tarif` |
+| 8 | US-27 / US-30 | Judul tertulis "Lihat Data Bahan dan Ketersediaan Mebeler" | Menjadi `Lihat Data Mebeler` |
+| 9 | Seluruh kelompok | Kolom *Story Point* kosong | Ditulis `TBD` dan wajib diisi pada *sprint planning* |
+
+## Lampiran B · Gap User Story
+
+User story **belum tersedia** untuk modul transaksi Sprint 1. Rincian gap ada pada [sprint1.md §4](sprint1.md#4-gap-dokumentasi-sprint-1) (temuan **C8**).
+
+| Kelompok yang perlu ditambahkan | Rujukan requirement |
+| --- | --- |
+| Keranjang sesi sementara (tambah/lihat/hapus item) | `REQ-13` |
+| Pembuatan pengajuan peminjaman (*checkout*) | `REQ-14` |
+| Pemilihan & verifikasi pembayaran eksternal | `REQ-16`, `REQ-22` |
+| Persetujuan/penolakan item-level oleh KaLab/Admin | `REQ-17`, `REQ-18` |
+| Pembatalan pengajuan mandiri | `REQ-19`, `BR-5` |
+| Penyerahan fisik & perubahan status menjadi Dipinjam | `REQ-20` |
+| Validasi pengembalian fisik & penangguhan otomatis | `REQ-20`, `REQ-21` |
+| Riwayat peminjaman per item | `REQ-27` |
+| Bebas laboratorium & cetak surat | `REQ-31`, `REQ-32` |
+| Dokumentasi kegiatan & laporan maintenance/kalibrasi | `REQ-23`, `REQ-24` |
+| Ekspor laporan inventarisasi & keuangan | `REQ-28`, `REQ-29` |
+| Dashboard layanan tarif eksternal | `REQ-26` |
+| Halaman informasi statik (SOP/persyaratan/FAQ) | `REQ-30` |

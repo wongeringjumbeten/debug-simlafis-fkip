@@ -122,6 +122,66 @@
     --sidebar-ring: #a8dadc;
 }
 
+/*
+ * Mode gelap — adaptasi palet navy–teal.
+ *
+ * Dasar tetap navy (Ink #0F1E30) agar identitas visual tidak hilang. Yang
+ * berubah adalah arah kontras: permukaan menjadi gelap dan teks menjadi terang.
+ *
+ * Catatan penting: `--primary`, `--success`, `--warning`, dan `--destructive`
+ * sengaja DICERAHKAN dibanding mode terang. Di mode terang token ini dipakai
+ * sebagai warna isian (tombol); di mode gelap token yang sama juga dipakai
+ * sebagai warna teks dan ikon (mis. `text-primary`), sehingga nilai gelap akan
+ * tidak terbaca di atas permukaan gelap.
+ */
+.dark {
+    --background: #0f1e30;
+    --foreground: #e6eef5;
+
+    --card: #16283f;
+    --card-foreground: #e6eef5;
+    --popover: #16283f;
+    --popover-foreground: #e6eef5;
+
+    --primary: #5aa9e6;
+    --primary-foreground: #0b1a2b;
+    --secondary: #22384f;
+    --secondary-foreground: #dbe7f0;
+    --muted: #1b2f45;
+    --muted-foreground: #9db2c4;
+    --accent: #24394f;
+    --accent-foreground: #e6eef5;
+
+    --destructive: #ec6d77;
+    --destructive-foreground: #2a0a0e;
+    --success: #3fbf8f;
+    --success-foreground: #06231a;
+    --warning: #f0b357;
+    --warning-foreground: #2b1c05;
+    --info: #5aa9e6;
+    --info-foreground: #0b1a2b;
+
+    --border: #2a4058;
+    --input: #2a4058;
+    --ring: #5aa9e6;
+
+    --chart-1: #5aa9e6;
+    --chart-2: #3fbf8f;
+    --chart-3: #f0b357;
+    --chart-4: #e35d68;
+    --chart-5: #a8dadc;
+
+    /* Sidebar dibuat lebih gelap dari halaman agar terpisah jelas. */
+    --sidebar: #0b1725;
+    --sidebar-foreground: #e6eef5;
+    --sidebar-primary: #a8dadc;
+    --sidebar-primary-foreground: #0b1725;
+    --sidebar-accent: #16283f;
+    --sidebar-accent-foreground: #e6eef5;
+    --sidebar-border: #1d3557;
+    --sidebar-ring: #a8dadc;
+}
+
 @layer base {
     html,
     body,

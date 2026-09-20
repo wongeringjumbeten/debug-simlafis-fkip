@@ -1,19 +1,19 @@
 <?php
 
-use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 test('profile page is displayed', function () {
-    $user = User::factory()->create();
+    $user = buatPenggunaLengkap();
 
-    $response = $this
-        ->actingAs($user)
-        ->get(route('profile.edit'));
-
-    $response->assertOk();
+    $this->actingAs($user)
+        ->get(route('profile.edit'))
+        ->assertOk();
 });
 
 test('profile information can be updated', function () {
-    $user = User::factory()->create();
+    $user = buatPenggunaLengkap(['email' => 'awal@unej.ac.id']);
 
     $response = $this
         ->actingAs($user)
@@ -26,68 +26,112 @@ test('profile information can be updated', function () {
         ->assertSessionHasNoErrors()
         ->assertRedirect(route('profile.edit'));
 
-    $user->refresh();
+    $tersimpan = DB::table('pengguna')->where('id_pengguna', idPengguna($user))->first();
 
-    expect($user->name)->toBe('Test User');
-    expect($user->email)->toBe('test@example.com');
-    expect($user->email_verified_at)->toBeNull();
+    expect($tersimpan->nama_lengkap)->toBe('Test User');
+    expect($tersimpan->email)->toBe('test@example.com');
+
+    // Email baru harus diverifikasi ulang.
+    expect(DB::table('akun')->where('id_akun', $user->getAuthIdentifier())->value('email_verified_at'))->toBeNull();
 });
 
 test('email verification status is unchanged when the email address is unchanged', function () {
-    $user = User::factory()->create();
+    $user = buatPenggunaLengkap(['email' => 'tetap@unej.ac.id']);
+
+    $this
+        ->actingAs($user)
+        ->patch(route('profile.update'), [
+            'name' => 'Test User',
+            'email' => 'tetap@unej.ac.id',
+        ])
+        ->assertSessionHasNoErrors();
+
+    expect(DB::table('akun')->where('id_akun', $user->getAuthIdentifier())->value('email_verified_at'))->not->toBeNull();
+});
+
+test('foto profil dapat diunggah dan menggantikan berkas lama', function () {
+    Storage::fake('public');
+
+    $user = buatPenggunaLengkap(['email' => 'foto@unej.ac.id']);
+
+    // Berkas lama yang seharusnya dibersihkan setelah penggantian.
+    $lama = UploadedFile::fake()->image('lama.jpg', 200, 200);
+    $pathLama = $lama->store('profiles', 'public');
+
+    DB::table('pengguna')
+        ->where('id_pengguna', idPengguna($user))
+        ->update(['foto_profil' => $pathLama]);
+
+    Storage::disk('public')->assertExists($pathLama);
 
     $response = $this
         ->actingAs($user)
         ->patch(route('profile.update'), [
-            'name' => 'Test User',
+            'name' => $user->name,
             'email' => $user->email,
+            'foto_profil' => UploadedFile::fake()->image('baru.jpg', 400, 400),
         ]);
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('profile.edit'));
+    $response->assertSessionHasNoErrors();
 
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
+    $pathBaru = DB::table('pengguna')
+        ->where('id_pengguna', idPengguna($user))
+        ->value('foto_profil');
+
+    expect($pathBaru)->toBeString();
+    expect($pathBaru)->toStartWith('profiles/');
+    expect($pathBaru)->not->toBe($pathLama);
+
+    Storage::disk('public')->assertExists($pathBaru);
+    Storage::disk('public')->assertMissing($pathLama);
 });
 
-test('user can delete their account', function () {
-    $user = User::factory()->create();
+test('unggahan foto profil menolak berkas yang bukan gambar', function () {
+    Storage::fake('public');
 
-    $response = $this
+    $user = buatPenggunaLengkap(['email' => 'dokumen@unej.ac.id']);
+
+    $this
         ->actingAs($user)
-        ->delete(route('profile.destroy'), [
-            'password' => 'password',
-        ]);
-
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('home'));
-
-    $this->assertGuest();
-    expect($user->fresh())->toBeNull();
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'foto_profil' => UploadedFile::fake()->create('laporan.pdf', 100, 'application/pdf'),
+        ])
+        ->assertSessionHasErrors('foto_profil');
 });
 
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
+test('unggahan foto profil menolak berkas melebihi 2 MB', function () {
+    Storage::fake('public');
 
-    $response = $this
+    $user = buatPenggunaLengkap(['email' => 'besar@unej.ac.id']);
+
+    $this
         ->actingAs($user)
-        ->from(route('profile.edit'))
-        ->delete(route('profile.destroy'), [
-            'password' => 'wrong-password',
-        ]);
+        ->patch(route('profile.update'), [
+            'name' => $user->name,
+            'email' => $user->email,
+            'foto_profil' => UploadedFile::fake()->image('besar.jpg')->size(3000),
+        ])
+        ->assertSessionHasErrors('foto_profil');
+});
 
-    $response
-        ->assertSessionHasErrors('password')
-        ->assertRedirect(route('profile.edit'));
+test('penghapusan akun mandiri ditolak pada PostgreSQL', function () {
+    $user = buatPenggunaLengkap(['email' => 'hapus@unej.ac.id']);
 
-    expect($user->fresh())->not->toBeNull();
+    $this
+        ->actingAs($user)
+        ->delete(route('profile.destroy'), ['password' => 'password'])
+        ->assertForbidden();
+
+    // Akun tetap ada; pengelolaan akun adalah wewenang Admin (BR-1).
+    expect(DB::table('pengguna')->where('email', 'hapus@unej.ac.id')->exists())->toBeTrue();
 });
 
 test('external user can update institution and phone number', function () {
-    $user = User::factory()->create([
+    $user = buatPenggunaLengkap([
         'role' => 'ekst',
-        'instansi' => 'Instansi Lama',
+        'email' => 'eksternal@contoh.com',
         'kategori' => 'internal_unej',
     ]);
 
@@ -100,16 +144,21 @@ test('external user can update institution and phone number', function () {
         ])
         ->assertSessionHasNoErrors();
 
-    $user->refresh();
+    $pengguna = DB::table('pengguna')->where('id_pengguna', idPengguna($user))->first();
+    expect($pengguna->no_telepon)->toBe('081234567890');
 
-    expect($user->instansi)->toBe('Instansi Baru');
-    expect($user->no_hp)->toBe('081234567890');
+    $instansi = DB::table('eksternal as e')
+        ->leftJoin('instansi as i', 'i.id_instansi', '=', 'e.id_instansi')
+        ->where('e.id_pengguna', idPengguna($user))
+        ->value('i.nama_instansi');
+
+    expect($instansi)->toBe('Instansi Baru');
 });
 
 test('external user cannot change tariff category or role via profile update', function () {
-    $user = User::factory()->create([
+    $user = buatPenggunaLengkap([
         'role' => 'ekst',
-        'instansi' => 'Instansi Awal',
+        'email' => 'tarif@contoh.com',
         'kategori' => 'internal_unej',
     ]);
 
@@ -117,20 +166,27 @@ test('external user cannot change tariff category or role via profile update', f
         ->patch(route('profile.update'), [
             'name' => $user->name,
             'email' => $user->email,
-            'instansi' => 'Instansi Awal',
-            'kategori' => 'luar_unej', // ignored: not validated for profile
-            'role' => 'admin', // ignored: never accepted here
+            'instansi' => 'Instansi Tetap',
+            'kategori' => 'luar_unej', // diabaikan: tidak divalidasi di profil
+            'role' => 'admin',         // diabaikan: tidak pernah diterima di sini
         ])
         ->assertSessionHasNoErrors();
 
-    $user->refresh();
+    expect(DB::table('akun')->where('id_akun', $user->getAuthIdentifier())->value('kategori_eksternal'))
+        ->toBe('internal_unej');
 
-    expect($user->kategori)->toBe('internal_unej');
-    expect($user->role)->toBe('ekst');
+    expect(DB::table('akun as a')
+        ->join('peran as r', 'r.id_peran', '=', 'a.id_peran')
+        ->where('a.id_akun', $user->getAuthIdentifier())
+        ->value('r.role'))->toBe('eksternal');
 });
 
 test('external profile update rejects an invalid phone number', function () {
-    $user = User::factory()->create(['role' => 'ekst', 'instansi' => 'Instansi']);
+    $user = buatPenggunaLengkap([
+        'role' => 'ekst',
+        'email' => 'hp@contoh.com',
+        'kategori' => 'internal_unej',
+    ]);
 
     $this->actingAs($user)
         ->patch(route('profile.update'), [
@@ -143,7 +199,7 @@ test('external profile update rejects an invalid phone number', function () {
 });
 
 test('internal user profile update ignores external-only fields', function () {
-    $user = User::factory()->create(['role' => 'mhs']);
+    $user = buatPenggunaLengkap(['role' => 'mhs', 'email' => 'mhs@unej.ac.id']);
 
     $this->actingAs($user)
         ->patch(route('profile.update'), [
@@ -154,9 +210,8 @@ test('internal user profile update ignores external-only fields', function () {
         ])
         ->assertSessionHasNoErrors();
 
-    $user->refresh();
+    $pengguna = DB::table('pengguna')->where('id_pengguna', idPengguna($user))->first();
 
-    expect($user->name)->toBe('Nama Baru');
-    expect($user->instansi)->toBeNull();
-    expect($user->no_hp)->toBeNull();
+    expect($pengguna->nama_lengkap)->toBe('Nama Baru');
+    expect($pengguna->no_telepon)->toBeNull();
 });

@@ -24,7 +24,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
                 </div>
 
                 {status === 'verification-link-sent' && (
-                    <div className="rounded-lg border border-green-600/30 bg-green-600/10 p-3 text-center text-sm font-medium text-green-600">
+                    <div className="rounded-lg border border-success/30 bg-success/10 p-3 text-center text-sm font-medium text-success">
                         Tautan verifikasi baru telah dikirim ke email Anda.
                     </div>
                 )}

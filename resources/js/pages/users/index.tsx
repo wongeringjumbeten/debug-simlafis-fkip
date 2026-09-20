@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -84,6 +85,8 @@ export default function Users({
     const [suspendTarget, setSuspendTarget] = useState<UserRow | null>(null);
     const [blockTarget, setBlockTarget] = useState<UserRow | null>(null);
     const [detailTarget, setDetailTarget] = useState<UserRow | null>(null);
+    /** Id pengguna yang sedang diaktifkan kembali — mencegah klik ganda. */
+    const [mengaktifkan, setMengaktifkan] = useState<number | null>(null);
 
     const { data, setData, get, processing } = useForm({
         q: filters.q,
@@ -290,7 +293,14 @@ export default function Users({
                                                         {user.status !==
                                                             'active' && (
                                                             <DropdownMenuItem
-                                                                onClick={() =>
+                                                                disabled={
+                                                                    mengaktifkan !==
+                                                                    null
+                                                                }
+                                                                onClick={() => {
+                                                                    setMengaktifkan(
+                                                                        user.id,
+                                                                    );
                                                                     router.patch(
                                                                         UserController.updateStatus.url(
                                                                             user.id,
@@ -303,9 +313,14 @@ export default function Users({
                                                                             only: [
                                                                                 'users',
                                                                             ],
+                                                                            onFinish:
+                                                                                () =>
+                                                                                    setMengaktifkan(
+                                                                                        null,
+                                                                                    ),
                                                                         },
-                                                                    )
-                                                                }
+                                                                    );
+                                                                }}
                                                             >
                                                                 Aktifkan kembali
                                                             </DropdownMenuItem>
@@ -591,13 +606,12 @@ function SuspendDialog({
                                     <Label htmlFor="alasan_suspend">
                                         Alasan penangguhan
                                     </Label>
-                                    <textarea
+                                    <Textarea
                                         id="alasan_suspend"
                                         name="alasan"
                                         rows={3}
                                         required
                                         placeholder="Mis. terlambat mengembalikan alat lebih dari 7 hari"
-                                        className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none"
                                     />
                                     <InputError message={errors.alasan} />
                                 </div>
@@ -664,13 +678,12 @@ function BlockDialog({
                                     <Label htmlFor="alasan_block">
                                         Alasan pemblokiran
                                     </Label>
-                                    <textarea
+                                    <Textarea
                                         id="alasan_block"
                                         name="alasan"
                                         rows={3}
                                         required
                                         placeholder="Mis. pelanggaran berat atau penyalahgunaan fasilitas"
-                                        className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:ring-[3px] focus-visible:outline-none"
                                     />
                                     <InputError message={errors.alasan} />
                                 </div>

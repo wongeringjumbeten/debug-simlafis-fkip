@@ -89,7 +89,7 @@ export default function Login({ status, canResetPassword }: Props) {
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-[#4A6274]">
+                        <div className="text-center text-sm text-muted-foreground">
                             Belum punya akun?{' '}
                             <TextLink href={register()} tabIndex={5}>
                                 Daftar akun eksternal
@@ -100,7 +100,7 @@ export default function Login({ status, canResetPassword }: Props) {
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-[#2A9D6F]">
+                <div className="mb-4 text-center text-sm font-medium text-success">
                     {status}
                 </div>
             )}

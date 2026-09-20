@@ -47,26 +47,40 @@ export function FileUpload({
             const f = e.target.files?.[0] ?? null;
             setLocalError(null);
 
-            if (f) {
-                const ext = f.name.split('.').pop()?.toLowerCase();
-                const validExt = ['jpg', 'jpeg', 'png'];
+            /** Bersihkan input agar berkas yang ditolak tidak ikut terkirim. */
+            const tolak = (pesan: string) => {
+                setLocalError(pesan);
+                if (inputRef.current) {
+                    inputRef.current.value = '';
+                }
+                onChange(null);
+            };
 
-                if (!ext || !validExt.includes(ext)) {
-                    setLocalError('Format file harus JPG/PNG.');
-                    onChange(null);
+            if (f) {
+                const ekstensi = f.name.split('.').pop()?.toLowerCase() ?? '';
+                const diizinkan = accept
+                    .split(',')
+                    .map((a) => a.trim().replace(/^\./, '').toLowerCase())
+                    .filter((a) => a !== '' && !a.includes('*'));
+
+                // Bila `accept` memakai wildcard (mis. "image/*"), lewati
+                // pemeriksaan ekstensi dan andalkan validasi ukuran.
+                if (diizinkan.length > 0 && !diizinkan.includes(ekstensi)) {
+                    tolak(
+                        `Format berkas harus ${diizinkan.join('/').toUpperCase()}.`,
+                    );
                     return;
                 }
 
                 if (f.size > maxSizeMB * 1024 * 1024) {
-                    setLocalError(`Ukuran file maksimal ${maxSizeMB} MB.`);
-                    onChange(null);
+                    tolak(`Ukuran berkas maksimal ${maxSizeMB} MB.`);
                     return;
                 }
             }
 
             onChange(f);
         },
-        [maxSizeMB, onChange],
+        [accept, maxSizeMB, onChange],
     );
 
     const handleRemove = useCallback(() => {

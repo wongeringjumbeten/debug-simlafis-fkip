@@ -116,7 +116,7 @@ export function AddToCartDialog({
                 </DialogHeader>
 
                 <div className="grid gap-4">
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-1.5">
                             <Label htmlFor="tanggal-mulai">Tanggal Mulai</Label>
                             <Input
@@ -143,7 +143,7 @@ export function AddToCartDialog({
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid gap-3 sm:grid-cols-2">
                         <div className="space-y-1.5">
                             <Label htmlFor="jam-mulai">Jam Mulai</Label>
                             <Input
@@ -183,7 +183,7 @@ export function AddToCartDialog({
                     </div>
 
                     {error && (
-                        <p className="text-sm text-[#A32E38]" role="alert">
+                        <p className="text-sm text-[#A32E38] dark:text-destructive" role="alert">
                             {error}
                         </p>
                     )}

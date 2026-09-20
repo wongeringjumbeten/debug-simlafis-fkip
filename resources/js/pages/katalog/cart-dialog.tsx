@@ -11,6 +11,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/spinner';
 import type { CartItem, Role, SubKategoriEksternal } from '@/types';
 import { formatRupiah, formatTanggal, hitungHari, tarifUntuk } from './helpers';
 
@@ -27,6 +28,8 @@ interface CartDialogProps {
     onOpenChange: (open: boolean) => void;
     onHapus: (index: number) => void;
     onAjukan: (data: CartSubmitData) => void;
+    /** Status pengiriman pengajuan, dikendalikan induk lewat `onFinish`. */
+    submitting?: boolean;
 }
 
 type CartTab = 'alat' | 'ruangan';
@@ -39,6 +42,7 @@ export function CartDialog({
     onOpenChange,
     onHapus,
     onAjukan,
+    submitting = false,
 }: CartDialogProps) {
     const [tab, setTab] = useState<CartTab>('alat');
     const [metodePembayaran, setMetodePembayaran] = useState<
@@ -67,7 +71,7 @@ export function CartDialog({
             aria-selected={tab === 'alat'}
             role="tab"
             className={cn(
-                'flex-1 rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
+                'focus-visible:ring-ring/50 flex-1 rounded-md px-4 py-1.5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                 tab === 'alat'
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground',
@@ -83,7 +87,7 @@ export function CartDialog({
             aria-selected={tab === 'ruangan'}
             role="tab"
             className={cn(
-                'flex-1 rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
+                'focus-visible:ring-ring/50 flex-1 rounded-md px-4 py-1.5 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                 tab === 'ruangan'
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground',
@@ -165,6 +169,7 @@ export function CartDialog({
                                     variant="ghost"
                                     size="icon"
                                     aria-label={`Hapus ${item.aset.nama}`}
+                                    disabled={submitting}
                                     onClick={() => onHapus(index)}
                                 >
                                     <Trash2 className="text-muted-foreground" />
@@ -240,6 +245,7 @@ export function CartDialog({
                         <Button
                             variant="secondary"
                             onClick={() => onOpenChange(false)}
+                            disabled={submitting}
                         >
                             Tutup
                         </Button>
@@ -252,9 +258,12 @@ export function CartDialog({
                                     buktiPembayaran,
                                 })
                             }
-                            disabled={items.length === 0}
+                            disabled={items.length === 0 || submitting}
                         >
-                            Ajukan Peminjaman
+                            {submitting && <Spinner />}
+                            {submitting
+                                ? 'Mengirim...'
+                                : 'Ajukan Peminjaman'}
                         </Button>
                     </div>
                 </DialogFooter>

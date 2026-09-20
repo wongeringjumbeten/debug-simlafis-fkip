@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /*
@@ -44,7 +47,95 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+/**
+ * Buat pengguna lengkap beserta rantai tabel 3NF-nya.
+ *
+ * `User::factory()->create()` TIDAK bisa dipakai untuk skenario ini: model `User`
+ * memetakan ke view `v_auth_users`, dan `User::save()` sengaja mengembalikan
+ * `false` untuk record baru (insert ditangani service, bukan model). Akibatnya
+ * factory tidak membuat baris apa pun dan `getAuthIdentifier()` bernilai null.
+ *
+ * Helper ini membuat baris nyata pada `pengguna`, `kredensial`, dan `akun`,
+ * lalu mengembalikan model yang terbaca dari view sehingga siap dipakai
+ * `actingAs()` maupun service profil.
+ *
+ * @param  array<string, mixed>  $atribut
+ */
+function buatPenggunaLengkap(array $atribut = []): User
 {
-    // ..
+    // Model memakai singkatan (mhs/ekst); tabel `peran` memakai nama penuh.
+    $role = $atribut['role'] ?? 'admin';
+    $rolePenuh = match ($role) {
+        'mhs' => 'mahasiswa',
+        'ekst' => 'eksternal',
+        default => $role,
+    };
+
+    $idPeran = DB::table('peran')->where('role', $rolePenuh)->value('id_peran');
+
+    if ($idPeran === null) {
+        throw new RuntimeException("Peran '{$rolePenuh}' tidak ditemukan pada tabel peran.");
+    }
+
+    $idPengguna = DB::table('pengguna')->insertGetId([
+        'email' => $atribut['email'] ?? fake()->unique()->safeEmail(),
+        'nama_lengkap' => $atribut['name'] ?? fake()->name(),
+        'no_telepon' => $atribut['no_hp'] ?? null,
+        'foto_profil' => $atribut['foto_profil'] ?? null,
+        'foto_identitas' => $atribut['foto_identitas'] ?? null,
+    ], 'id_pengguna');
+
+    $idKredensial = DB::table('kredensial')->insertGetId([
+        'password' => Hash::make($atribut['password'] ?? 'password'),
+    ], 'id_kredensial');
+
+    $idAkun = DB::table('akun')->insertGetId([
+        'id_pengguna' => $idPengguna,
+        'id_peran' => $idPeran,
+        'id_kredensial' => $idKredensial,
+        'status' => $atribut['status'] ?? 'active',
+        'kategori_eksternal' => $atribut['kategori'] ?? null,
+        'email_verified_at' => $atribut['email_verified_at'] ?? now(),
+    ], 'id_akun');
+
+    // Subtipe opsional, dibutuhkan sebagian halaman (mis. identitas profil).
+    if ($role === 'dosen') {
+        DB::table('dosen')->insert([
+            'id_pengguna' => $idPengguna,
+            'nama_dosen' => $atribut['name'] ?? 'Dosen Uji',
+            'nip_nidn' => $atribut['nip_nidn'] ?? (string) fake()->unique()->numerify('################'),
+        ]);
+    }
+
+    if ($role === 'mhs') {
+        DB::table('mahasiswa')->insert([
+            'id_pengguna' => $idPengguna,
+            'nama_mahasiswa' => $atribut['name'] ?? 'Mahasiswa Uji',
+            'nim' => $atribut['nim'] ?? (string) fake()->unique()->numerify('##########'),
+        ]);
+    }
+
+    if ($role === 'ekst') {
+        DB::table('eksternal')->insert([
+            'id_pengguna' => $idPengguna,
+            'nama_eksternal' => $atribut['name'] ?? 'Eksternal Uji',
+            'nik' => $atribut['nik'] ?? (string) fake()->unique()->numerify('################'),
+        ]);
+    }
+
+    return User::whereKey($idAkun)->firstOrFail();
+}
+
+/**
+ * Ambil `id_pengguna` dari model User.
+ *
+ * Penting: `$user->id` adalah `id_akun` (kolom `id` pada view `v_auth_users`),
+ * BUKAN `id_pengguna`. Keduanya berasal dari sequence berbeda dan tidak boleh
+ * dipertukarkan saat menulis assertion ke tabel `pengguna`.
+ */
+function idPengguna(User $user): int
+{
+    return (int) DB::table('akun')
+        ->where('id_akun', $user->getAuthIdentifier())
+        ->value('id_pengguna');
 }

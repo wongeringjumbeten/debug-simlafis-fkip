@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
+import { Textarea } from '@/components/ui/textarea';
 import {
     Select,
     SelectContent,
@@ -26,6 +28,13 @@ interface ItemFormDialogProps {
     kategori: KategoriAset;
     onOpenChange: (open: boolean) => void;
     onSimpan: (aset: Aset, foto?: File | null) => void;
+    /**
+     * Status permintaan simpan. Dikendalikan induk lewat `onFinish` agar dialog
+     * tidak tertinggal dalam keadaan "Menyimpan" ketika backend menolak.
+     */
+    submitting?: boolean;
+    /** Pesan galat dari backend (validasi), ditampilkan di dalam dialog. */
+    errorBackend?: string | null;
 }
 
 const unitLabs: UnitLab[] = ['dasar', 'elektronika', 'lanjut', 'elf'];
@@ -36,6 +45,8 @@ export function ItemFormDialog({
     kategori,
     onOpenChange,
     onSimpan,
+    submitting = false,
+    errorBackend,
 }: ItemFormDialogProps) {
     const aset = state?.aset;
     const [kode, setKode] = useState('');
@@ -51,7 +62,6 @@ export function ItemFormDialog({
     const [tarifLuar, setTarifLuar] = useState('');
     const [foto, setFoto] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (state) {
@@ -78,7 +88,6 @@ export function ItemFormDialog({
             );
             setFoto(null);
             setError(null);
-            setSaving(false);
         }
     }, [state, aset]);
 
@@ -112,7 +121,7 @@ export function ItemFormDialog({
             setError('Tarif tidak boleh negatif.');
             return;
         }
-        setSaving(true);
+        setError(null);
         onSimpan(
             {
                 id: aset?.id ?? Date.now(),
@@ -244,12 +253,11 @@ export function ItemFormDialog({
 
                     <div className="space-y-1.5">
                         <Label htmlFor="spesifikasi">Spesifikasi</Label>
-                        <textarea
+                        <Textarea
                             id="spesifikasi"
                             value={spesifikasi}
                             onChange={(e) => setSpesifikasi(e.target.value)}
                             rows={3}
-                            className="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
                         />
                     </div>
 
@@ -324,9 +332,9 @@ export function ItemFormDialog({
                         </div>
                     )}
 
-                    {error && (
-                        <p className="text-sm text-[#A32E38]" role="alert">
-                            {error}
+                    {(error ?? errorBackend) && (
+                        <p className="text-sm text-[#A32E38] dark:text-destructive" role="alert">
+                            {error ?? errorBackend}
                         </p>
                     )}
                 </div>
@@ -335,12 +343,13 @@ export function ItemFormDialog({
                     <Button
                         variant="secondary"
                         onClick={() => onOpenChange(false)}
-                        disabled={saving}
+                        disabled={submitting}
                     >
                         Batal
                     </Button>
-                    <Button onClick={simpan} disabled={saving}>
-                        {saving ? 'Menyimpan...' : 'Simpan'}
+                    <Button onClick={simpan} disabled={submitting}>
+                        {submitting && <Spinner />}
+                        {submitting ? 'Menyimpan...' : 'Simpan'}
                     </Button>
                 </DialogFooter>
             </DialogContent>

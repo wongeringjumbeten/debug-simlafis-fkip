@@ -42,26 +42,36 @@ return new class extends Migration
             WHERE a.id_pengguna = p.id_pengguna
         SQL);
 
-        Schema::create('sessions', function (Blueprint $table): void {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        // Tabel berikut juga dibuat oleh migrasi standar Laravel
+        // (0001_01_01_000001_create_cache_table, 0001_01_01_000000_create_users_table).
+        // Dijaga agar migrasi ini tetap dapat dijalankan pada database bersih
+        // tanpa peduli urutan mana yang lebih dulu berjalan.
+        if (! Schema::hasTable('sessions')) {
+            Schema::create('sessions', function (Blueprint $table): void {
+                $table->string('id')->primary();
+                $table->foreignId('user_id')->nullable()->index();
+                $table->string('ip_address', 45)->nullable();
+                $table->text('user_agent')->nullable();
+                $table->longText('payload');
+                $table->integer('last_activity')->index();
+            });
+        }
 
-        Schema::create('cache', function (Blueprint $table): void {
-            $table->string('key')->primary();
-            $table->mediumText('value');
-            $table->integer('expiration');
-        });
+        if (! Schema::hasTable('cache')) {
+            Schema::create('cache', function (Blueprint $table): void {
+                $table->string('key')->primary();
+                $table->mediumText('value');
+                $table->integer('expiration');
+            });
+        }
 
-        Schema::create('cache_locks', function (Blueprint $table): void {
-            $table->string('key')->primary();
-            $table->string('owner');
-            $table->integer('expiration');
-        });
+        if (! Schema::hasTable('cache_locks')) {
+            Schema::create('cache_locks', function (Blueprint $table): void {
+                $table->string('key')->primary();
+                $table->string('owner');
+                $table->integer('expiration');
+            });
+        }
 
         $this->refreshAuthView();
     }

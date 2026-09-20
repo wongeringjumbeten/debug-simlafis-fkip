@@ -89,14 +89,15 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         if ($this->exists) {
             $dirty = $this->getDirty();
 
-            // Jika ada perubahan kolom, lakukan update langsung ke tabel fisik 'users'
+            // Jika ada perubahan kolom, lakukan update ke view/tabel terkait
             if (count($dirty) > 0) {
-                DB::table('users')
-                    ->where('id', $this->id)
+                DB::table($this->getTable())
+                    ->where($this->getKeyName(), $this->getKey())
                     ->update($dirty);
 
                 $this->syncOriginal();
             }
+
             return true;
         }
 
@@ -132,6 +133,6 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             return $this->attributes['status'] === 'suspended';
         }
 
-        return !$this->active;
+        return ! $this->active;
     }
 }

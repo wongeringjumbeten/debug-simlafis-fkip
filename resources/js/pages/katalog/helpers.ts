@@ -2,7 +2,9 @@ import type {
     Aset,
     KategoriAset,
     KondisiAset,
+    KondisiUnit,
     Role,
+    StatusUnit,
     SubKategoriEksternal,
     UnitLab,
 } from '@/types';
@@ -34,6 +36,20 @@ export const kondisiTone: Record<
     baik: 'success',
     perlu_perawatan: 'warning',
     rusak: 'destructive',
+};
+
+/** Label kondisi fisik unit alat (nilai mentah `detail_alat.kondisi`). */
+export const kondisiUnitLabels: Record<KondisiUnit, string> = {
+    baik: 'Baik',
+    rusak: 'Rusak',
+    'sedang perbaikan': 'Sedang Perbaikan',
+};
+
+/** Label status operasional unit alat (nilai mentah `detail_alat.status`). */
+export const statusUnitLabels: Record<StatusUnit, string> = {
+    tersedia: 'Tersedia',
+    'tidak tersedia': 'Tidak Tersedia',
+    'sedang perbaikan': 'Sedang Perbaikan',
 };
 
 /** Tab katalog yang terlihat per role — Bahan disembunyikan dari Dosen/Mahasiswa/Eksternal (REQ-11). */

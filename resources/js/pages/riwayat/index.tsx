@@ -123,7 +123,7 @@ export default function Riwayat({ transaksi, isLab }: Props) {
                         </p>
                     </div>
                 ) : (
-                    <div className="bg-card overflow-hidden rounded-xl border shadow-sm">
+                    <div className="bg-card overflow-x-auto rounded-xl border">
                         <table className="w-full text-left text-sm">
                             <thead className="bg-muted/50 text-muted-foreground border-b text-xs font-semibold uppercase">
                                 <tr>

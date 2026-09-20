@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
 import { dashboard, persetujuan } from '@/routes';
 
 interface ItemPersetujuan {
@@ -74,6 +75,13 @@ export default function Persetujuan({ pengajuan }: Props) {
     } | null>(null);
     const [alasanTolak, setAlasanTolak] = useState('');
     const [memproses, setMemproses] = useState(false);
+    /**
+     * Kunci item yang sedang disetujui (`alat-12` / `ruangan-3`).
+     *
+     * Perlu per-item, bukan sekadar boolean, agar tombol yang berputar hanya
+     * pada item yang benar-benar sedang diproses.
+     */
+    const [menyetujui, setMenyetujui] = useState<string | null>(null);
 
     function handleApprove(jenis: 'alat' | 'ruangan', id: number) {
         const url =
@@ -81,7 +89,16 @@ export default function Persetujuan({ pengajuan }: Props) {
                 ? `/persetujuan/alat/${id}/approve`
                 : `/persetujuan/ruangan/${id}/approve`;
 
-        router.patch(url, {}, { preserveScroll: true });
+        setMenyetujui(`${jenis}-${id}`);
+
+        router.patch(
+            url,
+            {},
+            {
+                preserveScroll: true,
+                onFinish: () => setMenyetujui(null),
+            },
+        );
     }
 
     function handleReject() {
@@ -136,13 +153,14 @@ export default function Persetujuan({ pengajuan }: Props) {
                         {pengajuan.map((p) => (
                             <div
                                 key={p.id}
-                                className="bg-card overflow-hidden rounded-xl border shadow-sm"
+                                className="bg-card overflow-hidden rounded-xl border"
                             >
                                 <div className="bg-muted/40 flex flex-wrap items-center justify-between gap-3 border-b p-4">
                                     <div>
-                                        <span className="font-mono text-base font-bold">
+                                        {/* Heading kartu agar hierarki tidak melompat h1 → h3. */}
+                                        <h2 className="inline-block font-mono text-base font-bold">
                                             {p.kode}
-                                        </span>
+                                        </h2>
                                         <span className="text-muted-foreground ml-3 text-sm">
                                             Pemohon:{' '}
                                             <strong className="text-foreground">
@@ -237,6 +255,10 @@ export default function Persetujuan({ pengajuan }: Props) {
                                                                             size="sm"
                                                                             variant="default"
                                                                             className="bg-success text-success-foreground hover:bg-success/90 h-8 gap-1"
+                                                                            disabled={
+                                                                                menyetujui !==
+                                                                                null
+                                                                            }
                                                                             onClick={() =>
                                                                                 handleApprove(
                                                                                     'alat',
@@ -244,7 +266,12 @@ export default function Persetujuan({ pengajuan }: Props) {
                                                                                 )
                                                                             }
                                                                         >
-                                                                            <Check className="h-4 w-4" />
+                                                                            {menyetujui ===
+                                                                            `alat-${alat.id}` ? (
+                                                                                <Spinner />
+                                                                            ) : (
+                                                                                <Check className="h-4 w-4" />
+                                                                            )}
                                                                             <span>
                                                                                 Setujui
                                                                             </span>
@@ -334,6 +361,10 @@ export default function Persetujuan({ pengajuan }: Props) {
                                                                             size="sm"
                                                                             variant="default"
                                                                             className="bg-success text-success-foreground hover:bg-success/90 h-8 gap-1"
+                                                                            disabled={
+                                                                                menyetujui !==
+                                                                                null
+                                                                            }
                                                                             onClick={() =>
                                                                                 handleApprove(
                                                                                     'ruangan',
@@ -341,7 +372,12 @@ export default function Persetujuan({ pengajuan }: Props) {
                                                                                 )
                                                                             }
                                                                         >
-                                                                            <Check className="h-4 w-4" />
+                                                                            {menyetujui ===
+                                                                            `ruangan-${ruang.id}` ? (
+                                                                                <Spinner />
+                                                                            ) : (
+                                                                                <Check className="h-4 w-4" />
+                                                                            )}
                                                                             <span>
                                                                                 Setujui
                                                                             </span>
@@ -417,6 +453,7 @@ export default function Persetujuan({ pengajuan }: Props) {
                             onClick={handleReject}
                             disabled={memproses}
                         >
+                            {memproses && <Spinner />}
                             {memproses ? 'Menyimpan...' : 'Tolak Item Ini'}
                         </Button>
                     </DialogFooter>

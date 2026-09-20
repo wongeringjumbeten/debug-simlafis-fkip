@@ -173,7 +173,7 @@ export function UserFormDialog({
                                             id="kategori"
                                             name="kategori"
                                             defaultValue={user?.kategori ?? ''}
-                                            className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-none"
+                                            className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-2 text-sm transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-none"
                                         >
                                             <option value="">
                                                 Pilih kategori
